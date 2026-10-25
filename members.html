@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wingman — Member Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root {
+  --bg: #0B0D11;
+  --panel: #13171E;
+  --panel2: #181D25;
+  --line: #232830;
+  --fg: #F0EDE6;
+  --muted: #6B7280;
+  --accent: #C8F169;
+  --accent-dim: rgba(200,241,105,.08);
+  --accent-border: rgba(200,241,105,.18);
+  --warm: #FF8A6B;
+  --warm-dim: rgba(255,138,107,.08);
+  --warm-border: rgba(255,138,107,.2);
+  --red: #FF4D4D;
+  --sidebar: 240px;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100svh;
+}
+.sg { font-family: 'Space Grotesk', system-ui, sans-serif; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+.label { font-family: 'JetBrains Mono', monospace; font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* ── Layout ── */
+.shell { display: flex; min-height: 100svh; }
+
+/* ── Sidebar ── */
+.sidebar {
+  width: var(--sidebar);
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column;
+  position: fixed; top: 0; left: 0; bottom: 0;
+  z-index: 50;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  transition: transform .25s cubic-bezier(.22,1,.36,1);
+}
+.sb-top {
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: .7rem;
+}
+.sb-mark {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--accent); display: flex; align-items: center; justify-content: center;
+  flex: none;
+}
+.sb-mark svg { width: 14px; height: 14px; }
+.sb-brand { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: .78rem; letter-spacing: -.01em; line-height: 1.25; }
+.sb-brand span { display: block; color: var(--muted); font-size: .65rem; font-weight: 500; letter-spacing: 0; }
+
+.sb-nav { flex: 1; padding: .8rem 0; overflow-y: auto; }
+.sb-section { padding: .4rem 1rem .2rem; }
+.sb-section-label { font-family: 'JetBrains Mono', monospace; font-size: .52rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: .35rem; }
+.sb-item {
+  display: flex; align-items: center; gap: .65rem;
+  padding: .55rem .8rem; border-radius: 8px; cursor: pointer;
+  font-size: .88rem; color: var(--muted); font-weight: 500;
+  text-decoration: none; margin-bottom: 2px;
+  transition: background .15s, color .15s;
+  -webkit-tap-highlight-color: transparent;
+  border: none; background: none; width: 100%; text-align: left;
+}
+.sb-item:hover { background: var(--line); color: var(--fg); }
+.sb-item.active { background: var(--accent-dim); color: var(--accent); }
+.sb-item svg { width: 16px; height: 16px; flex: none; }
+.sb-badge { margin-left: auto; background: var(--red); color: #fff; font-family: 'JetBrains Mono', monospace; font-size: .52rem; font-weight: 600; border-radius: 100px; padding: 1px 7px; min-width: 18px; text-align: center; }
+
+.sb-online {
+  margin: .5rem .8rem;
+  border-radius: 10px; padding: .6rem .9rem;
+  font-size: .82rem; font-weight: 600;
+  display: flex; align-items: center; gap: .45rem;
+  transition: all .2s;
+}
+.sb-online.live {
+  background: rgba(255,77,77,.08);
+  border: 1px solid rgba(255,77,77,.2);
+  color: var(--red);
+}
+.sb-online.offline {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+.sb-online-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.sb-online.live .sb-online-dot { background: var(--red); animation: blink 1.5s ease-in-out infinite; }
+.sb-online.offline .sb-online-dot { background: var(--muted); }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+
+.sb-user {
+  padding: .8rem 1rem;
+  border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: .7rem;
+}
+.sb-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--accent-dim); border: 1px solid var(--accent-border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: .55rem; color: var(--accent);
+  flex: none;
+}
+.sb-user-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .88rem; line-height: 1.2; }
+.sb-user-tier { font-family: 'JetBrains Mono', monospace; font-size: .56rem; color: var(--accent); }
+
+/* ── Main ── */
+.main { margin-left: var(--sidebar); flex: 1; display: flex; flex-direction: column; min-height: 100svh; }
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(11,13,17,.88);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+  padding: .75rem 1.6rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: -.02em; }
+.topbar-right { display: flex; align-items: center; gap: .8rem; }
+.notif-btn {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: var(--panel); border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative;
+}
+.notif-btn svg { width: 15px; height: 15px; color: var(--muted); }
+.notif-dot { position: absolute; top: 7px; right: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--red); border: 1.5px solid var(--bg); }
+
+.content { padding: 1.6rem 1.6rem; flex: 1; max-width: 880px; }
+
+/* ── Cards ── */
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.card-header { padding: .9rem 1.3rem; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .95rem; }
+.card-body { padding: 1.3rem; }
+
+/* ── Live banner ── */
+.live-banner {
+  background: linear-gradient(135deg, rgba(255,77,77,.12), rgba(255,138,107,.05));
+  border: 1px solid rgba(255,77,77,.22);
+  border-radius: 16px; padding: 1.3rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  margin-bottom: 1.3rem;
+}
+.lb-pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--red); animation: blink 1.5s ease-in-out infinite; flex: none; }
+.lb-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--red); }
+.lb-sub { font-size: .82rem; color: var(--muted); margin-top: .1rem; }
+.lb-btn { background: var(--red); color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: .88rem; border: none; border-radius: 10px; padding: .65rem 1.3rem; cursor: pointer; text-decoration: none; transition: opacity .15s; }
+.lb-btn:hover { opacity: .88; }
+
+/* ── Alert banner (Mario online/offline) ── */
+.alert-banner {
+  border-radius: 12px; padding: .85rem 1.1rem;
+  display: flex; align-items: center; gap: .7rem;
+  margin-bottom: 1.1rem; font-size: .88rem; font-weight: 600;
+  animation: slideIn .35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes slideIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+.alert-banner.online { background: rgba(200,241,105,.1); border: 1px solid var(--accent-border); color: var(--accent); }
+.alert-banner.offline { background: var(--panel); border: 1px solid var(--line); color: var(--muted); }
+.alert-banner-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.alert-banner.online .alert-banner-dot { background: var(--accent); }
+.alert-banner.offline .alert-banner-dot { background: var(--muted); }
+
+/* ── Stats ── */
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.3rem; }
+.stat-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.2rem; }
+.stat-num { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 2rem; letter-spacing: -.04em; line-height: 1; }
+.stat-num.accent { color: var(--accent); }
+.stat-num.warm { color: var(--warm); }
+.stat-num.pts { color: var(--accent); }
+.stat-label { font-family: 'JetBrains Mono', monospace; font-size: .56rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: .35rem; }
+
+/* ── Loyalty / points card ── */
+.loyalty-card {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
+  border-radius: 16px; padding: 1.3rem;
+  margin-bottom: 1.3rem;
+}
+.lc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.1rem; flex-wrap: wrap; }
+.lc-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; }
+.lc-sub { font-size: .82rem; color: var(--muted); margin-top: .15rem; }
+.lc-pts-box { text-align: right; }
+.lc-pts-val { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.6rem; letter-spacing: -.03em; color: var(--accent); line-height: 1; }
+.lc-pts-label { font-family: 'JetBrains Mono', monospace; font-size: .54rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+/* Track */
+.lc-steps { display: flex; align-items: center; }
+.lc-step { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
+.lc-wk { font-family: 'JetBrains Mono', monospace; font-size: .48rem; color: var(--muted); margin-bottom: .25rem; }
+.lc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); flex: none; }
+.lc-dot.done { background: var(--accent); }
+.lc-dot.here { background: var(--accent); box-shadow: 0 0 0 4px rgba(200,241,105,.18); }
+.lc-dot.locked { background: var(--warm); box-shadow: 0 0 0 3px rgba(255,138,107,.15); }
+.lc-pr { font-family: 'JetBrains Mono', monospace; font-size: .46rem; color: var(--muted); margin-top: .25rem; white-space: nowrap; }
+.lc-pr.accent { color: var(--accent); font-weight: 600; }
+.lc-pr.warm { color: var(--warm); font-weight: 600; }
+.lc-line { flex: 1; height: 1px; background: var(--line); }
+.lc-line.done { background: var(--accent); }
+
+.lc-note { font-size: .8rem; color: var(--muted); margin-top: .8rem; }
+.lc-note b { color: var(--fg); }
+.lc-note .pts-note { color: var(--warm); font-weight: 600; }
+
+/* Points redemption chips */
+.pts-redeem { margin-top: 1rem; display: flex; gap: .5rem; flex-wrap: wrap; }
+.pts-item {
+  display: flex; align-items: center; gap: .5rem;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 10px; padding: .55rem .9rem;
+  font-size: .83rem; cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.pts-item:hover { border-color: var(--accent); background: var(--accent-dim); }
+.pts-item-cost { font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--accent); font-weight: 600; }
+.pts-item.disabled { opacity: .4; pointer-events: none; }
+
+/* ── Sessions ── */
+.session-list { display: flex; flex-direction: column; }
+.session-item { display: flex; align-items: center; gap: 1rem; padding: .85rem 1.3rem; border-bottom: 1px solid var(--line); }
+.session-item:last-child { border-bottom: none; }
+.si-date { font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: .06em; color: var(--muted); flex: none; width: 3.8rem; }
+.si-body { flex: 1; }
+.si-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .9rem; }
+.si-time { font-size: .8rem; color: var(--muted); margin-top: .05rem; }
+.si-badge { font-family: 'JetBrains Mono', monospace; font-size: .54rem; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; flex: none; }
+.si-badge.live { background: rgba(255,77,77,.1); color: var(--red); border: 1px solid rgba(255,77,77,.2); }
+.si-badge.upcoming { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); }
+.si-badge.done { background: var(--line); color: var(--muted); border: 1px solid var(--line); }
+
+/* ── Messages ── */
+.msg-list { display: flex; flex-direction: column; }
+.msg-item { display: flex; gap: .9rem; align-items: flex-start; padding: 1rem 1.3rem; border-bottom: 1px solid var(--line); cursor: pointer; transition: background .12s; }
+.msg-item:last-child { border-bottom: none; }
+.msg-item:hover { background: var(--panel2); }
+.msg-item.unread { background: rgba(200,241,105,.025); }
+.msg-av { width: 35px; height: 35px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: .65rem; color: #0B1400; font-weight: 700; flex: none; }
+.msg-body { flex: 1; min-width: 0; }
+.msg-row { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; margin-bottom: .12rem; }
+.msg-from { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .9rem; }
+.msg-time { font-family: 'JetBrains Mono', monospace; font-size: .57rem; color: var(--muted); flex: none; }
+.msg-subject { font-size: .88rem; margin-bottom: .12rem; }
+.msg-item.unread .msg-subject { font-weight: 600; }
+.msg-preview { font-size: .82rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg-attach-note { display: flex; align-items: center; gap: .3rem; font-family: 'JetBrains Mono', monospace; font-size: .54rem; color: var(--muted); margin-top: .3rem; }
+.msg-attach-note svg { width: 11px; height: 11px; }
+.unread-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-top: .35rem; flex: none; }
+
+/* Message detail */
+.md-header { padding: 1.1rem 1.3rem; border-bottom: 1px solid var(--line); }
+.md-subject { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em; margin-bottom: .5rem; }
+.md-meta { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+.md-av { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: .5rem; color: #0B1400; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+.md-sender { display: flex; align-items: center; gap: .45rem; font-size: .88rem; font-weight: 500; }
+.md-date { font-family: 'JetBrains Mono', monospace; font-size: .58rem; color: var(--muted); }
+.md-body-content { padding: 1.3rem; font-size: .93rem; line-height: 1.75; color: var(--muted); }
+.md-body-content p { margin-bottom: .8rem; }
+.md-body-content p:last-child { margin-bottom: 0; }
+.md-body-content b { color: var(--fg); }
+.md-attachments-area { padding: .9rem 1.3rem; border-top: 1px solid var(--line); }
+.attach-grid { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: .55rem; }
+.attach-pill { display: flex; align-items: center; gap: .5rem; background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: .5rem .85rem; font-size: .83rem; cursor: pointer; text-decoration: none; color: var(--fg); transition: border-color .15s; }
+.attach-pill:hover { border-color: var(--accent); }
+.attach-pill svg { width: 14px; height: 14px; color: var(--accent); flex: none; }
+.attach-pill-size { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: .56rem; }
+
+/* ── My Plan ── */
+.plan-table { width: 100%; border-collapse: collapse; }
+.plan-table th { padding: .6rem 1.3rem; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: .54rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--line); }
+.plan-table td { padding: .75rem 1.3rem; border-bottom: 1px solid var(--line); font-size: .88rem; }
+.plan-table tr:last-child td { border-bottom: none; }
+.plan-table tr.you td { background: rgba(200,241,105,.04); }
+.plan-table tr.pts-row td { background: rgba(255,138,107,.04); }
+.pts-earn-badge { font-family: 'JetBrains Mono', monospace; font-size: .54rem; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 100px; background: var(--warm-dim); color: var(--warm); border: 1px solid var(--warm-border); }
+
+/* ── Buttons ── */
+.btn { display: inline-flex; align-items: center; gap: .45rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .88rem; border-radius: 9px; padding: .6rem 1.1rem; border: none; cursor: pointer; text-decoration: none; transition: opacity .15s; -webkit-tap-highlight-color: transparent; }
+.btn-accent { background: var(--accent); color: #0B1400; }
+.btn-ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+.btn-ghost:hover { border-color: var(--muted); }
+.btn-accent:hover { opacity: .88; }
+.btn-sm { font-size: .8rem; padding: .42rem .82rem; }
+.btn-danger { background: rgba(255,77,77,.1); color: var(--red); border: 1px solid rgba(255,77,77,.2); }
+.btn-danger:hover { background: rgba(255,77,77,.18); }
+
+/* ── Sec header ── */
+.sec-header { margin-bottom: 1.1rem; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+.sec-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; letter-spacing: -.02em; }
+
+/* ── Tabs ── */
+.tabs { display: flex; border-bottom: 1px solid var(--line); margin-bottom: 1.3rem; }
+.tab { font-family: 'Space Grotesk', sans-serif; font-size: .88rem; font-weight: 600; padding: .6rem 1rem; border-bottom: 2px solid transparent; cursor: pointer; color: var(--muted); background: none; border-top: none; border-left: none; border-right: none; transition: color .15s; -webkit-tap-highlight-color: transparent; }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab:hover:not(.active) { color: var(--fg); }
+
+/* ── Toast ── */
+.toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--fg); color: var(--bg); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .88rem; border-radius: 100px; padding: .65rem 1.4rem; z-index: 200; pointer-events: none; transition: transform .3s cubic-bezier(.22,1,.36,1), opacity .3s; opacity: 0; white-space: nowrap; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* ── Mobile ── */
+.sb-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 49; backdrop-filter: blur(2px); }
+.menu-btn { display: none; width: 34px; height: 34px; border-radius: 8px; background: var(--panel); border: 1px solid var(--line); align-items: center; justify-content: center; cursor: pointer; }
+.menu-btn svg { width: 16px; height: 16px; color: var(--fg); }
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .sb-overlay.open { display: block; }
+  .main { margin-left: 0; }
+  .menu-btn { display: flex; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .stats-row .stat-card:last-child { grid-column: span 2; }
+  .content { padding: 1.2rem 1rem; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="sb-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-top">
+      <div class="sb-mark">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M7 1L12 4V10L7 13L2 10V4L7 1Z" fill="#0B1400"/></svg>
+      </div>
+      <div class="sb-brand">Wingman <span>Member Portal</span></div>
+    </div>
+
+    <!-- Mario's online status -->
+    <div class="sb-online live" id="mario-status-bar">
+      <div class="sb-online-dot"></div>
+      <span id="mario-status-label">Mario is online</span>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-section">
+        <div class="sb-section-label">Menu</div>
+        <button class="sb-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+          <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>
+          Dashboard
+        </button>
+        <button class="sb-item" onclick="showPage('schedule')" id="nav-schedule">
+          <svg viewBox="0 0 16 16" fill="none"><rect x="1.5" y="2.5" width="13" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><line x1="5" y1="1" x2="5" y2="4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="11" y1="1" x2="11" y2="4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="1.5" y1="6.5" x2="14.5" y2="6.5" stroke="currentColor" stroke-width="1.4"/></svg>
+          Schedule
+        </button>
+        <button class="sb-item" onclick="showPage('messages')" id="nav-messages">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M2 3.5A1.5 1.5 0 013.5 2h9A1.5 1.5 0 0114 3.5v7A1.5 1.5 0 0112.5 12H9l-3 2.5V12H3.5A1.5 1.5 0 012 10.5v-7z" stroke="currentColor" stroke-width="1.4"/></svg>
+          Messages
+          <span class="sb-badge" id="msg-badge">2</span>
+        </button>
+        <button class="sb-item" onclick="showPage('plan')" id="nav-plan">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5l1.8 3.6 4 .6L11 8.5l.7 3.9L8 10.5l-3.7 1.9.7-3.9L2.2 5.7l4-.6L8 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          My Plan
+        </button>
+      </div>
+    </nav>
+
+    <div class="sb-user">
+      <div class="sb-avatar">JD</div>
+      <div>
+        <div class="sb-user-name">John D.</div>
+        <div class="sb-user-tier">Week 2 · $180/wk · 0 pts</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:.8rem;">
+        <button class="menu-btn" onclick="openSidebar()">
+          <svg viewBox="0 0 16 16" fill="none"><line x1="2" y1="4" x2="14" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="12" x2="14" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <div class="topbar-title" id="page-title">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <div class="notif-btn" onclick="showPage('messages')">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5A4.5 4.5 0 003.5 6v2.5L2 10h12l-1.5-1.5V6A4.5 4.5 0 008 1.5z" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 12.5a1.5 1.5 0 003 0" stroke="currentColor" stroke-width="1.4"/></svg>
+          <div class="notif-dot" id="notif-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ══════════════
+           DASHBOARD
+      ══════════════ -->
+      <div id="page-dashboard">
+
+        <!-- Alert banner (Mario online/offline notification) -->
+        <div class="alert-banner online" id="alert-banner">
+          <div class="alert-banner-dot"></div>
+          <span id="alert-text">Mario just went live — join on Discord</span>
+          <a href="https://discord.gg/PLACEHOLDER" target="_blank" style="margin-left:auto;color:var(--accent);font-size:.82rem;text-decoration:none;white-space:nowrap;font-weight:600;">Join →</a>
+        </div>
+
+        <!-- Live session -->
+        <div class="live-banner" id="live-session-banner">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div class="lb-pulse"></div>
+            <div>
+              <div class="lb-title">Mario is trading live now</div>
+              <div class="lb-sub">Tuesday session · NQ Futures · 9 / 12 seats</div>
+            </div>
+          </div>
+          <a class="lb-btn" href="https://discord.gg/PLACEHOLDER" target="_blank">Join on Discord →</a>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-num accent">2</div>
+            <div class="stat-label">Your week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num warm">$180</div>
+            <div class="stat-label">Next renewal</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num pts">0 pts</div>
+            <div class="stat-label">Points balance</div>
+          </div>
+        </div>
+
+        <!-- Loyalty card -->
+        <div class="loyalty-card">
+          <div class="lc-top">
+            <div>
+              <div class="lc-title">Loyalty Progress</div>
+              <div class="lc-sub">Price locks at $140 at week 4. Then you earn points.</div>
+            </div>
+            <div class="lc-pts-box">
+              <div class="lc-pts-val">0</div>
+              <div class="lc-pts-label">Points</div>
+            </div>
+          </div>
+
+          <div class="lc-steps">
+            <div class="lc-step"><div class="lc-wk">W1</div><div class="lc-dot done"></div><div class="lc-pr accent">$200</div></div>
+            <div class="lc-line done"></div>
+            <div class="lc-step"><div class="lc-wk">W2</div><div class="lc-dot here"></div><div class="lc-pr accent">$180</div></div>
+            <div class="lc-line"></div>
+            <div class="lc-step"><div class="lc-wk">W3</div><div class="lc-dot"></div><div class="lc-pr">$160</div></div>
+            <div class="lc-line"></div>
+            <div class="lc-step"><div class="lc-wk">W4+</div><div class="lc-dot locked"></div><div class="lc-pr warm">$140</div></div>
+          </div>
+
+          <div class="lc-note">
+            <b>Week 4+ = $140/week forever.</b> Every consecutive week earns <span class="pts-note">+20 pts</span> — redeem for a free renewal, the ebook, or an indicator.
+          </div>
+
+          <div class="pts-redeem">
+            <div class="pts-item disabled" title="Need 20 pts">
+              <span>📖 Ebook</span>
+              <span class="pts-item-cost">20 pts</span>
+            </div>
+            <div class="pts-item disabled" title="Need 80 pts">
+              <span>📈 NQ Indicator</span>
+              <span class="pts-item-cost">80 pts</span>
+            </div>
+            <div class="pts-item disabled" title="Need 100 pts">
+              <span>🆓 Free week</span>
+              <span class="pts-item-cost">100 pts</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- This week -->
+        <div class="sec-header">
+          <div class="sec-title">This Week</div>
+          <button class="btn btn-ghost btn-sm" onclick="showPage('schedule')">Full schedule →</button>
+        </div>
+        <div class="card">
+          <div class="session-list">
+            <div class="session-item">
+              <div class="si-date">MON</div>
+              <div class="si-body"><div class="si-title">Game Plan</div><div class="si-time">9:00 AM CT · Pre-market levels &amp; bias</div></div>
+              <div class="si-badge done">Done</div>
+            </div>
+            <div class="session-item">
+              <div class="si-date">TUE</div>
+              <div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT · NQ Futures</div></div>
+              <div class="si-badge live">Live</div>
+            </div>
+            <div class="session-item">
+              <div class="si-date">WED</div>
+              <div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT · NQ Futures</div></div>
+              <div class="si-badge upcoming">Tomorrow</div>
+            </div>
+            <div class="session-item">
+              <div class="si-date">THU</div>
+              <div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT · NQ Futures</div></div>
+              <div class="si-badge upcoming">Upcoming</div>
+            </div>
+            <div class="session-item">
+              <div class="si-date">FRI</div>
+              <div class="si-body"><div class="si-title">Week Recap</div><div class="si-time">4:00 PM CT · Post-week breakdown</div></div>
+              <div class="si-badge upcoming">Upcoming</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Latest from Mario -->
+        <div class="sec-header" style="margin-top:1.5rem;">
+          <div class="sec-title">Latest from Mario</div>
+          <button class="btn btn-ghost btn-sm" onclick="showPage('messages')">All messages →</button>
+        </div>
+        <div class="card" style="cursor:pointer;" onclick="openMessage(0);showPage('messages');">
+          <div class="msg-item unread">
+            <div class="msg-av">M</div>
+            <div class="msg-body">
+              <div class="msg-row">
+                <span class="msg-from">Mario</span>
+                <span class="msg-time">Today, 8:42 AM</span>
+              </div>
+              <div class="msg-subject">This week's game plan + key levels PDF</div>
+              <div class="msg-preview">Here's the plan going into this week. NQ has a clean setup building at...</div>
+              <div class="msg-attach-note">
+                <svg viewBox="0 0 12 12" fill="none"><path d="M2 9.5V3a2 2 0 014 0v6a1 1 0 01-2 0V3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                game-plan-oct-28.pdf
+              </div>
+            </div>
+            <div class="unread-dot"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ══════════════
+           SCHEDULE
+      ══════════════ -->
+      <div id="page-schedule" style="display:none">
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab(this,'tab-week')">This Week</button>
+          <button class="tab" onclick="switchTab(this,'tab-next')">Next Week</button>
+        </div>
+
+        <div id="tab-week">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Week of Oct 28, 2026</div>
+              <div class="label">Johnny Cake Method</div>
+            </div>
+            <div class="session-list">
+              <div class="session-item"><div class="si-date">MON 28</div><div class="si-body"><div class="si-title">Pre-Week Game Plan</div><div class="si-time">9:00 AM CT — key levels, weekly bias, what to watch</div></div><div class="si-badge done">Done</div></div>
+              <div class="session-item"><div class="si-date">TUE 29</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT — NQ Futures, market open</div></div><div class="si-badge live">Live now</div></div>
+              <div class="session-item"><div class="si-date">WED 30</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT — NQ Futures, market open</div></div><div class="si-badge upcoming">Tomorrow</div></div>
+              <div class="session-item"><div class="si-date">THU 31</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT — NQ Futures, market open</div></div><div class="si-badge upcoming">Upcoming</div></div>
+              <div class="session-item"><div class="si-date">FRI 1</div><div class="si-body"><div class="si-title">Post-Week Recap</div><div class="si-time">4:00 PM CT — what fired, what didn't, next week</div></div><div class="si-badge upcoming">Upcoming</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-next" style="display:none">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Week of Nov 4, 2026</div>
+              <div class="label">Seats lock in Monday</div>
+            </div>
+            <div class="session-list">
+              <div class="session-item"><div class="si-date">MON 4</div><div class="si-body"><div class="si-title">Pre-Week Game Plan</div><div class="si-time">9:00 AM CT</div></div><div class="si-badge upcoming">Upcoming</div></div>
+              <div class="session-item"><div class="si-date">TUE 5</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT</div></div><div class="si-badge upcoming">Upcoming</div></div>
+              <div class="session-item"><div class="si-date">WED 6</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT</div></div><div class="si-badge upcoming">Upcoming</div></div>
+              <div class="session-item"><div class="si-date">THU 7</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT</div></div><div class="si-badge upcoming">Upcoming</div></div>
+              <div class="session-item"><div class="si-date">FRI 8</div><div class="si-body"><div class="si-title">Post-Week Recap</div><div class="si-time">4:00 PM CT</div></div><div class="si-badge upcoming">Upcoming</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:1.2rem;padding:.9rem 1.2rem;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-size:.86rem;color:var(--muted);">
+          All sessions run on Discord Stage. <a href="https://discord.gg/PLACEHOLDER" style="color:var(--accent);text-decoration:none;" target="_blank">Join the Discord →</a>
+        </div>
+      </div>
+
+      <!-- ══════════════
+           MESSAGES
+      ══════════════ -->
+      <div id="page-messages" style="display:none">
+        <div id="view-inbox">
+          <div class="card">
+            <div class="msg-list">
+              <div class="msg-item unread" id="msg-0" onclick="openMessage(0)">
+                <div class="msg-av">M</div>
+                <div class="msg-body">
+                  <div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">Today, 8:42 AM</span></div>
+                  <div class="msg-subject">This week's game plan + key levels PDF</div>
+                  <div class="msg-preview">Here's the plan going into this week. NQ has a clean setup...</div>
+                  <div class="msg-attach-note"><svg viewBox="0 0 12 12" fill="none"><path d="M2 9.5V3a2 2 0 014 0v6a1 1 0 01-2 0V3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>game-plan-oct-28.pdf</div>
+                </div>
+                <div class="unread-dot" id="dot-0"></div>
+              </div>
+              <div class="msg-item unread" id="msg-1" onclick="openMessage(1)">
+                <div class="msg-av">M</div>
+                <div class="msg-body">
+                  <div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">Sun, 6:15 PM</span></div>
+                  <div class="msg-subject">Welcome to Wingman — read this first</div>
+                  <div class="msg-preview">Welcome to the room. Here's everything you need to know...</div>
+                  <div class="msg-attach-note"><svg viewBox="0 0 12 12" fill="none"><path d="M2 9.5V3a2 2 0 014 0v6a1 1 0 01-2 0V3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>wingman-welcome.pdf · discord-setup.png</div>
+                </div>
+                <div class="unread-dot" id="dot-1"></div>
+              </div>
+              <div class="msg-item" id="msg-2" onclick="openMessage(2)">
+                <div class="msg-av">M</div>
+                <div class="msg-body">
+                  <div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">Oct 18</span></div>
+                  <div class="msg-subject">Friday recap — what happened this week</div>
+                  <div class="msg-preview">Solid week. Here's what I saw, what I missed, and what I'm adjusting...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-detail" style="display:none">
+          <div style="margin-bottom:.9rem;">
+            <button class="btn btn-ghost btn-sm" onclick="closeMessage()">← Back</button>
+          </div>
+          <div class="card">
+            <div class="md-header">
+              <div class="md-subject" id="md-subject">—</div>
+              <div class="md-meta">
+                <div class="md-sender"><div class="md-av">M</div>Mario Johnson</div>
+                <div class="md-date" id="md-date">—</div>
+              </div>
+            </div>
+            <div class="md-body-content" id="md-body"></div>
+            <div class="md-attachments-area" id="md-attachments" style="display:none">
+              <div class="label">Attachments</div>
+              <div class="attach-grid" id="md-attach-grid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════
+           MY PLAN
+      ══════════════ -->
+      <div id="page-plan" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;">
+          <div style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:14px;padding:1.2rem;">
+            <div class="label" style="margin-bottom:.4rem;">Current week</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-.04em;color:var(--accent);line-height:1;">Week 2</div>
+            <div style="color:var(--muted);font-size:.84rem;margin-top:.35rem;">Renews Monday, Nov 4</div>
+          </div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.2rem;">
+            <div class="label" style="margin-bottom:.4rem;">Points balance</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-.04em;color:var(--warm);line-height:1;">0 pts</div>
+            <div style="color:var(--muted);font-size:.84rem;margin-top:.35rem;">Earn 20 pts/wk from week 4+</div>
+          </div>
+        </div>
+
+        <!-- Loyalty table -->
+        <div class="card" style="margin-bottom:1.2rem;">
+          <div class="card-header">
+            <div class="card-title">Loyalty Schedule</div>
+            <div class="label">30% max discount · then points</div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="plan-table">
+              <thead>
+                <tr>
+                  <th>Week</th><th>Price</th><th>Off</th><th>Points</th><th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Week 1</td><td style="font-weight:600;">$200</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td><span style="color:var(--accent);font-size:.78rem;">✓ Done</span></td></tr>
+                <tr class="you"><td style="color:var(--accent);font-weight:600;">Week 2 ← You</td><td style="color:var(--accent);font-weight:600;">$180</td><td style="color:var(--accent);">10%</td><td style="color:var(--muted);">—</td><td><span style="color:var(--accent);">● Active</span></td></tr>
+                <tr><td style="color:var(--muted);">Week 3</td><td>$160</td><td style="color:var(--muted);">20%</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">Upcoming</td></tr>
+                <tr class="pts-row"><td style="color:var(--warm);font-weight:600;">Week 4+ 🔒</td><td style="color:var(--warm);font-weight:600;">$140</td><td style="color:var(--warm);">30% cap</td><td><span class="pts-earn-badge">+20 pts/wk</span></td><td style="color:var(--muted);">Upcoming</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Points store -->
+        <div class="card" style="margin-bottom:1.2rem;">
+          <div class="card-header">
+            <div class="card-title">Points Store</div>
+            <div class="label">0 pts available</div>
+          </div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:.85rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
+              <div>
+                <div style="font-weight:600;font-size:.95rem;">📖 Johnny Cake Method Ebook</div>
+                <div style="color:var(--muted);font-size:.82rem;">Full strategy breakdown — Mario's system in writing</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:.7rem;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--warm);font-weight:600;">20 pts</span>
+                <button class="btn btn-ghost btn-sm" disabled style="opacity:.4;cursor:default;">Redeem</button>
+              </div>
+            </div>
+            <div style="height:1px;background:var(--line);"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
+              <div>
+                <div style="font-weight:600;font-size:.95rem;">📈 NQ Levels Indicator</div>
+                <div style="color:var(--muted);font-size:.82rem;">TradingView indicator — key grain levels auto-plotted</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:.7rem;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--warm);font-weight:600;">80 pts</span>
+                <button class="btn btn-ghost btn-sm" disabled style="opacity:.4;cursor:default;">Redeem</button>
+              </div>
+            </div>
+            <div style="height:1px;background:var(--line);"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
+              <div>
+                <div style="font-weight:600;font-size:.95rem;">🆓 Free Week Renewal</div>
+                <div style="color:var(--muted);font-size:.82rem;">Skip one week's payment — seat held, tier protected</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:.7rem;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--warm);font-weight:600;">100 pts</span>
+                <button class="btn btn-ghost btn-sm" disabled style="opacity:.4;cursor:default;">Redeem</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Manage -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">Manage</div></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:.85rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
+              <div>
+                <div style="font-weight:600;font-size:.93rem;">Billing</div>
+                <div style="color:var(--muted);font-size:.83rem;">Renews Nov 4 · $160 (Week 3 rate)</div>
+              </div>
+              <a class="btn btn-ghost btn-sm" href="#">Manage →</a>
+            </div>
+            <div style="height:1px;background:var(--line);"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
+              <div>
+                <div style="font-weight:600;font-size:.93rem;">Discord</div>
+                <div style="color:var(--muted);font-size:.83rem;">Sessions run on Discord Stage</div>
+              </div>
+              <a class="btn btn-ghost btn-sm" href="https://discord.gg/PLACEHOLDER" target="_blank">Open Discord →</a>
+            </div>
+            <div style="height:1px;background:var(--line);"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
+              <div>
+                <div style="font-weight:600;font-size:.93rem;color:var(--red);">Cancel</div>
+                <div style="color:var(--muted);font-size:.83rem;">Your loyalty tier is saved for 30 days if you come back</div>
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="if(confirm('Cancel your Wingman subscription?')) showToast('Cancellation submitted')">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Message data ──
+var MESSAGES = [
+  {
+    subject: "This week's game plan + key levels PDF",
+    date: "Today, 8:42 AM",
+    body: "<p>Here's the plan going into this week.</p><p>NQ has a clean setup building at the <b>19,800 level</b>. I'm watching for grain confirmation before touching anything. Plan is attached — print it or keep it on a second screen during the session.</p><p>See you live at 9:30 AM CT on Discord Stage. Get in a few minutes early.</p><p>— Mario</p>",
+    attachments: [{ name: "game-plan-oct-28.pdf", size: "142 KB" }]
+  },
+  {
+    subject: "Welcome to Wingman — read this first",
+    date: "Sun Oct 25, 6:15 PM",
+    body: "<p>Welcome to the room.</p><p>Everything you need is here. Sessions run on <b>Discord Stage</b> — the invite and setup guide are attached. Get in the server before Tuesday so you're not rushing at market open.</p><p>Sessions are Tue–Thu at 9:30 AM CT. Monday I drop the game plan. Friday we recap. That's the week.</p><p>One rule: <b>stay off the keyboard while I'm in a trade.</b> Questions are for between setups. Everything you're wondering gets answered by watching.</p><p>— Mario</p>",
+    attachments: [
+      { name: "wingman-welcome.pdf", size: "88 KB" },
+      { name: "discord-setup.png", size: "210 KB" }
+    ]
+  },
+  {
+    subject: "Friday recap — what happened this week",
+    date: "Fri Oct 18, 4:22 PM",
+    body: "<p>Good week. Hit two clean setups Tuesday and Thursday, passed on Wednesday — grain wasn't right.</p><p>Key takeaway: <b>patience at the grain level is the whole game.</b> Everything else is just waiting.</p><p>Watching 19,600 next week. See you Monday.</p><p>— Mario</p>",
+    attachments: []
+  }
+];
+
+var readState = [false, false, true];
+
+// ── Navigation ──
+function showPage(name) {
+  ['dashboard','schedule','messages','plan'].forEach(function(p) {
+    document.getElementById('page-' + p).style.display = p === name ? 'block' : 'none';
+    var nav = document.getElementById('nav-' + p);
+    if (nav) nav.classList.toggle('active', p === name);
+  });
+  document.getElementById('page-title').textContent = { dashboard:'Dashboard', schedule:'Schedule', messages:'Messages', plan:'My Plan' }[name] || name;
+  if (name === 'messages') {
+    document.getElementById('view-inbox').style.display = 'block';
+    document.getElementById('view-detail').style.display = 'none';
+  }
+  closeSidebar();
+  window.scrollTo(0, 0);
+}
+
+// ── Tabs ──
+function switchTab(btn, tabId) {
+  btn.closest('.tabs').querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  ['tab-week','tab-next'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = id === tabId ? 'block' : 'none';
+  });
+}
+
+// ── Messages ──
+function openMessage(idx) {
+  var msg = MESSAGES[idx];
+  if (!msg) return;
+  document.getElementById('md-subject').textContent = msg.subject;
+  document.getElementById('md-date').textContent = msg.date;
+  document.getElementById('md-body').innerHTML = msg.body;
+
+  var attEl = document.getElementById('md-attachments');
+  var grid = document.getElementById('md-attach-grid');
+  if (msg.attachments && msg.attachments.length) {
+    grid.innerHTML = msg.attachments.map(function(a) {
+      return '<a class="attach-pill" href="#">' +
+        '<svg viewBox="0 0 14 14" fill="none"><path d="M2 11V3a2 2 0 014 0v7a1 1 0 01-2 0V3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>' +
+        a.name + '<span class="attach-pill-size">' + a.size + '</span></a>';
+    }).join('');
+    attEl.style.display = 'block';
+  } else { attEl.style.display = 'none'; }
+
+  // Mark read
+  if (!readState[idx]) {
+    readState[idx] = true;
+    var item = document.getElementById('msg-' + idx);
+    if (item) item.classList.remove('unread');
+    var dot = document.getElementById('dot-' + idx);
+    if (dot) dot.style.display = 'none';
+    updateBadge();
+  }
+
+  document.getElementById('view-inbox').style.display = 'none';
+  document.getElementById('view-detail').style.display = 'block';
+}
+
+function closeMessage() {
+  document.getElementById('view-inbox').style.display = 'block';
+  document.getElementById('view-detail').style.display = 'none';
+}
+
+function updateBadge() {
+  var count = readState.filter(function(r) { return !r; }).length;
+  var badge = document.getElementById('msg-badge');
+  badge.textContent = count;
+  badge.style.display = count > 0 ? '' : 'none';
+  document.getElementById('notif-dot').style.display = count > 0 ? 'block' : 'none';
+}
+
+// ── Mario online/offline status ──
+// This is set by admin panel via shared localStorage key "mario_status"
+function checkMarioStatus() {
+  var status;
+  try { status = localStorage.getItem('mario_status') || 'live'; } catch(e) { status = 'live'; }
+  var bar = document.getElementById('mario-status-bar');
+  var label = document.getElementById('mario-status-label');
+  var alert = document.getElementById('alert-banner');
+  var alertText = document.getElementById('alert-text');
+  if (status === 'live') {
+    bar.className = 'sb-online live';
+    label.textContent = 'Mario is online';
+    if (alert) {
+      alert.className = 'alert-banner online';
+      alert.innerHTML = '<div class="alert-banner-dot"></div><span>Mario just went live — join on Discord</span><a href="https://discord.gg/PLACEHOLDER" target="_blank" style="margin-left:auto;color:var(--accent);font-size:.82rem;text-decoration:none;white-space:nowrap;font-weight:600;">Join →</a>';
+      alert.style.display = 'flex';
+    }
+  } else {
+    bar.className = 'sb-online offline';
+    label.textContent = 'Mario is offline';
+    if (alert) {
+      alert.className = 'alert-banner offline';
+      alert.innerHTML = '<div class="alert-banner-dot"></div><span>Mario is offline — next session Wed 9:30 AM CT</span>';
+      alert.style.display = 'flex';
+    }
+  }
+}
+
+// ── Toast ──
+var _tt;
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(_tt); _tt = setTimeout(function() { t.classList.remove('show'); }, 2200);
+}
+
+// ── Sidebar mobile ──
+function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
+
+// ── Init ──
+updateBadge();
+checkMarioStatus();
+// Poll status every 10s (admin changes localStorage)
+setInterval(checkMarioStatus, 10000);
+// Also listen for storage changes from admin panel (same browser)
+window.addEventListener('storage', checkMarioStatus);
+</script>
+</body>
+</html>

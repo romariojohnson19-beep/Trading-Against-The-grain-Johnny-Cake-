@@ -3,536 +3,804 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Wingman Live — Johnny Cake Method</title>
-<meta name="description" content="Trade live with Mario. Real charts, real setups, real time. 12 seats. Cancel anytime.">
-<meta property="og:title" content="Wingman Live — Johnny Cake Method">
-<meta property="og:description" content="Stop burning money on evals. Trade live with Mario — 3 sessions a week, 12 seats max.">
+<title>Wingman Trading Room — Johnny Cake Method</title>
+<meta name="description" content="Mario trades live. 12 seats. Watch, learn, ask questions in real time.">
+<meta property="og:title" content="Wingman Trading Room — Johnny Cake Method">
+<meta property="og:description" content="Mario trades live. 12 seats. Watch, learn, ask questions in real time.">
 <meta property="og:image" content="https://www.smartmoneystore.com/og-image.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Wingman Live — Johnny Cake Method">
-<meta name="twitter:description" content="Stop burning money on evals. Trade live with Mario.">
-<meta name="twitter:image" content="https://www.smartmoneystore.com/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
 <style>
-:root{
-  --bg:#0E1116; --panel:#161B22; --line:#2A2F38;
-  --fg:#F2EFE8; --muted:#A9A59B;
-  --accent:#C8F169; --accent-ink:#0E1116; --warm:#FF8A6B;
-  --display:'Bricolage Grotesque',Georgia,serif;
-  --body:'Inter',system-ui,sans-serif;
-  --mono:'JetBrains Mono',ui-monospace,monospace;
-  color-scheme:dark;
+:root {
+  --bg: #0B0D11;
+  --panel: #13171E;
+  --line: #232830;
+  --fg: #F0EDE6;
+  --muted: #6B7280;
+  --accent: #C8F169;
+  --accent-dim: rgba(200,241,105,.08);
+  --accent-border: rgba(200,241,105,.18);
+  --warm: #FF8A6B;
+  --red: #FF4D4D;
+  color-scheme: dark;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
-img{max-width:100%;display:block;}
-
-/* ── Scroll reveal ── */
-[data-reveal]{opacity:0;transform:translateY(32px);transition:opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1);}
-[data-reveal].visible{opacity:1;transform:none;}
-[data-reveal="left"]{transform:translateX(-32px);}
-[data-reveal="left"].visible{transform:none;}
-[data-reveal="right"]{transform:translateX(32px);}
-[data-reveal="right"].visible{transform:none;}
-[data-reveal="scale"]{transform:scale(.94);opacity:0;}
-[data-reveal="scale"].visible{transform:scale(1);opacity:1;}
-
-/* ── Utility ── */
-.wrap{max-width:1080px;margin-inline:auto;
-  padding-left:max(20px,env(safe-area-inset-left,0px));
-  padding-right:max(20px,env(safe-area-inset-right,0px));}
-.tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
-.accent{color:var(--accent);}
-.divider{height:1px;background:var(--line);}
-
-/* ── Header ── */
-header{position:fixed;top:0;left:0;right:0;z-index:80;
-  background:rgba(14,17,22,.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  border-bottom:1px solid rgba(42,47,56,.6);padding-top:env(safe-area-inset-top,0px);}
-.hbar{display:flex;align-items:center;justify-content:space-between;padding:.75rem max(20px,env(safe-area-inset-left,0px));}
-.brand{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fg);text-decoration:none;}
-.brand-dot{width:8px;height:8px;border-radius:2px;background:var(--accent);transform:rotate(45deg);}
-.hcta{font-family:var(--body);font-weight:700;font-size:.88rem;background:var(--accent);color:var(--accent-ink);
-  border:none;border-radius:8px;padding:.55rem 1.1rem;text-decoration:none;cursor:pointer;
-  min-height:40px;display:flex;align-items:center;-webkit-tap-highlight-color:transparent;}
-
-/* ── Buttons ── */
-.btn{display:flex;align-items:center;justify-content:center;gap:.5rem;
-  font-family:var(--body);font-weight:700;font-size:1rem;border-radius:11px;
-  padding:.9rem 1.5rem;text-decoration:none;border:none;cursor:pointer;
-  min-height:52px;width:100%;-webkit-tap-highlight-color:transparent;
-  transition:transform .15s ease,box-shadow .15s ease;}
-.btn-primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 4px 24px rgba(200,241,105,.18);}
-.btn-primary:active{transform:scale(.97);}
-.btn-ghost{background:transparent;color:var(--fg);border:1px solid var(--line);}
-.btn-ghost:active{border-color:var(--fg);}
-.btn-warm{background:var(--warm);color:#1a0a04;}
-@media(hover:hover){
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(200,241,105,.28);}
-  .btn-ghost:hover{border-color:var(--muted);}
-  .btn-warm:hover{transform:translateY(-2px);}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* ── HERO — Wingman leads ── */
-.hero{min-height:100svh;display:flex;align-items:center;
-  padding-top:calc(60px + env(safe-area-inset-top,0px));
-  padding-bottom:60px;position:relative;overflow:hidden;}
-.hero-bg{position:absolute;inset:0;pointer-events:none;}
-.hero-bg::before{content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 70% at 70% 40%, rgba(200,241,105,.07) 0%, transparent 65%);}
-.hero-bg::after{content:"";position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 60% at 20% 60%, rgba(255,138,107,.05) 0%, transparent 60%);}
+/* ── Reveal ── */
+[data-r] { opacity: 0; transform: translateY(28px); transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1); }
+[data-r].on { opacity: 1; transform: none; }
+[data-r="up2"] { transition-delay: .1s; }
+[data-r="up3"] { transition-delay: .2s; }
+[data-r="scale"] { transform: scale(.95) translateY(16px); }
+[data-r="scale"].on { transform: none; }
 
-/* Grid texture */
-.hero-grid{position:absolute;inset:0;pointer-events:none;
-  background-image:linear-gradient(to right,#2A2F38 1px,transparent 1px),linear-gradient(to bottom,#2A2F38 1px,transparent 1px);
-  background-size:80px 80px;opacity:.18;}
+/* ── Layout ── */
+.wrap { max-width: 1040px; margin-inline: auto; padding-inline: max(24px, env(safe-area-inset-left, 0px)); }
+.label { font-family: 'JetBrains Mono', monospace; font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
 
-.hero-inner{display:flex;flex-direction:column;gap:2.4rem;width:100%;}
-.hero-label{display:inline-flex;align-items:center;gap:.6rem;
-  background:rgba(200,241,105,.08);border:1px solid rgba(200,241,105,.2);
-  border-radius:100px;padding:.35rem 1rem .35rem .5rem;
-  font-family:var(--mono);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);}
-.hero-label-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.hero h1{font-family:var(--display);font-weight:800;
-  font-size:clamp(2.8rem,10vw,6.4rem);line-height:.96;letter-spacing:-0.03em;max-width:14ch;}
-.hero h1 em{font-style:normal;color:var(--accent);}
-.hero-sub{color:var(--muted);font-size:clamp(1rem,2.5vw,1.15rem);max-width:44ch;line-height:1.65;margin-top:.8rem;}
-.hero-sub b{color:var(--fg);}
-.hero-actions{display:flex;flex-direction:column;gap:.75rem;width:100%;max-width:360px;margin-top:1.4rem;}
-.hero-stats{display:flex;gap:2.4rem;flex-wrap:wrap;margin-top:2rem;padding-top:2rem;border-top:1px solid var(--line);}
-.hstat-num{font-family:var(--display);font-weight:800;font-size:1.8rem;letter-spacing:-0.03em;line-height:1;}
-.hstat-num em{font-style:normal;color:var(--accent);}
-.hstat-label{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.2rem;}
+/* ══ BANNER ══ */
+.banner {
+  background: var(--accent);
+  color: #0B1400;
+  text-align: center;
+  padding: .55rem 24px;
+  font-size: .85rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+.banner b { font-weight: 700; }
 
-.scroll-hint{display:flex;align-items:center;gap:.5rem;margin-top:2.4rem;
-  font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;}
-.scroll-arrow{width:18px;height:18px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);
-  transform:rotate(45deg);animation:bounce 2s ease-in-out infinite;flex:none;}
-@keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(4px)}}
+/* ══ NAV ══ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+  background: rgba(11,13,17,.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.nav-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .7rem max(24px, env(safe-area-inset-left, 0px));
+}
+.brand {
+  display: flex; align-items: center; gap: .55rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--fg); text-decoration: none;
+}
+.brand-mark {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--accent); display: flex; align-items: center; justify-content: center;
+}
+.brand-mark svg { width: 14px; height: 14px; }
+.nav-cta {
+  font-weight: 600; font-size: .85rem;
+  background: var(--accent); color: #0B1400;
+  border: none; border-radius: 8px; padding: .5rem 1.1rem;
+  text-decoration: none; cursor: pointer;
+  min-height: 38px; display: flex; align-items: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity .15s;
+}
+.nav-cta:hover { opacity: .88; }
 
-@media(min-width:720px){
-  .hero-inner{flex-direction:row;align-items:center;gap:5rem;}
-  .hero-text{flex:1;}
-  .hero-visual{flex:none;width:min(380px,45vw);}
-  .hero-actions{flex-direction:row;max-width:none;}
-  .btn{width:auto;}
+/* ══ HERO ══ */
+.hero {
+  min-height: 100svh;
+  display: flex; align-items: center;
+  padding-top: calc(80px + env(safe-area-inset-top, 0px));
+  padding-bottom: 80px;
+  position: relative; overflow: hidden;
+}
+/* Subtle grid */
+.hero::before {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(to right, #232830 1px, transparent 1px),
+    linear-gradient(to bottom, #232830 1px, transparent 1px);
+  background-size: 72px 72px;
+  opacity: .3;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black 20%, transparent 80%);
+}
+/* Glow */
+.hero::after {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 55% at 50% 45%, rgba(200,241,105,.06) 0%, transparent 70%);
 }
 
-/* ── Live card visual ── */
-.live-card{background:var(--panel);border:1px solid var(--line);border-radius:20px;
-  overflow:hidden;position:relative;}
-.lc-header{padding:1.1rem 1.3rem;border-bottom:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;}
-.lc-live{display:flex;align-items:center;gap:.4rem;
-  font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--warm);}
-.lc-live-dot{width:6px;height:6px;border-radius:50%;background:var(--warm);animation:pulse 1.5s ease-in-out infinite;}
-.lc-seats{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
-.lc-chart{padding:1.2rem;}
-.lc-ticker{padding:.8rem 1.3rem;background:rgba(200,241,105,.05);border-top:1px solid var(--line);
-  display:flex;justify-content:space-between;align-items:center;}
-.lc-ticker-sym{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;color:var(--fg);font-weight:600;}
-.lc-ticker-price{font-family:var(--display);font-weight:800;font-size:1.2rem;color:var(--accent);letter-spacing:-.02em;}
-.lc-ticker-chg{font-family:var(--mono);font-size:.65rem;color:var(--accent);letter-spacing:.06em;}
-.lc-comment{padding:1rem 1.3rem;border-top:1px solid var(--line);}
-.lc-comment-row{display:flex;gap:.7rem;align-items:flex-start;margin-bottom:.55rem;}
-.lc-comment-row:last-child{margin-bottom:0;}
-.lc-avatar{width:24px;height:24px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
-  font-family:var(--mono);font-size:.55rem;letter-spacing:.04em;font-weight:600;}
-.lc-msg{font-size:.8rem;line-height:1.45;color:var(--muted);}
-.lc-msg b{color:var(--fg);}
-.lc-msg .accent{color:var(--accent);}
-
-/* ── Pain section ── */
-.pain-section{padding:80px 0;}
-.pain-grid{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-top:3rem;}
-.pain-item{background:var(--bg);padding:1.6rem;display:flex;gap:1rem;align-items:flex-start;}
-.pain-num{font-family:var(--mono);font-size:.65rem;color:var(--warm);letter-spacing:.12em;flex:none;padding-top:.15rem;}
-.pain-text{font-size:1rem;line-height:1.55;color:var(--fg);}
-.pain-text b{color:var(--warm);font-weight:600;}
-@media(min-width:640px){.pain-grid{grid-template-columns:1fr 1fr;}}
-
-/* ── Wingman section (main) ── */
-.wingman-section{padding:80px 0;background:var(--panel);border-block:1px solid var(--line);}
-.wingman-inner{display:grid;grid-template-columns:1fr;gap:3rem;}
-@media(min-width:720px){.wingman-inner{grid-template-columns:1fr 1fr;align-items:start;gap:4rem;}}
-.wingman-schedule{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-top:2rem;}
-.ws-row{display:grid;grid-template-columns:3.5rem 1fr;border-bottom:1px solid var(--line);}
-.ws-row:last-child{border-bottom:none;}
-.ws-day{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--accent);
-  padding:1rem .6rem 1rem 1rem;border-right:1px solid var(--line);display:flex;align-items:center;
-  background:rgba(200,241,105,.03);text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);
-  justify-content:center;}
-.ws-body{padding:.9rem 1.2rem;}
-.ws-title{font-weight:600;font-size:.96rem;}
-.ws-desc{color:var(--muted);font-size:.84rem;margin-top:.2rem;line-height:1.5;}
-
-/* ── Pricing cards ── */
-.pricing-section{padding:80px 0;}
-.pricing-grid{display:grid;grid-template-columns:1fr;gap:1.2rem;margin-top:3rem;}
-@media(min-width:640px){.pricing-grid{grid-template-columns:1fr 1fr;}}
-@media(min-width:960px){.pricing-grid{grid-template-columns:repeat(4,1fr);}}
-
-.p-card{background:var(--panel);border:1px solid var(--line);border-radius:20px;
-  padding:clamp(1.4rem,4vw,1.8rem);display:flex;flex-direction:column;gap:1.2rem;position:relative;}
-.p-card.featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 8px 40px rgba(200,241,105,.12);}
-.p-card.dimmed{opacity:.5;pointer-events:none;user-select:none;}
-.p-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);
-  font-family:var(--mono);font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  padding:4px 14px;border-radius:100px;white-space:nowrap;}
-.p-badge.live{background:var(--accent);color:var(--accent-ink);}
-.p-badge.full{background:var(--warm);color:#1a0a04;}
-.p-badge.soon{background:var(--muted);color:var(--bg);}
-.p-badge.popular{background:var(--accent);color:var(--accent-ink);}
-.p-name{font-family:var(--display);font-weight:800;font-size:1.25rem;letter-spacing:-0.02em;}
-.p-sub{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.2rem;}
-.p-price{font-family:var(--display);font-weight:800;font-size:2.2rem;letter-spacing:-0.04em;line-height:1;}
-.p-price span{font-size:.9rem;font-weight:500;color:var(--muted);letter-spacing:0;}
-.p-list{list-style:none;display:flex;flex-direction:column;gap:.5rem;flex:1;}
-.p-list li{display:flex;gap:.5rem;font-size:.9rem;line-height:1.5;color:var(--fg);}
-.p-list .m{color:var(--accent);font-weight:700;flex:none;}
-.p-list .m.dim{color:var(--muted);}
-.p-btn{display:flex;flex-direction:column;gap:.5rem;margin-top:auto;}
-.p-fine{color:var(--muted);font-size:.75rem;text-align:center;line-height:1.5;}
-.p-note{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center;}
-
-/* Loyalty bar */
-.loyalty-bar{background:rgba(200,241,105,.06);border:1px solid rgba(200,241,105,.15);
-  border-radius:14px;padding:1.4rem 1.6rem;margin-top:3rem;}
-.loyalty-title{font-family:var(--display);font-weight:800;font-size:1.1rem;letter-spacing:-0.01em;margin-bottom:.8rem;}
-.loyalty-track{display:flex;align-items:center;gap:0;margin-bottom:.8rem;overflow-x:auto;}
-.lt-step{display:flex;flex-direction:column;align-items:center;flex:1;min-width:52px;}
-.lt-week{font-family:var(--mono);font-size:.58rem;letter-spacing:.06em;color:var(--muted);margin-bottom:.3rem;text-align:center;}
-.lt-dot{width:10px;height:10px;border-radius:50%;background:var(--line);border:1px solid var(--line);position:relative;z-index:1;}
-.lt-dot.earned{background:var(--accent);border-color:var(--accent);}
-.lt-price{font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-top:.3rem;text-align:center;}
-.lt-price.accent{color:var(--accent);}
-.lt-line{flex:1;height:1px;background:var(--line);margin:0 -1px;}
-.lt-line.earned{background:var(--accent);}
-.loyalty-note{font-size:.85rem;color:var(--muted);line-height:1.6;}
-.loyalty-note b{color:var(--fg);}
-
-/* ── Coaching tiers ── */
-.coaching-tiers{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.8rem;}
-.ct-row{display:flex;justify-content:space-between;align-items:center;
-  padding:.6rem .85rem;border:1px solid var(--line);border-radius:10px;}
-.ct-label{font-size:.85rem;font-weight:600;}
-.ct-price{font-family:var(--mono);font-size:.75rem;color:var(--muted);}
-
-/* ── Method / Steps ── */
-.steps-section{padding:80px 0;}
-.steps-grid{margin-top:2.4rem;display:flex;flex-direction:column;gap:0;
-  border:1px solid var(--line);border-radius:16px;overflow:hidden;}
-.step{display:grid;grid-template-columns:3rem 1fr;border-bottom:1px solid var(--line);}
-.step:last-child{border-bottom:none;}
-.step-num{font-family:var(--mono);font-size:.65rem;color:var(--accent);letter-spacing:.1em;
-  padding:1.2rem .6rem 1.2rem 1.1rem;display:flex;align-items:flex-start;
-  border-right:1px solid var(--line);background:rgba(200,241,105,.03);}
-.step-body{padding:1.1rem 1.3rem;}
-.step-name{font-family:var(--display);font-weight:800;font-size:1.1rem;letter-spacing:-0.01em;}
-.step-desc{color:var(--muted);font-size:.93rem;margin-top:.3rem;line-height:1.55;}
-@media(min-width:640px){
-  .step{grid-template-columns:3.5rem 1fr;}
-  .step-num{padding:1.3rem .8rem 1.3rem 1.3rem;font-size:.7rem;}
-  .step-body{padding:1.3rem 1.5rem;}
+.hero-inner {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 0; width: 100%;
 }
 
-/* ── Book section ── */
-.book-section{padding:80px 0;background:var(--panel);border-block:1px solid var(--line);}
-.book-inner{display:flex;flex-direction:column;gap:2.4rem;}
-@media(min-width:720px){.book-inner{flex-direction:row;align-items:center;gap:4rem;}}
-.book-wrap{perspective:1200px;display:flex;justify-content:center;flex:none;}
-.book{width:min(220px,50vw);aspect-ratio:2/3;border-radius:5px 12px 12px 5px;position:relative;
-  background:linear-gradient(145deg,#13181f,#0b0e13);border:1px solid rgba(42,47,56,.8);
-  box-shadow:-20px 32px 56px rgba(0,0,0,.7),inset 2px 0 0 rgba(255,255,255,.04);
-  transform:rotateY(-16deg) rotateX(3deg);transform-style:preserve-3d;
-  padding:24px 20px;display:flex;flex-direction:column;overflow:hidden;
-  transition:transform .6s cubic-bezier(.22,1,.36,1);}
-.book:hover{transform:rotateY(-8deg) rotateX(1deg);}
-.book::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:7px;border-radius:3px;
-  background:linear-gradient(180deg,var(--accent),#8ab33a);opacity:.95;}
-.book-label{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;padding-left:8px;}
-.book-title{font-family:var(--display);font-weight:800;font-size:1.7rem;line-height:.98;letter-spacing:-0.03em;margin-top:auto;padding-left:8px;}
-.book-title em{font-style:normal;color:var(--accent);}
-.book-rule{height:1px;background:var(--line);margin:14px 0;}
-.book-foot{font-family:var(--mono);font-size:.55rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;padding-left:8px;}
-.book-glow{position:absolute;bottom:0;left:0;right:0;height:40%;
-  background:linear-gradient(transparent,rgba(200,241,105,.04));pointer-events:none;}
-.book-chart{position:absolute;right:0;bottom:60px;left:50%;opacity:.2;}
-.book-info{flex:1;}
-.book-info h3{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:-0.03em;line-height:1.06;max-width:16ch;}
-.book-info h3 em{font-style:normal;color:var(--accent);}
-.book-info p{color:var(--muted);font-size:.95rem;line-height:1.65;margin-top:.8rem;max-width:40ch;}
-.book-actions{display:flex;flex-direction:column;gap:.6rem;margin-top:1.6rem;max-width:300px;}
-@media(min-width:480px){.book-actions{flex-direction:row;max-width:none;}.btn{width:auto;}}
+/* Live pill */
+.live-pill {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: rgba(255,77,77,.1); border: 1px solid rgba(255,77,77,.25);
+  border-radius: 100px; padding: .32rem .85rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--red);
+  margin-bottom: 2rem;
+}
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red);
+  animation: blink 1.6s ease-in-out infinite;
+}
+@keyframes blink { 0%,100% { opacity:1 } 50% { opacity:.3 } }
 
-/* ── Author ── */
-.author-section{padding:80px 0;}
-.author-inner{display:flex;flex-direction:column;gap:2rem;align-items:flex-start;}
-.avatar{width:88px;height:88px;border-radius:50%;border:2px solid var(--accent);padding:3px;flex:none;}
-.avatar-inner{width:100%;height:100%;border-radius:50%;background:repeating-linear-gradient(135deg,#1C222B 0 8px,#222934 8px 16px);
-  display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.6rem;color:var(--muted);}
-.author-inner h3{font-family:var(--display);font-weight:800;font-size:1.5rem;letter-spacing:-0.02em;margin-bottom:.5rem;}
-.author-inner p{color:var(--muted);font-size:.98rem;line-height:1.65;max-width:56ch;}
-@media(min-width:520px){.author-inner{flex-direction:row;align-items:center;gap:2rem;}}
+.hero h1 {
+  font-family: 'Bricolage Grotesque', serif;
+  font-weight: 800;
+  font-size: clamp(3.2rem, 12vw, 7.5rem);
+  line-height: .92;
+  letter-spacing: -.04em;
+  max-width: 12ch;
+  margin-bottom: 1.6rem;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
 
-/* ── FAQ ── */
-.faq-section{padding:80px 0;background:var(--panel);border-block:1px solid var(--line);}
-.faq-wrap{max-width:720px;}
-details{border-bottom:1px solid var(--line);padding:.9rem 0;}
-details summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem;
-  font-family:var(--display);font-weight:700;font-size:1.05rem;letter-spacing:-0.01em;-webkit-tap-highlight-color:transparent;}
-details summary::-webkit-details-marker{display:none;}
-.faq-plus{color:var(--accent);font-family:var(--mono);font-size:1.2rem;flex:none;transition:transform .2s;}
-details[open] .faq-plus{transform:rotate(45deg);}
-.faq-a{color:var(--muted);margin-top:.7rem;font-size:.96rem;line-height:1.65;padding-right:.5rem;}
+.hero-sub {
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  color: var(--muted);
+  max-width: 36ch;
+  line-height: 1.65;
+  margin-bottom: 2.8rem;
+}
+.hero-sub b { color: var(--fg); }
 
-/* ── Final CTA ── */
-.final{background:var(--accent);padding:80px 0;}
-.final-inner{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.4rem;}
-.final h2{font-family:var(--display);font-weight:800;font-size:clamp(2rem,7vw,3.6rem);letter-spacing:-0.03em;color:var(--accent-ink);max-width:16ch;line-height:1.06;}
-.final p{color:#1a4500;font-size:1rem;max-width:36ch;line-height:1.6;}
-.final .btn-dark{background:var(--accent-ink);color:var(--accent);width:auto;min-width:220px;font-size:1.05rem;min-height:56px;
-  box-shadow:0 8px 32px rgba(0,0,0,.3);}
-.final-note{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:#1d4d00;}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: .6rem;
+  background: var(--accent); color: #0B1400;
+  font-weight: 700; font-size: 1.05rem;
+  border: none; border-radius: 12px;
+  padding: 1rem 2rem; text-decoration: none; cursor: pointer;
+  min-height: 54px;
+  box-shadow: 0 0 0 0 rgba(200,241,105,0);
+  transition: transform .2s, box-shadow .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(200,241,105,.25); }
+.hero-cta:active { transform: scale(.97); }
+.hero-cta svg { width: 18px; height: 18px; }
 
-/* ── Footer ── */
-footer{padding:2rem 0;border-top:1px solid var(--line);padding-bottom:max(2rem,env(safe-area-inset-bottom,0px));}
-.foot-inner{display:flex;flex-direction:column;gap:.8rem;}
-.foot-disc{color:var(--muted);font-size:.78rem;line-height:1.6;}
-.foot-row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;
-  font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;}
-
-@media(prefers-reduced-motion:reduce){
-  *{transition:none!important;animation:none!important;}
-  [data-reveal]{opacity:1;transform:none;}
+.hero-note {
+  margin-top: 1.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
 }
 
-var CHECKOUT_URL = "";
+/* ── Chart visual ── */
+.chart-wrap {
+  width: 100%; max-width: 680px;
+  margin: 4rem auto 0;
+  position: relative;
+}
+.chart-frame {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.chart-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .9rem 1.3rem;
+  border-bottom: 1px solid var(--line);
+}
+.chart-header-left {
+  display: flex; align-items: center; gap: .7rem;
+}
+.chart-ticker { font-family: 'JetBrains Mono', monospace; font-size: .78rem; letter-spacing: .08em; font-weight: 600; }
+.chart-tf {
+  font-family: 'JetBrains Mono', monospace; font-size: .6rem;
+  color: var(--muted); letter-spacing: .1em;
+  background: var(--line); border-radius: 5px; padding: 2px 7px;
+}
+.chart-live-badge {
+  display: flex; align-items: center; gap: .4rem;
+  font-family: 'JetBrains Mono', monospace; font-size: .58rem;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--warm);
+}
+.chart-live-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--warm); animation: blink 1.8s ease-in-out infinite;
+}
+.chart-body { padding: 1.2rem; }
+.chart-footer {
+  padding: .8rem 1.3rem;
+  border-top: 1px solid var(--line);
+  display: flex; gap: 1.4rem; align-items: center;
+}
+.cf-stat { display: flex; flex-direction: column; gap: .1rem; }
+.cf-val { font-family: 'Bricolage Grotesque', serif; font-weight: 800; font-size: 1.1rem; letter-spacing: -.02em; }
+.cf-val.green { color: var(--accent); }
+.cf-val.red { color: var(--red); }
+.cf-lbl { font-family: 'JetBrains Mono', monospace; font-size: .55rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+/* Chat strip */
+.chat-strip {
+  border-top: 1px solid var(--line);
+  padding: .9rem 1.3rem;
+  display: flex; flex-direction: column; gap: .5rem;
+}
+.chat-msg { display: flex; gap: .6rem; align-items: flex-start; }
+.chat-av {
+  width: 22px; height: 22px; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: .5rem; font-weight: 600;
+}
+.chat-text { font-size: .82rem; line-height: 1.45; color: var(--muted); }
+.chat-text b { color: var(--fg); }
+.chat-text .hi { color: var(--accent); }
+
+/* ══ PROOF STRIP ══ */
+.proof { padding: 48px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.proof-item {
+  padding: 1.2rem 1.6rem;
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: .2rem;
+}
+.proof-item:last-child { border-right: none; }
+.proof-num {
+  font-family: 'Bricolage Grotesque', serif;
+  font-weight: 800; font-size: clamp(2rem, 6vw, 3.2rem);
+  letter-spacing: -.04em; line-height: 1;
+  color: var(--accent);
+}
+.proof-lbl { font-size: .88rem; color: var(--muted); line-height: 1.4; }
+@media (max-width: 480px) {
+  .proof-grid { grid-template-columns: 1fr 1fr; }
+  .proof-item:nth-child(2) { border-right: none; }
+  .proof-item:nth-child(3) { border-right: 1px solid var(--line); border-top: 1px solid var(--line); }
+  .proof-item:nth-child(3) ~ .proof-item { border-top: 1px solid var(--line); }
+}
+
+/* ══ WHAT IS WINGMAN ══ */
+.what { padding: 96px 0; }
+.what-inner {
+  display: grid; grid-template-columns: 1fr; gap: 4rem;
+}
+@media (min-width: 720px) {
+  .what-inner { grid-template-columns: 1fr 1fr; align-items: center; }
+}
+.section-label { margin-bottom: .6rem; }
+.section-h {
+  font-family: 'Bricolage Grotesque', serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: -.03em;
+  line-height: 1.06;
+  margin-bottom: 1.2rem;
+}
+.section-h em { font-style: normal; color: var(--accent); }
+.section-p { color: var(--muted); font-size: 1rem; line-height: 1.75; max-width: 44ch; }
+
+/* Schedule cards */
+.schedule { display: flex; flex-direction: column; gap: .6rem; }
+.sched-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  display: flex; gap: 1rem; align-items: flex-start;
+}
+.sched-day {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); flex: none; padding-top: .2rem; min-width: 2.8rem;
+}
+.sched-body {}
+.sched-title { font-weight: 600; font-size: .96rem; margin-bottom: .15rem; }
+.sched-desc { color: var(--muted); font-size: .84rem; line-height: 1.5; }
+
+/* ══ INCLUDES ══ */
+.includes { padding: 0 0 96px; }
+.includes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 2.4rem;
+}
+@media (min-width: 640px) { .includes-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .includes-grid { grid-template-columns: repeat(3, 1fr); } }
+.inc-card {
+  background: var(--bg);
+  padding: 1.8rem;
+  display: flex; flex-direction: column; gap: .6rem;
+}
+.inc-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--accent-dim); border: 1px solid var(--accent-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; margin-bottom: .2rem;
+}
+.inc-title { font-weight: 600; font-size: 1rem; }
+.inc-desc { color: var(--muted); font-size: .88rem; line-height: 1.55; }
+
+/* ══ DAY PASS ══ */
+.daypass { padding: 0 0 96px; }
+.dp-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: clamp(2rem, 5vw, 3rem);
+  display: flex; flex-direction: column;
+  gap: 1.4rem;
+  max-width: 560px;
+  margin-inline: auto;
+  text-align: center;
+  align-items: center;
+}
+.dp-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+  background: rgba(255,138,107,.1); border: 1px solid rgba(255,138,107,.25);
+  color: var(--warm); border-radius: 100px; padding: .3rem .9rem;
+}
+.dp-title {
+  font-family: 'Bricolage Grotesque', serif;
+  font-weight: 800; font-size: clamp(1.8rem, 5vw, 2.6rem);
+  letter-spacing: -.03em; line-height: 1.06;
+}
+.dp-title em { font-style: normal; color: var(--warm); }
+.dp-copy { color: var(--muted); font-size: .98rem; line-height: 1.7; max-width: 36ch; }
+.dp-guarantee {
+  background: rgba(255,138,107,.06);
+  border: 1px solid rgba(255,138,107,.18);
+  border-radius: 12px; padding: 1rem 1.4rem;
+  font-weight: 600; font-size: .95rem; color: var(--warm); width: 100%;
+}
+.dp-btn {
+  display: inline-flex; align-items: center; gap: .6rem;
+  background: var(--warm); color: #1a0800;
+  font-weight: 700; font-size: 1rem;
+  border: none; border-radius: 12px;
+  padding: .95rem 2rem; text-decoration: none; cursor: pointer;
+  min-height: 52px; width: 100%; justify-content: center;
+  transition: opacity .15s;
+}
+.dp-btn:hover { opacity: .88; }
+
+/* ══ METHOD / BOOK ══ */
+.method { padding: 96px 0; background: var(--panel); border-block: 1px solid var(--line); }
+.method-inner {
+  display: grid; grid-template-columns: 1fr; gap: 4rem;
+}
+@media (min-width: 720px) { .method-inner { grid-template-columns: 1fr 1fr; align-items: center; } }
+
+/* 3D book */
+.book-3d-wrap { display: flex; justify-content: center; perspective: 1200px; }
+.book-3d {
+  width: min(200px, 46vw);
+  aspect-ratio: 2/3;
+  border-radius: 4px 14px 14px 4px;
+  background: linear-gradient(145deg, #141920, #0c1016);
+  border: 1px solid rgba(255,255,255,.07);
+  box-shadow: -18px 28px 52px rgba(0,0,0,.7), inset 2px 0 0 rgba(255,255,255,.04);
+  transform: rotateY(-18deg) rotateX(3deg);
+  transform-style: preserve-3d;
+  padding: 22px 18px;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  transition: transform .6s cubic-bezier(.22,1,.36,1);
+}
+.book-3d:hover { transform: rotateY(-8deg) rotateX(1deg); }
+.book-3d::before {
+  content: "";
+  position: absolute; left: 7px; top: 0; bottom: 0; width: 7px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--accent), #7aaa1a);
+}
+.book-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .5rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted); padding-left: 8px;
+}
+.book-h {
+  font-family: 'Bricolage Grotesque', serif;
+  font-weight: 800; font-size: 1.6rem; line-height: .96;
+  letter-spacing: -.03em; margin-top: auto; padding-left: 8px;
+  color: var(--fg);
+}
+.book-h em { font-style: normal; color: var(--accent); }
+.book-rule { height: 1px; background: var(--line); margin: 12px 0; }
+.book-foot { font-family: 'JetBrains Mono', monospace; font-size: .5rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding-left: 8px; }
+.book-glow {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+  background: linear-gradient(transparent, rgba(200,241,105,.04));
+  pointer-events: none;
+}
+
+.steps { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; margin-top: 2rem; }
+.step-row {
+  display: grid; grid-template-columns: 2.8rem 1fr;
+  border-bottom: 1px solid var(--line);
+}
+.step-row:last-child { border-bottom: none; }
+.step-n {
+  font-family: 'JetBrains Mono', monospace; font-size: .6rem;
+  color: var(--accent); letter-spacing: .1em;
+  padding: 1rem .5rem 1rem 1rem;
+  border-right: 1px solid var(--line);
+  background: rgba(200,241,105,.03);
+  display: flex; align-items: flex-start;
+}
+.step-body { padding: .9rem 1.2rem; }
+.step-title { font-weight: 600; font-size: .95rem; }
+.step-desc { color: var(--muted); font-size: .83rem; margin-top: .15rem; line-height: 1.5; }
+
+/* ══ OFFERS ══ */
+.offers { padding: 96px 0; }
+.offers-grid {
+  display: grid; grid-template-columns: 1fr; gap: 1.2rem;
+  margin-top: 2.8rem;
+}
+@media (min-width: 560px) { .offers-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 900px) { .offers-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.offer-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 2rem 1.6rem;
+  display: flex; flex-direction: column; gap: 1.2rem;
+  position: relative;
+}
+.offer-card.hero-card {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 48px rgba(200,241,105,.1);
+}
+.offer-card.dimmed {
+  opacity: .45; pointer-events: none; user-select: none;
+}
+.offer-badge {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .58rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  padding: 4px 14px; border-radius: 100px; white-space: nowrap;
+}
+.offer-badge.lime { background: var(--accent); color: #0B1400; }
+.offer-badge.warm { background: var(--warm); color: #1a0800; }
+.offer-badge.muted { background: #2a2f38; color: var(--muted); }
+.offer-name {
+  font-family: 'Bricolage Grotesque', serif;
+  font-weight: 800; font-size: 1.4rem; letter-spacing: -.02em;
+}
+.offer-sub { font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: .2rem; }
+.offer-list { list-style: none; display: flex; flex-direction: column; gap: .45rem; flex: 1; }
+.offer-list li { display: flex; gap: .5rem; font-size: .9rem; line-height: 1.5; }
+.offer-list .ck { color: var(--accent); font-weight: 700; flex: none; }
+.offer-list .ck.dim { color: var(--muted); }
+
+.offer-btn {
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  font-weight: 700; font-size: .95rem;
+  border-radius: 10px; padding: .85rem 1.2rem;
+  text-decoration: none; border: none; cursor: pointer;
+  min-height: 48px; width: 100%;
+  transition: opacity .15s, transform .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.offer-btn.lime { background: var(--accent); color: #0B1400; }
+.offer-btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+.offer-btn.ghost:hover { border-color: var(--muted); }
+.offer-btn.lime:hover { opacity: .88; transform: translateY(-1px); }
+.offer-note { font-family: 'JetBrains Mono', monospace; font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-align: center; margin-top: .3rem; }
+
+/* ══ COMPARE ══ */
+.compare { padding: 0 0 96px; }
+.compare-table {
+  margin-top: 2.4rem;
+  border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+}
+.ct-row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--line);
+}
+.ct-row:last-child { border-bottom: none; }
+.ct-cell {
+  padding: .9rem 1.2rem;
+  border-right: 1px solid var(--line);
+  font-size: .9rem; line-height: 1.5;
+}
+.ct-cell:last-child { border-right: none; }
+.ct-row.header .ct-cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted); background: var(--panel);
+}
+.ct-row.header .ct-cell.active { color: var(--accent); }
+.ct-cell.active { color: var(--accent); font-weight: 600; }
+.ct-cell.muted { color: var(--muted); }
+.x { color: var(--red); }
+.ck2 { color: var(--accent); }
+
+/* ══ AUTHOR ══ */
+.author { padding: 96px 0; background: var(--panel); border-block: 1px solid var(--line); }
+.author-inner {
+  display: flex; flex-direction: column; gap: 2rem;
+}
+@media (min-width: 540px) { .author-inner { flex-direction: row; align-items: flex-start; gap: 2.4rem; } }
+.author-av {
+  width: 80px; height: 80px; border-radius: 50%; flex: none;
+  background: var(--line); border: 2px solid var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--muted);
+}
+.author-name { font-family: 'Bricolage Grotesque', serif; font-weight: 800; font-size: 1.4rem; letter-spacing: -.02em; margin-bottom: .5rem; }
+.author-copy { color: var(--muted); font-size: .96rem; line-height: 1.7; max-width: 54ch; }
+.author-handle { font-family: 'JetBrains Mono', monospace; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: .8rem; }
+
+/* ══ FAQ ══ */
+.faq { padding: 96px 0; }
+.faq-wrap { max-width: 680px; }
+details { border-bottom: 1px solid var(--line); padding: 1rem 0; }
+details summary {
+  cursor: pointer; list-style: none;
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  font-weight: 600; font-size: 1rem;
+  -webkit-tap-highlight-color: transparent;
+}
+details summary::-webkit-details-marker { display: none; }
+.faq-plus { color: var(--accent); font-size: 1.3rem; flex: none; transition: transform .2s; line-height: 1; }
+details[open] .faq-plus { transform: rotate(45deg); }
+.faq-body { color: var(--muted); font-size: .95rem; line-height: 1.7; margin-top: .7rem; padding-right: 1rem; }
+
+/* ══ FINAL CTA ══ */
+.final {
+  background: var(--accent); padding: 96px 0;
+}
+.final-inner {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.4rem;
+}
+.final h2 {
+  font-family: 'Bricolage Grotesque', serif;
+  font-weight: 800; font-size: clamp(2.2rem, 7vw, 4rem);
+  letter-spacing: -.04em; line-height: .96;
+  color: #0B1400; max-width: 14ch;
+}
+.final p { color: #1f4400; font-size: 1rem; max-width: 34ch; line-height: 1.6; }
+.final-btn {
+  display: inline-flex; align-items: center; gap: .6rem;
+  background: #0B1400; color: var(--accent);
+  font-weight: 700; font-size: 1.05rem;
+  border: none; border-radius: 12px; padding: 1rem 2.2rem;
+  text-decoration: none; cursor: pointer; min-height: 54px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+  transition: opacity .15s;
+}
+.final-btn:hover { opacity: .88; }
+.final-note { font-family: 'JetBrains Mono', monospace; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: #1f4400; }
+
+/* ══ FOOTER ══ */
+footer {
+  padding: 2rem 0; padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--line);
+}
+.foot-inner { display: flex; flex-direction: column; gap: .7rem; }
+.foot-disc { color: var(--muted); font-size: .78rem; line-height: 1.6; max-width: 72ch; }
+.foot-row {
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  [data-r] { opacity: 1; transform: none; }
+}
 </style>
 </head>
 <body>
 
-<!-- ── Header ── -->
-<header>
-  <div class="hbar">
+<!-- ══ BANNER ══ -->
+<div class="banner">
+  Use code <b>CAKE20</b> at checkout — limited time offer
+</div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-bar">
     <a class="brand" href="#">
-      <span class="brand-dot"></span>
+      <div class="brand-mark">
+        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 1L12 4V10L7 13L2 10V4L7 1Z" fill="#0B1400"/>
+        </svg>
+      </div>
       Johnny Cake Method
     </a>
-    <a class="hcta" href="#pricing">Tap In</a>
+    <a class="nav-cta" href="#offers">Tap In</a>
   </div>
-</header>
+</nav>
 
-<!-- ══════════════════════════════════════════
-     HERO — Wingman leads
-══════════════════════════════════════════ -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
+<!-- ══ HERO ══ -->
+<section class="hero" style="padding-top: calc(80px + 36px + env(safe-area-inset-top, 0px))">
   <div class="wrap">
     <div class="hero-inner">
-      <div class="hero-text">
-        <div class="hero-label">
-          <span class="hero-label-dot"></span>
-          Wingman Live · @MarioVsNQ
-        </div>
-        <h1 style="margin-top:1.2rem">Trade live.<br><em>With me.</em><br>In real time.</h1>
-        <p class="hero-sub" style="margin-top:1rem">
-          You're not losing because your read is wrong.<br>
-          <b>You're losing because you're in it alone.</b><br>
-          I'm live on the charts with you — 3x a week, 12 seats max.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#pricing">Claim a Seat</a>
-          <a class="btn btn-ghost" href="#method">See the Method</a>
-        </div>
-        <div class="hero-stats">
-          <div>
-            <div class="hstat-num"><em>12</em></div>
-            <div class="hstat-label">Seats max</div>
-          </div>
-          <div>
-            <div class="hstat-num"><em>3×</em></div>
-            <div class="hstat-label">Live sessions / week</div>
-          </div>
-          <div>
-            <div class="hstat-num"><em>$200</em></div>
-            <div class="hstat-label">/ week — less than one eval</div>
-          </div>
-        </div>
+      <div class="live-pill" data-r>
+        <span class="live-dot"></span>
+        Wingman Live — @MarioVsNQ
       </div>
 
-      <!-- Live card visual -->
-      <div class="hero-visual" data-reveal="scale">
-        <div class="live-card">
-          <div class="lc-header">
-            <div class="lc-live">
-              <div class="lc-live-dot"></div>
-              Live now
+      <h1 data-r="up2">
+        The trade<br>
+        room.<br>
+        <em>Mario's live.</em>
+      </h1>
+
+      <p class="hero-sub" data-r="up3">
+        Mario trades live. You're in the room.<br>
+        <b>Watch, ask questions, learn the setup — in real time.</b><br>
+        12 seats. 3 sessions a week. No replays.
+      </p>
+
+      <a class="hero-cta" href="#offers" data-r>
+        See the Offers
+        <svg viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <p class="hero-note" data-r>12 seats max · cancel anytime</p>
+
+      <!-- Chart visual -->
+      <div class="chart-wrap" data-r="scale">
+        <div class="chart-frame">
+          <div class="chart-header">
+            <div class="chart-header-left">
+              <span class="chart-ticker">NQ1! · 15m</span>
+              <span class="chart-tf">Live</span>
             </div>
-            <div class="lc-seats">8 / 12 seats</div>
+            <div class="chart-live-badge">
+              <span class="chart-live-dot"></span>
+              Mario is live
+            </div>
           </div>
-          <div class="lc-chart">
-            <svg width="100%" height="120" viewBox="0 0 340 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <line x1="0" y1="40" x2="340" y2="40" stroke="#2A2F38" stroke-width="1"/>
-              <line x1="0" y1="80" x2="340" y2="80" stroke="#2A2F38" stroke-width="1"/>
-              <!-- bear candles -->
-              <rect x="10" y="55" width="12" height="30" fill="#FF5757" opacity=".65" rx="1"/>
-              <line x1="16" y1="46" x2="16" y2="94" stroke="#FF5757" stroke-width="1.2" opacity=".65"/>
-              <rect x="30" y="60" width="12" height="28" fill="#FF5757" opacity=".65" rx="1"/>
-              <line x1="36" y1="52" x2="36" y2="97" stroke="#FF5757" stroke-width="1.2" opacity=".65"/>
-              <rect x="50" y="65" width="12" height="32" fill="#FF5757" opacity=".65" rx="1"/>
-              <line x1="56" y1="56" x2="56" y2="104" stroke="#FF5757" stroke-width="1.2" opacity=".65"/>
-              <!-- grain line -->
-              <line x1="0" y1="76" x2="340" y2="76" stroke="#FF8A6B" stroke-width="1.2" stroke-dasharray="5 4" opacity=".55"/>
-              <text x="4" y="72" font-family="JetBrains Mono,monospace" font-size="7" fill="#FF8A6B" opacity=".7" letter-spacing="1.5">GRAIN</text>
-              <!-- bull candles -->
-              <rect x="70" y="50" width="12" height="30" fill="#C8F169" opacity=".7" rx="1"/>
-              <line x1="76" y1="40" x2="76" y2="88" stroke="#C8F169" stroke-width="1.2" opacity=".7"/>
-              <rect x="90" y="35" width="12" height="42" fill="#C8F169" opacity=".85" rx="1"/>
-              <line x1="96" y1="26" x2="96" y2="84" stroke="#C8F169" stroke-width="1.2" opacity=".85"/>
-              <rect x="110" y="20" width="14" height="50" fill="#C8F169" rx="1"/>
-              <line x1="117" y1="10" x2="117" y2="78" stroke="#C8F169" stroke-width="1.5"/>
-              <rect x="132" y="24" width="12" height="38" fill="#C8F169" opacity=".75" rx="1"/>
-              <line x1="138" y1="16" x2="138" y2="70" stroke="#C8F169" stroke-width="1.2" opacity=".75"/>
-              <rect x="152" y="18" width="12" height="40" fill="#C8F169" opacity=".65" rx="1"/>
-              <line x1="158" y1="10" x2="158" y2="66" stroke="#C8F169" stroke-width="1.2" opacity=".65"/>
-              <!-- entry marker -->
-              <circle cx="70" cy="48" r="5" fill="none" stroke="#C8F169" stroke-width="1.5" opacity=".9"/>
-              <circle cx="70" cy="48" r="2" fill="#C8F169" opacity=".9"/>
-              <!-- live cursor line -->
-              <line x1="172" y1="0" x2="172" y2="120" stroke="#A9A59B" stroke-width="1" stroke-dasharray="3 3" opacity=".4"/>
-              <!-- progress dots -->
-              <rect x="185" y="50" width="8" height="20" fill="#2A2F38" rx="1" opacity=".8"/>
-              <rect x="200" y="44" width="8" height="26" fill="#2A2F38" rx="1" opacity=".8"/>
-              <rect x="215" y="38" width="8" height="30" fill="#2A2F38" rx="1" opacity=".8"/>
+          <div class="chart-body">
+            <svg width="100%" height="140" viewBox="0 0 600 140" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Grid lines -->
+              <line x1="0" y1="35" x2="600" y2="35" stroke="#232830" stroke-width="1"/>
+              <line x1="0" y1="70" x2="600" y2="70" stroke="#232830" stroke-width="1"/>
+              <line x1="0" y1="105" x2="600" y2="105" stroke="#232830" stroke-width="1"/>
+              <!-- Grain line -->
+              <line x1="0" y1="88" x2="600" y2="88" stroke="#FF8A6B" stroke-width="1.2" stroke-dasharray="6 5" opacity=".5"/>
+              <text x="8" y="84" font-family="JetBrains Mono" font-size="8" fill="#FF8A6B" opacity=".7" letter-spacing="1.5">GRAIN</text>
+              <!-- Bear candles left -->
+              <rect x="14" y="72" width="14" height="35" fill="#FF4D4D" opacity=".55" rx="1.5"/>
+              <line x1="21" y1="60" x2="21" y2="115" stroke="#FF4D4D" stroke-width="1.2" opacity=".55"/>
+              <rect x="36" y="78" width="14" height="32" fill="#FF4D4D" opacity=".55" rx="1.5"/>
+              <line x1="43" y1="68" x2="43" y2="118" stroke="#FF4D4D" stroke-width="1.2" opacity=".55"/>
+              <rect x="58" y="82" width="14" height="36" fill="#FF4D4D" opacity=".55" rx="1.5"/>
+              <line x1="65" y1="72" x2="65" y2="126" stroke="#FF4D4D" stroke-width="1.2" opacity=".55"/>
+              <!-- Entry marker -->
+              <circle cx="86" cy="88" r="7" fill="none" stroke="#C8F169" stroke-width="1.8" opacity=".9"/>
+              <circle cx="86" cy="88" r="2.5" fill="#C8F169" opacity=".9"/>
+              <!-- Bull candles -->
+              <rect x="94" y="66" width="16" height="32" fill="#C8F169" opacity=".7" rx="1.5"/>
+              <line x1="102" y1="54" x2="102" y2="100" stroke="#C8F169" stroke-width="1.4" opacity=".7"/>
+              <rect x="118" y="50" width="16" height="44" fill="#C8F169" opacity=".85" rx="1.5"/>
+              <line x1="126" y1="38" x2="126" y2="96" stroke="#C8F169" stroke-width="1.4" opacity=".85"/>
+              <rect x="142" y="32" width="18" height="52" fill="#C8F169" rx="1.5"/>
+              <line x1="151" y1="18" x2="151" y2="86" stroke="#C8F169" stroke-width="1.6"/>
+              <rect x="168" y="36" width="16" height="40" fill="#C8F169" opacity=".75" rx="1.5"/>
+              <line x1="176" y1="24" x2="176" y2="80" stroke="#C8F169" stroke-width="1.4" opacity=".75"/>
+              <rect x="192" y="28" width="16" height="44" fill="#C8F169" opacity=".65" rx="1.5"/>
+              <line x1="200" y1="18" x2="200" y2="74" stroke="#C8F169" stroke-width="1.4" opacity=".65"/>
+              <rect x="216" y="20" width="16" height="42" fill="#C8F169" opacity=".6" rx="1.5"/>
+              <line x1="224" y1="12" x2="224" y2="64" stroke="#C8F169" stroke-width="1.4" opacity=".6"/>
+              <!-- Live cursor -->
+              <line x1="244" y1="0" x2="244" y2="140" stroke="#6B7280" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/>
+              <!-- Pending candles (dimmer) -->
+              <rect x="252" y="56" width="14" height="28" fill="#232830" rx="1.5"/>
+              <rect x="274" y="50" width="14" height="32" fill="#232830" rx="1.5"/>
+              <rect x="296" y="44" width="14" height="36" fill="#232830" rx="1.5"/>
             </svg>
           </div>
-          <div class="lc-ticker">
-            <div class="lc-ticker-sym">NQ / 15m</div>
-            <div>
-              <div class="lc-ticker-price">19,842</div>
-              <div class="lc-ticker-chg">+0.38%</div>
+          <div class="chart-footer">
+            <div class="cf-stat">
+              <div class="cf-val green">+1.42%</div>
+              <div class="cf-lbl">Session P&amp;L</div>
+            </div>
+            <div class="cf-stat">
+              <div class="cf-val">9 / 12</div>
+              <div class="cf-lbl">Seats live</div>
+            </div>
+            <div class="cf-stat">
+              <div class="cf-val" style="color:var(--warm)">NQ</div>
+              <div class="cf-lbl">Instrument</div>
             </div>
           </div>
-          <div class="lc-comment">
-            <div class="lc-comment-row">
-              <div class="lc-avatar" style="background:#C8F16920;color:var(--accent)">M</div>
-              <div class="lc-msg"><b>Mario:</b> <span class="accent">grain is here</span> — watch for the trap before entry</div>
+          <div class="chat-strip">
+            <div class="chat-msg">
+              <div class="chat-av" style="background:rgba(200,241,105,.12);color:var(--accent)">M</div>
+              <div class="chat-text"><b>Mario:</b> <span class="hi">grain is right here</span> — watching for the trap before I enter</div>
             </div>
-            <div class="lc-comment-row">
-              <div class="lc-avatar" style="background:#2A2F38;color:var(--muted)">J</div>
-              <div class="lc-msg">Got it — watching the 842 level</div>
+            <div class="chat-msg">
+              <div class="chat-av" style="background:var(--line);color:var(--muted)">J</div>
+              <div class="chat-text">I see it — holding off on the 842 level</div>
             </div>
           </div>
         </div>
       </div>
 
     </div>
-    <div class="scroll-hint" style="margin-top:2.4rem">
-      <div class="scroll-arrow"></div>
-      scroll
-    </div>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- ══════════════════════════════════════════
-     PAIN — eval trap
-══════════════════════════════════════════ -->
-<section class="pain-section">
+<!-- ══ PROOF STRIP ══ -->
+<div class="proof">
   <div class="wrap">
-    <div class="tag" data-reveal>The real cost</div>
-    <div style="margin-top:.6rem;font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,5vw,2.8rem);letter-spacing:-0.025em;line-height:1.1;max-width:22ch;" data-reveal>
-      You're spending more on evals<br>than you'd spend on a <em class="accent">wingman.</em>
-    </div>
-    <div class="pain-grid" style="margin-top:2.4rem;">
-      <div class="pain-item" data-reveal>
-        <div class="pain-num">$150</div>
-        <div class="pain-text">Average prop firm eval — <b>gone the moment you breach</b> a rule you didn't understand in time.</div>
+    <div class="proof-grid">
+      <div class="proof-item" data-r>
+        <div class="proof-num">12</div>
+        <div class="proof-lbl">Seats max.<br>Stays intimate.</div>
       </div>
-      <div class="pain-item" data-reveal>
-        <div class="pain-num">$300</div>
-        <div class="pain-text">Some traders reset <b>2–3 times a month.</b> That's $300–$500 burned with nothing to show.</div>
+      <div class="proof-item" data-r="up2">
+        <div class="proof-num">3×</div>
+        <div class="proof-lbl">Live sessions<br>every week.</div>
       </div>
-      <div class="pain-item" data-reveal>
-        <div class="pain-num">$0</div>
-        <div class="pain-text">What a YouTube course gives you when the market doesn't look like the example. <b>No one's there with you.</b></div>
-      </div>
-      <div class="pain-item" data-reveal>
-        <div class="pain-num">$200</div>
-        <div class="pain-text">Wingman. <b>I'm live with you every week.</b> Same cost as one eval. Except you keep the knowledge forever.</div>
+      <div class="proof-item" data-r="up3">
+        <div class="proof-num">&lt; 1</div>
+        <div class="proof-lbl">Eval's cost.<br>Infinite returns.</div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<div class="divider"></div>
-
-<!-- ══════════════════════════════════════════
-     WINGMAN — what it is
-══════════════════════════════════════════ -->
-<section class="wingman-section" id="wingman">
+<!-- ══ WHAT IS WINGMAN ══ -->
+<section class="what" id="wingman">
   <div class="wrap">
-    <div class="wingman-inner">
+    <div class="what-inner">
       <div>
-        <div class="tag" data-reveal>Wingman Live</div>
-        <h2 style="font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,5vw,2.8rem);letter-spacing:-0.025em;line-height:1.1;margin-top:.5rem;" data-reveal>
-          Not a course.<br>Not a signal.<br><em style="font-style:normal;color:var(--accent)">A co-pilot.</em>
-        </h2>
-        <p style="color:var(--muted);font-size:.98rem;line-height:1.7;margin-top:1rem;max-width:44ch;" data-reveal>
-          I join you live — same chart, same time, same trade. You're not watching a replay. You're not reading a recap. We're in it together as it unfolds.
-        </p>
-        <div class="wingman-schedule" data-reveal>
-          <div class="ws-row">
-            <div class="ws-day">Mon</div>
-            <div class="ws-body">
-              <div class="ws-title">Pre-Week Game Plan</div>
-              <div class="ws-desc">Key levels, bias, what to watch. Week starts with a plan, not a guess.</div>
-            </div>
-          </div>
-          <div class="ws-row">
-            <div class="ws-day">Tue–Thu</div>
-            <div class="ws-body">
-              <div class="ws-title">Live Chart Sessions</div>
-              <div class="ws-desc">3 sessions during market hours. Real setups, real entries, real exits — live.</div>
-            </div>
-          </div>
-          <div class="ws-row">
-            <div class="ws-day">Fri</div>
-            <div class="ws-body">
-              <div class="ws-title">Post-Week Breakdown</div>
-              <div class="ws-desc">What worked, what didn't, what to adjust. You leave the week sharper.</div>
-            </div>
+        <div class="label section-label" data-r>Wingman Live</div>
+        <h2 class="section-h" data-r>Not a course.<br>Not a signal.<br><em>A live trade room.</em></h2>
+        <p class="section-p" data-r>Mario trades live. You're in the room watching, asking questions, seeing every decision as it happens. Same chart, same price, same moment. Not a replay. Not a mod.</p>
+      </div>
+      <div class="schedule" data-r="up2">
+        <div class="sched-card">
+          <div class="sched-day">Mon</div>
+          <div class="sched-body">
+            <div class="sched-title">Pre-Week Game Plan</div>
+            <div class="sched-desc">Key levels, weekly bias, what to watch and what to ignore.</div>
           </div>
         </div>
-      </div>
-      <div data-reveal="right">
-        <div style="display:flex;flex-direction:column;gap:1.2rem;">
-          <div style="background:rgba(200,241,105,.05);border:1px solid rgba(200,241,105,.15);border-radius:16px;padding:1.4rem;">
-            <div style="font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem;">What's included</div>
-            <ul style="list-style:none;display:flex;flex-direction:column;gap:.55rem;">
-              <li style="display:flex;gap:.55rem;font-size:.93rem;"><span style="color:var(--accent);font-weight:700;">✓</span> 3 live chart sessions per week</li>
-              <li style="display:flex;gap:.55rem;font-size:.93rem;"><span style="color:var(--accent);font-weight:700;">✓</span> Pre-week game plan every Monday</li>
-              <li style="display:flex;gap:.55rem;font-size:.93rem;"><span style="color:var(--accent);font-weight:700;">✓</span> Post-week breakdown every Friday</li>
-              <li style="display:flex;gap:.55rem;font-size:.93rem;"><span style="color:var(--accent);font-weight:700;">✓</span> Mario live — not a mod, not a replay</li>
-              <li style="display:flex;gap:.55rem;font-size:.93rem;"><span style="color:var(--accent);font-weight:700;">✓</span> 12 seats max — stays intimate</li>
-              <li style="display:flex;gap:.55rem;font-size:.93rem;"><span style="color:var(--accent);font-weight:700;">✓</span> Cancel anytime</li>
-              <li style="display:flex;gap:.55rem;font-size:.93rem;"><span style="color:var(--accent);font-weight:700;">✓</span> Free Discord access</li>
-              <li style="display:flex;gap:.55rem;font-size:.93rem;"><span style="color:var(--warm);font-weight:700;">✓</span> <b style="color:var(--fg)">Loyalty discount</b> — 10% off every consecutive week, up to 90% off week 9+</li>
-            </ul>
+        <div class="sched-card">
+          <div class="sched-day">Tue–Thu</div>
+          <div class="sched-body">
+            <div class="sched-title">Live Chart Sessions</div>
+            <div class="sched-desc">Real setups. Real entries. Real exits. Live, as it happens.</div>
           </div>
-          <div style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.2rem;">
-            <div style="font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;">Day Pass</div>
-            <div style="font-family:var(--display);font-weight:800;font-size:1.6rem;letter-spacing:-0.03em;">$65 <span style="font-size:.9rem;font-weight:500;color:var(--muted);">/ session</span></div>
-            <p style="font-size:.85rem;color:var(--muted);margin-top:.5rem;line-height:1.55;">One live session. No commitment. 4-hour cap or profit target — whichever comes first. <b style="color:var(--fg)">If we don't trade, you don't pay.</b> Max 6 day-pass seats per session.</p>
+        </div>
+        <div class="sched-card">
+          <div class="sched-day">Fri</div>
+          <div class="sched-body">
+            <div class="sched-title">Post-Week Breakdown</div>
+            <div class="sched-desc">What worked, what didn't, what to bring into next week.</div>
           </div>
         </div>
       </div>
@@ -540,315 +808,325 @@ var CHECKOUT_URL = "";
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- ══════════════════════════════════════════
-     PRICING — 4 cards
-══════════════════════════════════════════ -->
-<section class="pricing-section" id="pricing">
+<!-- ══ INCLUDES ══ -->
+<section class="includes">
   <div class="wrap">
-    <div class="tag" data-reveal>The Stack</div>
-    <h2 style="font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,5vw,2.8rem);letter-spacing:-0.025em;line-height:1.1;margin-top:.5rem;" data-reveal>Pick your level.</h2>
+    <div class="label" data-r>What's included</div>
+    <div class="includes-grid">
+      <div class="inc-card" data-r>
+        <div class="inc-icon">📡</div>
+        <div class="inc-title">Live Trade Room × 3</div>
+        <div class="inc-desc">Mario trades live Tue–Thu during market hours. You're in the room watching every decision unfold.</div>
+      </div>
+      <div class="inc-card" data-r="up2">
+        <div class="inc-icon">🗺</div>
+        <div class="inc-title">Monday Game Plan</div>
+        <div class="inc-desc">Key levels, weekly bias, what to watch. Week starts with a plan, not a guess.</div>
+      </div>
+      <div class="inc-card" data-r="up3">
+        <div class="inc-icon">📋</div>
+        <div class="inc-title">Friday Recap</div>
+        <div class="inc-desc">What fired, what didn't, what changes next week. No sugarcoating.</div>
+      </div>
+      <div class="inc-card" data-r>
+        <div class="inc-icon">💬</div>
+        <div class="inc-title">Discord Access</div>
+        <div class="inc-desc">Members-only channel, notes between sessions, direct line to the room.</div>
+      </div>
+      <div class="inc-card" data-r="up2">
+        <div class="inc-icon">🔒</div>
+        <div class="inc-title">12 Seats. That's It.</div>
+        <div class="inc-desc">Intentionally small. Mario knows who's in the room. You're not a username in a crowd.</div>
+      </div>
+      <div class="inc-card" data-r="up3">
+        <div class="inc-icon">🔓</div>
+        <div class="inc-title">Cancel Anytime</div>
+        <div class="inc-desc">No contracts. No lock-ins. Stay because it's working — not because you're trapped.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <div class="pricing-grid" style="margin-top:3rem;">
+<!-- ══ DAY PASS ══ -->
+<section class="daypass">
+  <div class="wrap">
+    <div class="dp-card" data-r="scale">
+      <div class="dp-badge">Day Pass</div>
+      <div class="dp-title">One session.<br><em>No commitment.</em></div>
+      <p class="dp-copy">Try Wingman for a single live session. 1–3 hours or until the profit target hits — whichever comes first. Max 6 day-pass seats per session.</p>
+      <div class="dp-guarantee">
+        "If we don't trade — you don't pay."
+      </div>
+      <a class="dp-btn" href="mailto:mariovsng@gmail.com?subject=Day+Pass+Seat">
+        Book a Day Pass
+      </a>
+      <p class="offer-note">DM to confirm your session slot</p>
+    </div>
+  </div>
+</section>
 
-      <!-- Card 1: Book -->
-      <div class="p-card" data-reveal>
-        <div class="p-badge live">Start Here</div>
-        <div>
-          <div class="p-name">The Book</div>
-          <div class="p-sub">Ebook · Instant Access</div>
-        </div>
-        <div class="p-price">$47 <span>one-time</span></div>
-        <ul class="p-list">
-          <li><span class="m">✓</span> Full Johnny Cake Method ebook</li>
-          <li><span class="m">✓</span> 9 chapters, zero filler</li>
-          <li><span class="m">✓</span> Hunter Psychology framework</li>
-          <li><span class="m">✓</span> Instant delivery</li>
-          <li><span class="m">✓</span> Free Discord access</li>
-        </ul>
-        <div class="p-btn">
-          <a class="btn btn-primary" href="#" data-buy>
-            Get the Book
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<!-- ══ METHOD ══ -->
+<section class="method" id="method">
+  <div class="wrap">
+    <div class="method-inner">
+      <div>
+        <div class="label section-label" data-r>The Book</div>
+        <h2 class="section-h" data-r>Trading<br><em>The Grain.</em><br>Start here.</h2>
+        <p class="section-p" data-r>The Johnny Cake Method in full. 9 chapters, zero filler. Most Wingman members read the book first — it's the playbook that makes the live sessions click.</p>
+        <div style="margin-top:1.8rem" data-r>
+          <a class="hero-cta" href="#" data-buy style="display:inline-flex;width:auto">
+            Get the Ebook
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <p class="p-fine">Code <b style="color:var(--fg)">CAKE20</b> saves $20 · Stripe checkout</p>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.7rem;">Code CAKE20 saves $20 · instant delivery</p>
+        </div>
+      </div>
+      <div data-r="up2">
+        <div class="book-3d-wrap">
+          <div class="book-3d">
+            <div class="book-lbl">@MarioVsNQ</div>
+            <div class="book-h">Trading<br><em>The</em><br>Grain</div>
+            <div class="book-rule"></div>
+            <div class="book-foot">Johnny Cake Method</div>
+            <div class="book-glow"></div>
+          </div>
+        </div>
+        <div class="steps" style="margin-top:2rem;">
+          <div class="step-row">
+            <div class="step-n">01</div>
+            <div class="step-body">
+              <div class="step-title">Before the session</div>
+              <div class="step-desc">Your levels are set before the open. The work is done.</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-n">02</div>
+            <div class="step-body">
+              <div class="step-title">The wait</div>
+              <div class="step-desc">Most traders lose here. The method fixes it at the source.</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-n">03</div>
+            <div class="step-body">
+              <div class="step-title">The signal</div>
+              <div class="step-desc">Price arrives. Something specific happens. The Hunter sees it.</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-n">04</div>
+            <div class="step-body">
+              <div class="step-title">The plan</div>
+              <div class="step-desc">Set before you touch the order. Every. Single. Time.</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-n">05</div>
+            <div class="step-body">
+              <div class="step-title">Execution</div>
+              <div class="step-desc">Was already valid or it wasn't. You're just following the plan.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ OFFERS ══ -->
+<section class="offers" id="offers">
+  <div class="wrap">
+    <div class="label" data-r>The Stack</div>
+    <h2 class="section-h" style="margin-top:.5rem;margin-bottom:0" data-r>Pick your level.</h2>
+
+    <div class="offers-grid">
+
+      <!-- Book -->
+      <div class="offer-card" data-r>
+        <div>
+          <div class="offer-name">The Book</div>
+          <div class="offer-sub">Ebook · Instant Access</div>
+        </div>
+        <ul class="offer-list">
+          <li><span class="ck">✓</span> Full Johnny Cake Method ebook</li>
+          <li><span class="ck">✓</span> 9 chapters, zero filler</li>
+          <li><span class="ck">✓</span> Hunter Psychology framework</li>
+          <li><span class="ck">✓</span> Discord community access</li>
+          <li><span class="ck">✓</span> Instant delivery</li>
+        </ul>
+        <div>
+          <a class="offer-btn lime" href="#" data-buy>
+            Get the Book
+          </a>
+          <p class="offer-note">Code CAKE20 saves $20</p>
         </div>
       </div>
 
-      <!-- Card 2: Book + Coaching (DIMMED) -->
-      <div class="p-card dimmed" data-reveal>
-        <div class="p-badge full">Seats Full</div>
+      <!-- Wingman Weekly (hero) -->
+      <div class="offer-card hero-card" data-r="up2">
+        <div class="offer-badge lime">Most Popular</div>
         <div>
-          <div class="p-name">Book + Coaching</div>
-          <div class="p-sub">1-on-1 · Live Walkthrough</div>
+          <div class="offer-name">Wingman Weekly</div>
+          <div class="offer-sub">Live Charts · 12 Seats Max</div>
         </div>
-        <ul class="p-list">
-          <li><span class="m dim">✓</span> Trading The Grain ebook included</li>
-          <li><span class="m dim">✓</span> 1-on-1 live walkthrough with Mario</li>
-          <li><span class="m dim">✓</span> Personal chart review</li>
-          <li><span class="m dim">✓</span> Q&amp;A on your exact setups</li>
-          <li><span class="m dim">✓</span> 2 custom TradingView indicators — yours for life</li>
-          <li><span class="m dim">✓</span> Discord access</li>
+        <ul class="offer-list">
+          <li><span class="ck">✓</span> 3 live trade room sessions / week</li>
+          <li><span class="ck">✓</span> Monday game plan</li>
+          <li><span class="ck">✓</span> Friday recap</li>
+          <li><span class="ck">✓</span> Mario trading live — not a replay</li>
+          <li><span class="ck">✓</span> 12 seats max, no exceptions</li>
+          <li><span class="ck">✓</span> Cancel anytime</li>
+          <li><span class="ck">✓</span> Discord access</li>
         </ul>
-        <div class="coaching-tiers">
-          <div class="ct-row"><span class="ct-label">1 Session</span><span class="ct-price">$197</span></div>
-          <div class="ct-row"><span class="ct-label">2 Sessions</span><span class="ct-price">$367</span></div>
-          <div class="ct-row"><span class="ct-label">3 Sessions</span><span class="ct-price">$497</span></div>
+        <div>
+          <a class="offer-btn lime" href="mailto:mariovsng@gmail.com?subject=Wingman+Weekly+Seat">
+            Claim a Seat
+          </a>
+          <p class="offer-note">DM to confirm · limited seats</p>
         </div>
-        <div class="p-btn">
-          <a class="btn" style="background:transparent;color:var(--muted);border:1px dashed var(--line);font-size:.95rem;" href="mailto:mariovsng@gmail.com?subject=Book+Coaching+Waitlist">
+      </div>
+
+      <!-- Private Session (dimmed) -->
+      <div class="offer-card dimmed" data-r="up3">
+        <div class="offer-badge warm">Seats Full</div>
+        <div>
+          <div class="offer-name">Private Session</div>
+          <div class="offer-sub">1-on-1 · Live Chart Walkthrough</div>
+        </div>
+        <ul class="offer-list">
+          <li><span class="ck dim">✓</span> Ebook included</li>
+          <li><span class="ck dim">✓</span> Private live session with Mario</li>
+          <li><span class="ck dim">✓</span> Live chart walkthrough on your setups</li>
+          <li><span class="ck dim">✓</span> Open Q&amp;A during the session</li>
+          <li><span class="ck dim">✓</span> 2 custom TradingView indicators — yours to keep</li>
+          <li><span class="ck dim">✓</span> Discord access</li>
+        </ul>
+        <div>
+          <a class="offer-btn ghost" href="mailto:mariovsng@gmail.com?subject=Private+Session+Waitlist">
             Join the Waitlist
           </a>
         </div>
       </div>
 
-      <!-- Card 3: Day Pass -->
-      <div class="p-card" data-reveal>
-        <div>
-          <div class="p-name">Day Pass</div>
-          <div class="p-sub">One Session · No Commitment</div>
-        </div>
-        <div class="p-price">$65 <span>/ session</span></div>
-        <ul class="p-list">
-          <li><span class="m">✓</span> 1 live chart session with Mario</li>
-          <li><span class="m">✓</span> 4-hour cap or profit target</li>
-          <li><span class="m">✓</span> Full refund or rollover if no trades</li>
-          <li><span class="m">✓</span> Max 6 day-pass seats per session</li>
-          <li><span class="m">✓</span> Discord access</li>
-        </ul>
-        <div class="p-btn">
-          <a class="btn btn-ghost" href="mailto:mariovsng@gmail.com?subject=Day+Pass+Seat">
-            Book a Day
-          </a>
-          <p class="p-note">DM to confirm your session slot</p>
-        </div>
-      </div>
-
-      <!-- Card 4: Wingman Weekly (FEATURED) -->
-      <div class="p-card featured" data-reveal>
-        <div class="p-badge popular">Best Value</div>
-        <div>
-          <div class="p-name">Wingman Weekly</div>
-          <div class="p-sub">Live Charts · 12 Seats Max</div>
-        </div>
-        <div class="p-price">$200 <span>/ week</span></div>
-        <ul class="p-list">
-          <li><span class="m">✓</span> 3 live chart sessions / week</li>
-          <li><span class="m">✓</span> Pre-week game plan (Monday)</li>
-          <li><span class="m">✓</span> Post-week breakdown (Friday)</li>
-          <li><span class="m">✓</span> Mario live — not a replay</li>
-          <li><span class="m">✓</span> 12 seats max</li>
-          <li><span class="m">✓</span> Cancel anytime</li>
-          <li><span class="m">✓</span> <b style="color:var(--accent)">Loyalty discount starts week 2</b></li>
-        </ul>
-        <div class="p-btn">
-          <a class="btn btn-primary" href="mailto:mariovsng@gmail.com?subject=Wingman+Weekly+Seat">
-            Claim a Seat
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <p class="p-note">Book not included · DM to lock in</p>
-        </div>
-      </div>
-
     </div>
-
-    <!-- Loyalty bar -->
-    <div class="loyalty-bar" data-reveal>
-      <div class="loyalty-title">Wingman Loyalty — the longer you stay, the less you pay</div>
-      <div class="loyalty-track">
-        <div class="lt-step"><div class="lt-week">Wk 1</div><div class="lt-dot earned"></div><div class="lt-price accent">$200</div></div>
-        <div class="lt-line earned"></div>
-        <div class="lt-step"><div class="lt-week">Wk 2</div><div class="lt-dot earned"></div><div class="lt-price accent">$180</div></div>
-        <div class="lt-line earned"></div>
-        <div class="lt-step"><div class="lt-week">Wk 3</div><div class="lt-dot"></div><div class="lt-price">$160</div></div>
-        <div class="lt-line"></div>
-        <div class="lt-step"><div class="lt-week">Wk 4</div><div class="lt-dot"></div><div class="lt-price">$140</div></div>
-        <div class="lt-line"></div>
-        <div class="lt-step"><div class="lt-week">Wk 5</div><div class="lt-dot"></div><div class="lt-price">$120</div></div>
-        <div class="lt-line"></div>
-        <div class="lt-step"><div class="lt-week">Wk 6</div><div class="lt-dot"></div><div class="lt-price">$100</div></div>
-        <div class="lt-line"></div>
-        <div class="lt-step"><div class="lt-week">Wk 7</div><div class="lt-dot"></div><div class="lt-price">$80</div></div>
-        <div class="lt-line"></div>
-        <div class="lt-step"><div class="lt-week">Wk 8</div><div class="lt-dot"></div><div class="lt-price">$60</div></div>
-        <div class="lt-line"></div>
-        <div class="lt-step"><div class="lt-week">Wk 9+</div><div class="lt-dot"></div><div class="lt-price">$20</div></div>
-      </div>
-      <p class="loyalty-note"><b>Miss a week → drops back 10%.</b> Come back at week 8 → you're at $60, not $200. Loyalty is earned — and it's protected.</p>
-    </div>
-
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- ══════════════════════════════════════════
-     METHOD — The 5 Steps
-══════════════════════════════════════════ -->
-<section class="steps-section" id="method">
+<!-- ══ COMPARE ══ -->
+<section class="compare">
   <div class="wrap">
-    <div class="tag" data-reveal>Johnny Cake Method</div>
-    <div style="margin-top:.6rem;font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,5vw,2.8rem);letter-spacing:-0.025em;line-height:1.1;max-width:18ch;" data-reveal>A five-step process.<br>Everything else is noise.</div>
-    <div class="steps-grid" style="margin-top:2.4rem">
-      <div class="step" data-reveal>
-        <div class="step-num">01</div>
-        <div class="step-body">
-          <div class="step-name">Before the session</div>
-          <div class="step-desc">You already know where price has to be before you care. The work is done before the open.</div>
-        </div>
+    <div class="label" data-r>Why Wingman</div>
+    <h2 class="section-h" style="margin-top:.5rem;margin-bottom:0;max-width:20ch" data-r>Less than what you're already spending.</h2>
+    <div class="compare-table" style="margin-top:2.4rem" data-r>
+      <div class="ct-row header">
+        <div class="ct-cell"> </div>
+        <div class="ct-cell">Prop Firm Eval</div>
+        <div class="ct-cell active">Wingman Weekly</div>
       </div>
-      <div class="step" data-reveal>
-        <div class="step-num">02</div>
-        <div class="step-body">
-          <div class="step-name">The wait</div>
-          <div class="step-desc">Most traders lose here — not from bad entries, from the wrong ones. The method fixes this at the source.</div>
-        </div>
+      <div class="ct-row">
+        <div class="ct-cell" style="color:var(--muted);font-size:.85rem">Cost</div>
+        <div class="ct-cell muted">$150 – $500 / reset</div>
+        <div class="ct-cell active">See offer ↑</div>
       </div>
-      <div class="step" data-reveal>
-        <div class="step-num">03</div>
-        <div class="step-body">
-          <div class="step-name">What you're watching for</div>
-          <div class="step-desc">Price arrives. Something specific happens. The Hunter recognises it. The book teaches you to see it.</div>
-        </div>
+      <div class="ct-row">
+        <div class="ct-cell" style="color:var(--muted);font-size:.85rem">Live mentor</div>
+        <div class="ct-cell"><span class="x">✕</span></div>
+        <div class="ct-cell"><span class="ck2">✓</span></div>
       </div>
-      <div class="step" data-reveal>
-        <div class="step-num">04</div>
-        <div class="step-body">
-          <div class="step-name">The plan</div>
-          <div class="step-desc">Set before you touch the order. Every time. This is what keeps the emotion out.</div>
-        </div>
+      <div class="ct-row">
+        <div class="ct-cell" style="color:var(--muted);font-size:.85rem">Real chart access</div>
+        <div class="ct-cell"><span class="x">✕</span></div>
+        <div class="ct-cell"><span class="ck2">✓</span></div>
       </div>
-      <div class="step" data-reveal>
-        <div class="step-num">05</div>
-        <div class="step-body">
-          <div class="step-name">Execution</div>
-          <div class="step-desc">The setup was already valid or it wasn't. At this point you're just following the plan.</div>
-        </div>
+      <div class="ct-row">
+        <div class="ct-cell" style="color:var(--muted);font-size:.85rem">You keep learning</div>
+        <div class="ct-cell"><span class="x">✕</span></div>
+        <div class="ct-cell"><span class="ck2">✓</span></div>
+      </div>
+      <div class="ct-row">
+        <div class="ct-cell" style="color:var(--muted);font-size:.85rem">Cancel anytime</div>
+        <div class="ct-cell muted">N/A</div>
+        <div class="ct-cell"><span class="ck2">✓</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- ══════════════════════════════════════════
-     THE BOOK — entry point
-══════════════════════════════════════════ -->
-<section class="book-section">
-  <div class="wrap">
-    <div class="book-inner">
-      <div class="book-wrap" data-reveal="scale">
-        <div class="book">
-          <div class="book-label">@MarioVsNQ</div>
-          <div class="book-title">Trading<br><em>The</em><br>Grain</div>
-          <div class="book-rule"></div>
-          <div class="book-foot">Johnny Cake Method</div>
-          <div class="book-glow"></div>
-          <div class="book-chart">
-            <svg width="120" height="80" viewBox="0 0 120 80" fill="none">
-              <polyline points="0,70 20,60 35,65 50,40 65,45 80,20 100,25 120,10" stroke="#C8F169" stroke-width="1.5" fill="none" opacity=".7"/>
-              <polyline points="0,70 20,60 35,65 50,40 65,45 80,20 100,25 120,10" stroke="#C8F169" stroke-width="8" fill="none" opacity=".07"/>
-              <circle cx="80" cy="20" r="3" fill="#C8F169" opacity=".9"/>
-            </svg>
-          </div>
-        </div>
-      </div>
-      <div class="book-info" data-reveal>
-        <div class="tag">Start here</div>
-        <h3 style="margin-top:.5rem;">Trading<br><em>The Grain.</em><br>9 chapters. No filler.</h3>
-        <p>The playbook behind the method. Learn the framework first — then bring it into the live sessions. Most Wingman members start with the book.</p>
-        <div class="book-actions">
-          <a class="btn btn-primary" href="#" data-buy>Get the Ebook — $47</a>
-          <a class="btn btn-ghost" href="#pricing">See all options</a>
-        </div>
-        <p style="font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.8rem;">Code CAKE20 saves $20 · Stripe checkout</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ══════════════════════════════════════════
-     AUTHOR
-══════════════════════════════════════════ -->
-<section class="author-section">
+<!-- ══ AUTHOR ══ -->
+<section class="author">
   <div class="wrap">
     <div class="author-inner">
-      <div class="avatar">
-        <div class="avatar-inner">MRJ</div>
-      </div>
+      <div class="author-av">MRJ</div>
       <div>
-        <h3>Romario Johnson</h3>
-        <p>I trade NQ futures. I built the Johnny Cake Method from years of getting it wrong — chasing moves, getting stopped out at the exact wrong level, watching the market do exactly what I called it to do after I'd already exited. The method exists because I needed it. Wingman exists because I wish I'd had one.</p>
-        <p style="margin-top:.8rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);">@MarioVsNQ on TikTok &amp; Instagram</p>
+        <div class="author-name">Romario Johnson</div>
+        <p class="author-copy">I trade NQ futures. I built the Johnny Cake Method from years of getting it wrong — chasing moves, getting stopped at the exact wrong level, watching the market do exactly what I called after I already exited. I opened the trade room because I wished I could have watched a real trader work through it live. Now you can.</p>
+        <p class="author-handle">@MarioVsNQ · TikTok &amp; Instagram</p>
       </div>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
-
-<!-- ══════════════════════════════════════════
-     FAQ
-══════════════════════════════════════════ -->
-<section class="faq-section">
+<!-- ══ FAQ ══ -->
+<section class="faq">
   <div class="wrap faq-wrap">
-    <div class="tag" data-reveal>FAQ</div>
-    <h2 style="font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,4vw,2.4rem);letter-spacing:-0.02em;line-height:1.1;margin-top:.5rem;" data-reveal>Questions.</h2>
-    <div style="margin-top:2rem;">
-      <details>
-        <summary>What platform do the live sessions run on? <span class="faq-plus">+</span></summary>
-        <p class="faq-a">Platform TBA — details sent to confirmed seats before the first session.</p>
-      </details>
-      <details>
-        <summary>How does the loyalty discount work exactly? <span class="faq-plus">+</span></summary>
-        <p class="faq-a">Every consecutive week you resub, you get 10% off — starting at $200 down to $20 at week 9+. Miss a week and it drops back 10%. Come back at week 6 for $100, not $200. You don't lose everything — just one step.</p>
-      </details>
-      <details>
-        <summary>What happens on the Day Pass if there are no trades? <span class="faq-plus">+</span></summary>
-        <p class="faq-a">Full refund or rollover to the next session — your choice. If we don't trade, you don't pay. That's the deal.</p>
-      </details>
-      <details>
-        <summary>Is the book included with Wingman? <span class="faq-plus">+</span></summary>
-        <p class="faq-a">Not included by default — the book is a separate $47 purchase. Repeat Wingman subscribers may receive a discount code directly from Mario.</p>
-      </details>
-      <details>
-        <summary>What markets does the method cover? <span class="faq-plus">+</span></summary>
-        <p class="faq-a">Primarily NQ futures. The framework applies to other liquid markets but the live sessions are built around NQ.</p>
-      </details>
-      <details>
-        <summary>Can I cancel Wingman anytime? <span class="faq-plus">+</span></summary>
-        <p class="faq-a">Yes. Cancel anytime, no questions. If you want your loyalty tier held for a return, DM Mario directly.</p>
-      </details>
-    </div>
+    <div class="label" data-r>FAQ</div>
+    <h2 class="section-h" style="margin-top:.5rem" data-r>Questions.</h2>
+
+    <details>
+      <summary>Is this coaching or financial advice? <span class="faq-plus">+</span></summary>
+      <p class="faq-body">Neither. Wingman is a live trade room — Mario trades live and members watch, observe, and ask questions in real time. This is not financial advice, investment advice, or coaching. It's access to a live trader's process, for educational purposes only.</p>
+    </details>
+    <details>
+      <summary>What platform do live sessions run on? <span class="faq-plus">+</span></summary>
+      <p class="faq-body">Discord Stage. Invite link sent on purchase. No extra apps needed beyond Discord.</p>
+    </details>
+    <details>
+      <summary>What if I join mid-week? <span class="faq-plus">+</span></summary>
+      <p class="faq-body">Weekly seats lock in on Monday. Mid-week, grab a Day Pass for any remaining sessions that week — then roll into a weekly seat from the following Monday.</p>
+    </details>
+    <details>
+      <summary>Is the book included with Wingman Weekly? <span class="faq-plus">+</span></summary>
+      <p class="faq-body">Not included by default — the book is a separate purchase. Most members grab it first. DM Mario about member discounts.</p>
+    </details>
+    <details>
+      <summary>What markets does the room cover? <span class="faq-plus">+</span></summary>
+      <p class="faq-body">Primarily NQ futures. The Johnny Cake Method applies broadly — but live sessions are built around NQ.</p>
+    </details>
+    <details>
+      <summary>Can I cancel anytime? <span class="faq-plus">+</span></summary>
+      <p class="faq-body">Yes. No contracts. No lock-ins. Stay because it's working.</p>
+    </details>
+    <details>
+      <summary>What happens on a Day Pass if no trades fire? <span class="faq-plus">+</span></summary>
+      <p class="faq-body">Full refund or rollover to the next session — your call. If we don't trade, you don't pay.</p>
+    </details>
+    <details>
+      <summary>How many people are in the room? <span class="faq-plus">+</span></summary>
+      <p class="faq-body">12 weekly seats. Hard cap, no exceptions. Mario knows everyone in the room.</p>
+    </details>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     FINAL CTA
-══════════════════════════════════════════ -->
+<!-- ══ FINAL CTA ══ -->
 <section class="final">
   <div class="wrap">
     <div class="final-inner">
       <h2>Stop trading alone.</h2>
-      <p>12 seats. $200/week. Less than one failed eval. The Wingman seat won't be open long.</p>
-      <a class="btn btn-dark" href="mailto:mariovsng@gmail.com?subject=Wingman+Weekly+Seat" style="width:auto;min-width:220px;font-size:1.05rem;min-height:56px;box-shadow:0 8px 32px rgba(0,0,0,.3);">
+      <p>12 seats. Live charts. Real talk. The seat won't be open long.</p>
+      <a class="final-btn" href="mailto:mariovsng@gmail.com?subject=Wingman+Weekly+Seat">
         Tap In
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="#C8F169" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <span class="final-note">Free Discord for everyone · @MarioVsNQ</span>
+      <span class="final-note">@MarioVsNQ · Free Discord for all</span>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════ -->
+<!-- ══ FOOTER ══ -->
 <footer>
   <div class="wrap">
     <div class="foot-inner">
-      <div class="foot-disc">Trading involves risk. Nothing on this page is financial advice. Past performance does not guarantee future results. All products are educational.</div>
+      <p class="foot-disc">Wingman is a live trade room for educational purposes only. Mario Johnson is not a licensed financial advisor, broker, or investment coach. Nothing on this page constitutes financial advice, investment advice, or a recommendation to buy or sell any security or futures contract. Trading involves substantial risk of loss. Past performance does not guarantee future results. You are solely responsible for your own trading decisions.</p>
       <div class="foot-row">
         <span>© 2026 Smart Money Store</span>
         <span>@MarioVsNQ</span>
@@ -861,29 +1139,29 @@ var CHECKOUT_URL = "";
 <script>
 var CHECKOUT_URL = "https://buy.stripe.com/28EdR95TD3xz4os4ccgnK04";
 
-// Buy buttons
-document.querySelectorAll('[data-buy]').forEach(function(el){
-  el.addEventListener('click',function(e){
+document.querySelectorAll('[data-buy]').forEach(function(el) {
+  el.addEventListener('click', function(e) {
     e.preventDefault();
-    if(CHECKOUT_URL && CHECKOUT_URL !== ""){
-      window.location.href = CHECKOUT_URL;
-    }
+    if (CHECKOUT_URL) window.location.href = CHECKOUT_URL;
   });
 });
 
 // Scroll reveal
-(function(){
-  var els = document.querySelectorAll('[data-reveal]');
-  if(!els.length) return;
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting){
-        entry.target.classList.add('visible');
+(function() {
+  var els = document.querySelectorAll('[data-r]');
+  if (!els.length || !window.IntersectionObserver) {
+    els.forEach(function(el) { el.classList.add('on'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('on');
         io.unobserve(entry.target);
       }
     });
-  },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
-  els.forEach(function(el){ io.observe(el); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+  els.forEach(function(el) { io.observe(el); });
 })();
 </script>
 </body>
