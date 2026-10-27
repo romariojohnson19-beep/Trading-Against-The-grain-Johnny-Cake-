@@ -423,6 +423,7 @@ body {
         <div class="sb-user-name" id="sb-name">Member</div>
         <div class="sb-user-tier" id="sb-tier"></div>
       </div>
+      <a class="btn btn-ghost btn-sm" id="sb-admin" href="admin.html" style="display:none;padding:.35rem .6rem;font-size:.7rem;flex:none;text-decoration:none">Admin</a>
       <button class="btn btn-ghost btn-sm" onclick="doSignOut()" title="Sign out" style="padding:.35rem .6rem;font-size:.7rem;flex:none">Sign out</button>
     </div>
   </aside>
@@ -1075,6 +1076,7 @@ function doSignOut() { WMAuth.signOut(); location.reload(); }
 function refreshMe() {
   ME = WMAuth.user();
   ROSTER_ME = WMAuth.rosterEntry();
+  var _adm = document.getElementById('sb-admin'); if (_adm) _adm.style.display = (ME && ME.role === 'admin') ? '' : 'none';
 }
 function rateFor(w) { return w <= 1 ? 200 : w === 2 ? 180 : w === 3 ? 160 : 140; }
 function nextMonday() {

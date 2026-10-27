@@ -197,9 +197,10 @@
         document.documentElement.style.visibility = 'visible';
         Array.prototype.forEach.call(document.body.children, function (c) { if (c.id !== 'wma-root' && c.tagName !== 'SCRIPT') c.style.visibility = 'hidden'; });
         if (u && role === 'admin' && cloud()) {
+          location.replace('members.html'); return;
           Auth.injectCss();
           var d = document.createElement('div'); d.id = 'wma-root'; d.className = 'wma-back';
-          d.innerHTML = '<div class="wma-card"><h2 class="wma-h">No admin access</h2><p class="wma-sub">You are signed in as ' + esc(u.email) + ', which is not an admin account.</p><button class="wma-go" id="wma-out">Sign out</button></div>';
+          d.innerHTML = '<div class="wma-card"><h2 class="wma-h">No admin access</h2><p class="wma-sub">You are signed in as ' + esc(u.email) + ', which is not an admin account.</p><button class="wma-go" id="wma-out">Sign out</button><p class="wma-sub" style="margin-top:14px">Signed in with the wrong account? Sign out, then sign in with your admin email.</p></div>';
           document.body.appendChild(d);
           d.querySelector('#wma-out').onclick = function () { Auth.signOut(); location.reload(); };
           return;

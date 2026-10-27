@@ -1196,7 +1196,7 @@ document.querySelectorAll('[data-lead]').forEach(function(el) {
   if (u) {
     var si = document.getElementById('nav-signin'), jn = document.getElementById('nav-join');
     if (si) { si.textContent = 'Sign out'; si.removeAttribute('data-auth'); si.onclick = function(e) { e.preventDefault(); WMAuth.signOut(); location.reload(); }; }
-    if (jn) { jn.textContent = 'Dashboard'; }
+    if (jn) { jn.textContent = (u.role === 'admin') ? 'Admin panel' : 'Dashboard'; }
   }
   }
   paint(); WMAuth.ready().then(paint);
