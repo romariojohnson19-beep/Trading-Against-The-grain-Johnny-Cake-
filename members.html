@@ -9,26 +9,30 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
 <style>
 :root {
-  --bg: #0B0D11;
-  --panel: #13171E;
-  --panel2: #181D25;
-  --line: #232830;
-  --fg: #F0EDE6;
-  --muted: #6B7280;
-  --accent: #C8F169;
-  --accent-dim: rgba(200,241,105,.08);
-  --accent-border: rgba(200,241,105,.18);
-  --warm: #FF8A6B;
-  --warm-dim: rgba(255,138,107,.08);
-  --warm-border: rgba(255,138,107,.2);
-  --red: #FF4D4D;
+  --bg: #0E1210;
+  --panel: #151B18;
+  --panel2: #1B221E;
+  --line: #26302B;
+  --fg: #E6E9E2;
+  --muted: #8D978F;
+  --accent: #B9D77A;
+  --accent-dim: rgba(185,215,122,.08);
+  --accent-border: rgba(185,215,122,.18);
+  --warm: #E8946F;
+  --warm-dim: rgba(232,148,111,.08);
+  --warm-border: rgba(232,148,111,.2);
+  --red: #E5675F;
   --sidebar: 240px;
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { -webkit-text-size-adjust: 100%; }
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 110% 50% at 50% -5%, rgba(30,44,35,.7) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 0% 100%, rgba(22,32,26,.45) 0%, transparent 60%);
+  background-attachment: fixed;
   color: var(--fg);
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 15px;
@@ -93,8 +97,8 @@ body {
   transition: all .2s;
 }
 .sb-online.live {
-  background: rgba(255,77,77,.08);
-  border: 1px solid rgba(255,77,77,.2);
+  background: rgba(229,103,95,.08);
+  border: 1px solid rgba(229,103,95,.2);
   color: var(--red);
 }
 .sb-online.offline {
@@ -153,16 +157,22 @@ body {
 
 /* ── Live banner ── */
 .live-banner {
-  background: linear-gradient(135deg, rgba(255,77,77,.12), rgba(255,138,107,.05));
-  border: 1px solid rgba(255,77,77,.22);
   border-radius: 16px; padding: 1.3rem 1.5rem;
   display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
-  margin-bottom: 1.3rem;
+  margin-bottom: 1.3rem; transition: background .3s, border-color .3s;
+}
+.live-banner.online {
+  background: linear-gradient(135deg, rgba(229,103,95,.12), rgba(232,148,111,.05));
+  border: 1px solid rgba(229,103,95,.22);
+}
+.live-banner.offline {
+  background: var(--panel);
+  border: 1px solid var(--line);
 }
 .lb-pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--red); animation: blink 1.5s ease-in-out infinite; flex: none; }
 .lb-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--red); }
 .lb-sub { font-size: .82rem; color: var(--muted); margin-top: .1rem; }
-.lb-btn { background: var(--red); color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: .88rem; border: none; border-radius: 10px; padding: .65rem 1.3rem; cursor: pointer; text-decoration: none; transition: opacity .15s; }
+.lb-btn { background: rgba(229,103,95,.16); color: #F2A9A3; border: 1px solid rgba(229,103,95,.35); font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: .88rem; border-radius: 10px; padding: .65rem 1.3rem; cursor: pointer; text-decoration: none; transition: opacity .15s; }
 .lb-btn:hover { opacity: .88; }
 
 /* ── Alert banner (Mario online/offline) ── */
@@ -173,7 +183,7 @@ body {
   animation: slideIn .35s cubic-bezier(.22,1,.36,1);
 }
 @keyframes slideIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
-.alert-banner.online { background: rgba(200,241,105,.1); border: 1px solid var(--accent-border); color: var(--accent); }
+.alert-banner.online { background: rgba(185,215,122,.1); border: 1px solid var(--accent-border); color: var(--accent); }
 .alert-banner.offline { background: var(--panel); border: 1px solid var(--line); color: var(--muted); }
 .alert-banner-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
 .alert-banner.online .alert-banner-dot { background: var(--accent); }
@@ -208,8 +218,8 @@ body {
 .lc-wk { font-family: 'JetBrains Mono', monospace; font-size: .48rem; color: var(--muted); margin-bottom: .25rem; }
 .lc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); flex: none; }
 .lc-dot.done { background: var(--accent); }
-.lc-dot.here { background: var(--accent); box-shadow: 0 0 0 4px rgba(200,241,105,.18); }
-.lc-dot.locked { background: var(--warm); box-shadow: 0 0 0 3px rgba(255,138,107,.15); }
+.lc-dot.here { background: var(--accent); box-shadow: 0 0 0 4px rgba(185,215,122,.18); }
+.lc-dot.locked { background: var(--warm); box-shadow: 0 0 0 3px rgba(232,148,111,.15); }
 .lc-pr { font-family: 'JetBrains Mono', monospace; font-size: .46rem; color: var(--muted); margin-top: .25rem; white-space: nowrap; }
 .lc-pr.accent { color: var(--accent); font-weight: 600; }
 .lc-pr.warm { color: var(--warm); font-weight: 600; }
@@ -242,7 +252,7 @@ body {
 .si-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .9rem; }
 .si-time { font-size: .8rem; color: var(--muted); margin-top: .05rem; }
 .si-badge { font-family: 'JetBrains Mono', monospace; font-size: .54rem; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; flex: none; }
-.si-badge.live { background: rgba(255,77,77,.1); color: var(--red); border: 1px solid rgba(255,77,77,.2); }
+.si-badge.live { background: rgba(229,103,95,.1); color: var(--red); border: 1px solid rgba(229,103,95,.2); }
 .si-badge.upcoming { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); }
 .si-badge.done { background: var(--line); color: var(--muted); border: 1px solid var(--line); }
 
@@ -251,8 +261,8 @@ body {
 .msg-item { display: flex; gap: .9rem; align-items: flex-start; padding: 1rem 1.3rem; border-bottom: 1px solid var(--line); cursor: pointer; transition: background .12s; }
 .msg-item:last-child { border-bottom: none; }
 .msg-item:hover { background: var(--panel2); }
-.msg-item.unread { background: rgba(200,241,105,.025); }
-.msg-av { width: 35px; height: 35px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: .65rem; color: #0B1400; font-weight: 700; flex: none; }
+.msg-item.unread { background: rgba(185,215,122,.025); }
+.msg-av { width: 35px; height: 35px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: .65rem; color: #101A08; font-weight: 700; flex: none; }
 .msg-body { flex: 1; min-width: 0; }
 .msg-row { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; margin-bottom: .12rem; }
 .msg-from { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .9rem; }
@@ -268,7 +278,7 @@ body {
 .md-header { padding: 1.1rem 1.3rem; border-bottom: 1px solid var(--line); }
 .md-subject { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em; margin-bottom: .5rem; }
 .md-meta { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
-.md-av { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: .5rem; color: #0B1400; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+.md-av { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: .5rem; color: #101A08; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
 .md-sender { display: flex; align-items: center; gap: .45rem; font-size: .88rem; font-weight: 500; }
 .md-date { font-family: 'JetBrains Mono', monospace; font-size: .58rem; color: var(--muted); }
 .md-body-content { padding: 1.3rem; font-size: .93rem; line-height: 1.75; color: var(--muted); }
@@ -287,19 +297,19 @@ body {
 .plan-table th { padding: .6rem 1.3rem; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: .54rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--line); }
 .plan-table td { padding: .75rem 1.3rem; border-bottom: 1px solid var(--line); font-size: .88rem; }
 .plan-table tr:last-child td { border-bottom: none; }
-.plan-table tr.you td { background: rgba(200,241,105,.04); }
-.plan-table tr.pts-row td { background: rgba(255,138,107,.04); }
+.plan-table tr.you td { background: rgba(185,215,122,.04); }
+.plan-table tr.pts-row td { background: rgba(232,148,111,.04); }
 .pts-earn-badge { font-family: 'JetBrains Mono', monospace; font-size: .54rem; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 100px; background: var(--warm-dim); color: var(--warm); border: 1px solid var(--warm-border); }
 
 /* ── Buttons ── */
 .btn { display: inline-flex; align-items: center; gap: .45rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .88rem; border-radius: 9px; padding: .6rem 1.1rem; border: none; cursor: pointer; text-decoration: none; transition: opacity .15s; -webkit-tap-highlight-color: transparent; }
-.btn-accent { background: var(--accent); color: #0B1400; }
+.btn-accent { background: var(--accent); color: #101A08; }
 .btn-ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
 .btn-ghost:hover { border-color: var(--muted); }
 .btn-accent:hover { opacity: .88; }
 .btn-sm { font-size: .8rem; padding: .42rem .82rem; }
-.btn-danger { background: rgba(255,77,77,.1); color: var(--red); border: 1px solid rgba(255,77,77,.2); }
-.btn-danger:hover { background: rgba(255,77,77,.18); }
+.btn-danger { background: rgba(229,103,95,.1); color: var(--red); border: 1px solid rgba(229,103,95,.2); }
+.btn-danger:hover { background: rgba(229,103,95,.18); }
 
 /* ── Sec header ── */
 .sec-header { margin-bottom: 1.1rem; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
@@ -314,6 +324,31 @@ body {
 /* ── Toast ── */
 .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--fg); color: var(--bg); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .88rem; border-radius: 100px; padding: .65rem 1.4rem; z-index: 200; pointer-events: none; transition: transform .3s cubic-bezier(.22,1,.36,1), opacity .3s; opacity: 0; white-space: nowrap; }
 .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* ── Calendar ── */
+.m-cal-dow { text-align:center; font-family:'JetBrains Mono',monospace; font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding:.25rem 0; }
+.m-cal-day { min-height:76px; border-radius:8px; padding:.35rem .4rem; cursor:default; position:relative; overflow:hidden; transition:background .12s; border:1px solid transparent; }
+.m-cal-day.has-events { cursor:pointer; }
+.m-cal-day.has-events:hover { background:var(--panel2); border-color:var(--line); }
+.m-cal-day.today { background:rgba(185,215,122,.05); border-color:rgba(185,215,122,.18) !important; }
+.m-cal-day.today .m-cal-dn { color:var(--accent); font-weight:700; }
+.m-cal-day.other-month { opacity:.4; }
+.m-cal-day.is-weekend .m-cal-dn { color:rgba(107,114,128,.45); }
+.m-cal-dn { font-family:'Space Grotesk',sans-serif; font-size:.72rem; font-weight:600; line-height:1; margin-bottom:.28rem; }
+.m-cal-chip { display:block; font-family:'JetBrains Mono',monospace; font-size:.53rem; font-weight:700; letter-spacing:.01em; border-radius:4px; padding:2px 5px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.m-cal-more { font-family:'JetBrains Mono',monospace; font-size:.5rem; color:var(--muted); margin-top:2px; text-align:left; padding-left:1px; }
+.m-legend-item { display:flex; align-items:center; gap:.35rem; font-size:.72rem; color:var(--muted); }
+.m-legend-dot { width:7px; height:7px; border-radius:50%; flex:none; }
+/* Event detail rows */
+.m-evt-row { display:flex; gap:.8rem; padding:.75rem 0; border-bottom:1px solid var(--line); align-items:flex-start; }
+.m-evt-row:last-child { border-bottom:none; }
+.m-evt-bar { width:3px; min-height:50px; border-radius:2px; flex:none; margin-top:.15rem; }
+.m-evt-body { flex:1; min-width:0; }
+.m-evt-label { font-family:'JetBrains Mono',monospace; font-size:.58rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; margin-bottom:.2rem; }
+.m-evt-title { font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:.95rem; margin-bottom:.15rem; color:var(--fg); }
+.m-evt-time { font-size:.82rem; color:var(--muted); }
+.m-evt-inst { font-family:'JetBrains Mono',monospace; font-size:.68rem; color:var(--muted); margin-top:.3rem; letter-spacing:.02em; }
+.m-evt-notes { font-size:.78rem; color:var(--muted); margin-top:.3rem; font-style:italic; }
 
 /* ── Mobile ── */
 .sb-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 49; backdrop-filter: blur(2px); }
@@ -330,6 +365,11 @@ body {
   .content { padding: 1.2rem 1rem; }
 }
 </style>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" crossorigin="anonymous" onerror="window.WMSUPA_FAIL=1"></script>
+<script src="cloud.js"></script>
+<script src="auth.js"></script>
+<script>try{if(!WMAuth.user())document.documentElement.style.visibility='hidden';}catch(e){}</script>
 </head>
 <body>
 <div class="shell">
@@ -339,7 +379,7 @@ body {
   <aside class="sidebar" id="sidebar">
     <div class="sb-top">
       <div class="sb-mark">
-        <svg viewBox="0 0 14 14" fill="none"><path d="M7 1L12 4V10L7 13L2 10V4L7 1Z" fill="#0B1400"/></svg>
+        <svg viewBox="0 0 14 14" fill="none"><path d="M7 1L12 4V10L7 13L2 10V4L7 1Z" fill="#101A08"/></svg>
       </div>
       <div class="sb-brand">Wingman <span>Member Portal</span></div>
     </div>
@@ -370,15 +410,20 @@ body {
           <svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5l1.8 3.6 4 .6L11 8.5l.7 3.9L8 10.5l-3.7 1.9.7-3.9L2.2 5.7l4-.6L8 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           My Plan
         </button>
+        <button class="sb-item" onclick="showPage('downloads')" id="nav-downloads">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8m0 0L5 7m3 3l3-3M2 12.5v.5a1.5 1.5 0 001.5 1.5h9A1.5 1.5 0 0014 13v-.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Downloads
+        </button>
       </div>
     </nav>
 
     <div class="sb-user">
-      <div class="sb-avatar">JD</div>
-      <div>
-        <div class="sb-user-name">John D.</div>
-        <div class="sb-user-tier">Week 2 · $180/wk · 0 pts</div>
+      <div class="sb-avatar" id="sb-avatar">–</div>
+      <div style="min-width:0;flex:1">
+        <div class="sb-user-name" id="sb-name">Member</div>
+        <div class="sb-user-tier" id="sb-tier"></div>
       </div>
+      <button class="btn btn-ghost btn-sm" onclick="doSignOut()" title="Sign out" style="padding:.35rem .6rem;font-size:.7rem;flex:none">Sign out</button>
     </div>
   </aside>
 
@@ -406,82 +451,20 @@ body {
       ══════════════ -->
       <div id="page-dashboard">
 
-        <!-- Alert banner (Mario online/offline notification) -->
-        <div class="alert-banner online" id="alert-banner">
-          <div class="alert-banner-dot"></div>
-          <span id="alert-text">Mario just went live — join on Discord</span>
-          <a href="https://discord.gg/PLACEHOLDER" target="_blank" style="margin-left:auto;color:var(--accent);font-size:.82rem;text-decoration:none;white-space:nowrap;font-weight:600;">Join →</a>
+        <div id="pending-note" class="card" style="display:none;margin-bottom:1rem;border-color:rgba(232,148,111,.3);background:rgba(232,148,111,.05)">
+          <div class="card-body" style="font-size:.9rem;line-height:1.55"><b style="color:var(--warm)">Seat requested.</b> Mario confirms seats himself. Once yours is approved the Discord room link unlocks here.<div style="margin-top:.7rem"><a id="pay-btn" class="btn btn-accent btn-sm" href="#" style="display:none">Pay for your seat →</a></div></div>
         </div>
 
-        <!-- Live session -->
+        <!-- Single status banner — controlled by checkMarioStatus() -->
         <div class="live-banner" id="live-session-banner">
           <div style="display:flex;align-items:center;gap:.75rem;">
-            <div class="lb-pulse"></div>
+            <div class="lb-pulse" id="lb-pulse"></div>
             <div>
-              <div class="lb-title">Mario is trading live now</div>
-              <div class="lb-sub">Tuesday session · NQ Futures · 9 / 12 seats</div>
+              <div class="lb-title" id="lb-title">Mario is trading live now</div>
+              <div class="lb-sub" id="lb-sub">Join on Discord to participate</div>
             </div>
           </div>
-          <a class="lb-btn" href="https://discord.gg/PLACEHOLDER" target="_blank">Join on Discord →</a>
-        </div>
-
-        <!-- Stats -->
-        <div class="stats-row">
-          <div class="stat-card">
-            <div class="stat-num accent">2</div>
-            <div class="stat-label">Your week</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num warm">$180</div>
-            <div class="stat-label">Next renewal</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-num pts">0 pts</div>
-            <div class="stat-label">Points balance</div>
-          </div>
-        </div>
-
-        <!-- Loyalty card -->
-        <div class="loyalty-card">
-          <div class="lc-top">
-            <div>
-              <div class="lc-title">Loyalty Progress</div>
-              <div class="lc-sub">Price locks at $140 at week 4. Then you earn points.</div>
-            </div>
-            <div class="lc-pts-box">
-              <div class="lc-pts-val">0</div>
-              <div class="lc-pts-label">Points</div>
-            </div>
-          </div>
-
-          <div class="lc-steps">
-            <div class="lc-step"><div class="lc-wk">W1</div><div class="lc-dot done"></div><div class="lc-pr accent">$200</div></div>
-            <div class="lc-line done"></div>
-            <div class="lc-step"><div class="lc-wk">W2</div><div class="lc-dot here"></div><div class="lc-pr accent">$180</div></div>
-            <div class="lc-line"></div>
-            <div class="lc-step"><div class="lc-wk">W3</div><div class="lc-dot"></div><div class="lc-pr">$160</div></div>
-            <div class="lc-line"></div>
-            <div class="lc-step"><div class="lc-wk">W4+</div><div class="lc-dot locked"></div><div class="lc-pr warm">$140</div></div>
-          </div>
-
-          <div class="lc-note">
-            <b>Week 4+ = $140/week forever.</b> Every consecutive week earns <span class="pts-note">+20 pts</span> — redeem for a free renewal, the ebook, or an indicator.
-          </div>
-
-          <div class="pts-redeem">
-            <div class="pts-item disabled" title="Need 20 pts">
-              <span>📖 Ebook</span>
-              <span class="pts-item-cost">20 pts</span>
-            </div>
-            <div class="pts-item disabled" title="Need 80 pts">
-              <span>📈 NQ Indicator</span>
-              <span class="pts-item-cost">80 pts</span>
-            </div>
-            <div class="pts-item disabled" title="Need 100 pts">
-              <span>🆓 Free week</span>
-              <span class="pts-item-cost">100 pts</span>
-            </div>
-          </div>
+          <a class="lb-btn" id="lb-join-btn" href="#" data-discord>Join on Discord →</a>
         </div>
 
         <!-- This week -->
@@ -490,104 +473,76 @@ body {
           <button class="btn btn-ghost btn-sm" onclick="showPage('schedule')">Full schedule →</button>
         </div>
         <div class="card">
-          <div class="session-list">
-            <div class="session-item">
-              <div class="si-date">MON</div>
-              <div class="si-body"><div class="si-title">Game Plan</div><div class="si-time">9:00 AM CT · Pre-market levels &amp; bias</div></div>
-              <div class="si-badge done">Done</div>
-            </div>
-            <div class="session-item">
-              <div class="si-date">TUE</div>
-              <div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT · NQ Futures</div></div>
-              <div class="si-badge live">Live</div>
-            </div>
-            <div class="session-item">
-              <div class="si-date">WED</div>
-              <div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT · NQ Futures</div></div>
-              <div class="si-badge upcoming">Tomorrow</div>
-            </div>
-            <div class="session-item">
-              <div class="si-date">THU</div>
-              <div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT · NQ Futures</div></div>
-              <div class="si-badge upcoming">Upcoming</div>
-            </div>
-            <div class="session-item">
-              <div class="si-date">FRI</div>
-              <div class="si-body"><div class="si-title">Week Recap</div><div class="si-time">4:00 PM CT · Post-week breakdown</div></div>
-              <div class="si-badge upcoming">Upcoming</div>
-            </div>
-          </div>
+          <div class="session-list" id="week-list"></div>
         </div>
+
 
         <!-- Latest from Mario -->
         <div class="sec-header" style="margin-top:1.5rem;">
           <div class="sec-title">Latest from Mario</div>
           <button class="btn btn-ghost btn-sm" onclick="showPage('messages')">All messages →</button>
         </div>
-        <div class="card" style="cursor:pointer;" onclick="openMessage(0);showPage('messages');">
-          <div class="msg-item unread">
-            <div class="msg-av">M</div>
-            <div class="msg-body">
-              <div class="msg-row">
-                <span class="msg-from">Mario</span>
-                <span class="msg-time">Today, 8:42 AM</span>
-              </div>
-              <div class="msg-subject">This week's game plan + key levels PDF</div>
-              <div class="msg-preview">Here's the plan going into this week. NQ has a clean setup building at...</div>
-              <div class="msg-attach-note">
-                <svg viewBox="0 0 12 12" fill="none"><path d="M2 9.5V3a2 2 0 014 0v6a1 1 0 01-2 0V3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-                game-plan-oct-28.pdf
-              </div>
-            </div>
-            <div class="unread-dot"></div>
-          </div>
-        </div>
+        <div class="card" id="latest-card"></div>
+
 
       </div>
 
       <!-- ══════════════
-           SCHEDULE
+           SCHEDULE / CALENDAR
       ══════════════ -->
       <div id="page-schedule" style="display:none">
-        <div class="tabs">
-          <button class="tab active" onclick="switchTab(this,'tab-week')">This Week</button>
-          <button class="tab" onclick="switchTab(this,'tab-next')">Next Week</button>
-        </div>
 
-        <div id="tab-week">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Week of Oct 28, 2026</div>
-              <div class="label">Johnny Cake Method</div>
+        <!-- Next session callout -->
+        <div id="m-next-sess" class="card" style="display:none;margin-bottom:1rem;border-color:rgba(185,215,122,.22);background:rgba(185,215,122,.04)">
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;justify-content:space-between">
+            <div>
+              <div style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:.1em;color:var(--accent);text-transform:uppercase;margin-bottom:.3rem">Next Session</div>
+              <div id="m-next-title" style="font-weight:700;font-size:1rem;color:var(--fg)"></div>
+              <div id="m-next-sub" style="font-size:.8rem;color:var(--muted);margin-top:.2rem"></div>
             </div>
-            <div class="session-list">
-              <div class="session-item"><div class="si-date">MON 28</div><div class="si-body"><div class="si-title">Pre-Week Game Plan</div><div class="si-time">9:00 AM CT — key levels, weekly bias, what to watch</div></div><div class="si-badge done">Done</div></div>
-              <div class="session-item"><div class="si-date">TUE 29</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT — NQ Futures, market open</div></div><div class="si-badge live">Live now</div></div>
-              <div class="session-item"><div class="si-date">WED 30</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT — NQ Futures, market open</div></div><div class="si-badge upcoming">Tomorrow</div></div>
-              <div class="session-item"><div class="si-date">THU 31</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT — NQ Futures, market open</div></div><div class="si-badge upcoming">Upcoming</div></div>
-              <div class="session-item"><div class="si-date">FRI 1</div><div class="si-body"><div class="si-title">Post-Week Recap</div><div class="si-time">4:00 PM CT — what fired, what didn't, next week</div></div><div class="si-badge upcoming">Upcoming</div></div>
-            </div>
+            <a href="#" data-discord class="btn btn-accent btn-sm" style="font-size:.78rem;white-space:nowrap">Join on Discord →</a>
           </div>
         </div>
 
-        <div id="tab-next" style="display:none">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Week of Nov 4, 2026</div>
-              <div class="label">Seats lock in Monday</div>
-            </div>
-            <div class="session-list">
-              <div class="session-item"><div class="si-date">MON 4</div><div class="si-body"><div class="si-title">Pre-Week Game Plan</div><div class="si-time">9:00 AM CT</div></div><div class="si-badge upcoming">Upcoming</div></div>
-              <div class="session-item"><div class="si-date">TUE 5</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT</div></div><div class="si-badge upcoming">Upcoming</div></div>
-              <div class="session-item"><div class="si-date">WED 6</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT</div></div><div class="si-badge upcoming">Upcoming</div></div>
-              <div class="session-item"><div class="si-date">THU 7</div><div class="si-body"><div class="si-title">Live Trade Room</div><div class="si-time">9:30 AM CT</div></div><div class="si-badge upcoming">Upcoming</div></div>
-              <div class="session-item"><div class="si-date">FRI 8</div><div class="si-body"><div class="si-title">Post-Week Recap</div><div class="si-time">4:00 PM CT</div></div><div class="si-badge upcoming">Upcoming</div></div>
-            </div>
+        <!-- Calendar card -->
+        <div class="card" style="padding:0;overflow:hidden">
+          <!-- Calendar nav -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem .8rem;border-bottom:1px solid var(--line)">
+            <button onclick="mCalPrev()" style="background:none;border:1px solid var(--line);color:var(--fg);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--line)'">‹</button>
+            <div id="m-cal-label" style="font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;letter-spacing:-.01em"></div>
+            <button onclick="mCalNext()" style="background:none;border:1px solid var(--line);color:var(--fg);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--line)'">›</button>
+          </div>
+          <!-- Day labels -->
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);padding:.5rem 1rem .2rem;gap:2px">
+            <div class="m-cal-dow">M</div><div class="m-cal-dow">T</div><div class="m-cal-dow">W</div>
+            <div class="m-cal-dow">T</div><div class="m-cal-dow">F</div>
+            <div class="m-cal-dow" style="color:rgba(107,114,128,.5)">S</div>
+            <div class="m-cal-dow" style="color:rgba(107,114,128,.5)">S</div>
+          </div>
+          <!-- Grid -->
+          <div id="m-cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:.2rem 1rem 1rem"></div>
+        </div>
+
+        <!-- Event detail panel -->
+        <div id="m-cal-detail" style="display:none;margin-top:1rem" class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+            <div id="m-detail-date" style="font-weight:700;font-size:1rem"></div>
+            <button onclick="document.getElementById('m-cal-detail').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.2rem;line-height:1">×</button>
+          </div>
+          <div id="m-detail-events"></div>
+          <div style="margin-top:1rem;padding-top:.9rem;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)">
+            All sessions on Discord Stage · <a href="#" data-discord style="color:var(--accent);text-decoration:none">Join Discord →</a>
           </div>
         </div>
 
-        <div style="margin-top:1.2rem;padding:.9rem 1.2rem;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-size:.86rem;color:var(--muted);">
-          All sessions run on Discord Stage. <a href="https://discord.gg/PLACEHOLDER" style="color:var(--accent);text-decoration:none;" target="_blank">Join the Discord →</a>
+        <!-- Legend -->
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding:.7rem .9rem;background:var(--panel2);border-radius:10px;border:1px solid var(--line)">
+          <div style="font-size:.7rem;color:var(--muted);font-family:var(--font-mono);letter-spacing:.06em;text-transform:uppercase;align-self:center;margin-right:.2rem">Key</div>
+          <div class="m-legend-item"><span class="m-legend-dot" style="background:#FBBF24"></span>London</div>
+          <div class="m-legend-item"><span class="m-legend-dot" style="background:#60A5FA"></span>Pre-Market</div>
+          <div class="m-legend-item"><span class="m-legend-dot" style="background:#B9D77A"></span>NY Open</div>
+          <div class="m-legend-item"><span class="m-legend-dot" style="background:#E8946F"></span>Recap</div>
+          <div class="m-legend-item"><span class="m-legend-dot" style="background:#C084FC"></span>Custom</div>
         </div>
       </div>
 
@@ -597,35 +552,7 @@ body {
       <div id="page-messages" style="display:none">
         <div id="view-inbox">
           <div class="card">
-            <div class="msg-list">
-              <div class="msg-item unread" id="msg-0" onclick="openMessage(0)">
-                <div class="msg-av">M</div>
-                <div class="msg-body">
-                  <div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">Today, 8:42 AM</span></div>
-                  <div class="msg-subject">This week's game plan + key levels PDF</div>
-                  <div class="msg-preview">Here's the plan going into this week. NQ has a clean setup...</div>
-                  <div class="msg-attach-note"><svg viewBox="0 0 12 12" fill="none"><path d="M2 9.5V3a2 2 0 014 0v6a1 1 0 01-2 0V3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>game-plan-oct-28.pdf</div>
-                </div>
-                <div class="unread-dot" id="dot-0"></div>
-              </div>
-              <div class="msg-item unread" id="msg-1" onclick="openMessage(1)">
-                <div class="msg-av">M</div>
-                <div class="msg-body">
-                  <div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">Sun, 6:15 PM</span></div>
-                  <div class="msg-subject">Welcome to Wingman — read this first</div>
-                  <div class="msg-preview">Welcome to the room. Here's everything you need to know...</div>
-                  <div class="msg-attach-note"><svg viewBox="0 0 12 12" fill="none"><path d="M2 9.5V3a2 2 0 014 0v6a1 1 0 01-2 0V3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>wingman-welcome.pdf · discord-setup.png</div>
-                </div>
-                <div class="unread-dot" id="dot-1"></div>
-              </div>
-              <div class="msg-item" id="msg-2" onclick="openMessage(2)">
-                <div class="msg-av">M</div>
-                <div class="msg-body">
-                  <div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">Oct 18</span></div>
-                  <div class="msg-subject">Friday recap — what happened this week</div>
-                  <div class="msg-preview">Solid week. Here's what I saw, what I missed, and what I'm adjusting...</div>
-                </div>
-              </div>
+            <div class="msg-list" id="msg-list"></div>
             </div>
           </div>
         </div>
@@ -658,12 +585,12 @@ body {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;">
           <div style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:14px;padding:1.2rem;">
             <div class="label" style="margin-bottom:.4rem;">Current week</div>
-            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-.04em;color:var(--accent);line-height:1;">Week 2</div>
-            <div style="color:var(--muted);font-size:.84rem;margin-top:.35rem;">Renews Monday, Nov 4</div>
+            <div id="plan-week" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-.04em;color:var(--accent);line-height:1;">Week 1</div>
+            <div id="plan-renew" style="color:var(--muted);font-size:.84rem;margin-top:.35rem;"></div>
           </div>
           <div style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.2rem;">
             <div class="label" style="margin-bottom:.4rem;">Points balance</div>
-            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-.04em;color:var(--warm);line-height:1;">0 pts</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-.04em;color:var(--warm);line-height:1;"><span id="plan-pts">0</span> pts</div>
             <div style="color:var(--muted);font-size:.84rem;margin-top:.35rem;">Earn 20 pts/wk from week 4+</div>
           </div>
         </div>
@@ -681,12 +608,7 @@ body {
                   <th>Week</th><th>Price</th><th>Off</th><th>Points</th><th>Status</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr><td>Week 1</td><td style="font-weight:600;">$200</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">—</td><td><span style="color:var(--accent);font-size:.78rem;">✓ Done</span></td></tr>
-                <tr class="you"><td style="color:var(--accent);font-weight:600;">Week 2 ← You</td><td style="color:var(--accent);font-weight:600;">$180</td><td style="color:var(--accent);">10%</td><td style="color:var(--muted);">—</td><td><span style="color:var(--accent);">● Active</span></td></tr>
-                <tr><td style="color:var(--muted);">Week 3</td><td>$160</td><td style="color:var(--muted);">20%</td><td style="color:var(--muted);">—</td><td style="color:var(--muted);">Upcoming</td></tr>
-                <tr class="pts-row"><td style="color:var(--warm);font-weight:600;">Week 4+ 🔒</td><td style="color:var(--warm);font-weight:600;">$140</td><td style="color:var(--warm);">30% cap</td><td><span class="pts-earn-badge">+20 pts/wk</span></td><td style="color:var(--muted);">Upcoming</td></tr>
-              </tbody>
+              <tbody id="plan-rows"></tbody>
             </table>
           </div>
         </div>
@@ -695,42 +617,9 @@ body {
         <div class="card" style="margin-bottom:1.2rem;">
           <div class="card-header">
             <div class="card-title">Points Store</div>
-            <div class="label">0 pts available</div>
+            <div class="label" id="store-label">0 pts available</div>
           </div>
-          <div class="card-body" style="display:flex;flex-direction:column;gap:.85rem;">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
-              <div>
-                <div style="font-weight:600;font-size:.95rem;">📖 Johnny Cake Method Ebook</div>
-                <div style="color:var(--muted);font-size:.82rem;">Full strategy breakdown — Mario's system in writing</div>
-              </div>
-              <div style="display:flex;align-items:center;gap:.7rem;">
-                <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--warm);font-weight:600;">20 pts</span>
-                <button class="btn btn-ghost btn-sm" disabled style="opacity:.4;cursor:default;">Redeem</button>
-              </div>
-            </div>
-            <div style="height:1px;background:var(--line);"></div>
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
-              <div>
-                <div style="font-weight:600;font-size:.95rem;">📈 NQ Levels Indicator</div>
-                <div style="color:var(--muted);font-size:.82rem;">TradingView indicator — key grain levels auto-plotted</div>
-              </div>
-              <div style="display:flex;align-items:center;gap:.7rem;">
-                <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--warm);font-weight:600;">80 pts</span>
-                <button class="btn btn-ghost btn-sm" disabled style="opacity:.4;cursor:default;">Redeem</button>
-              </div>
-            </div>
-            <div style="height:1px;background:var(--line);"></div>
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
-              <div>
-                <div style="font-weight:600;font-size:.95rem;">🆓 Free Week Renewal</div>
-                <div style="color:var(--muted);font-size:.82rem;">Skip one week's payment — seat held, tier protected</div>
-              </div>
-              <div style="display:flex;align-items:center;gap:.7rem;">
-                <span style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--warm);font-weight:600;">100 pts</span>
-                <button class="btn btn-ghost btn-sm" disabled style="opacity:.4;cursor:default;">Redeem</button>
-              </div>
-            </div>
-          </div>
+          <div class="card-body" id="store-list" style="display:flex;flex-direction:column;gap:.85rem;"></div>
         </div>
 
         <!-- Manage -->
@@ -740,9 +629,9 @@ body {
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
               <div>
                 <div style="font-weight:600;font-size:.93rem;">Billing</div>
-                <div style="color:var(--muted);font-size:.83rem;">Renews Nov 4 · $160 (Week 3 rate)</div>
+                <div id="bill-line" style="color:var(--muted);font-size:.83rem;"></div>
               </div>
-              <a class="btn btn-ghost btn-sm" href="#">Manage →</a>
+              <a class="btn btn-ghost btn-sm" href="#" data-billing>Manage →</a>
             </div>
             <div style="height:1px;background:var(--line);"></div>
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
@@ -750,17 +639,30 @@ body {
                 <div style="font-weight:600;font-size:.93rem;">Discord</div>
                 <div style="color:var(--muted);font-size:.83rem;">Sessions run on Discord Stage</div>
               </div>
-              <a class="btn btn-ghost btn-sm" href="https://discord.gg/PLACEHOLDER" target="_blank">Open Discord →</a>
+              <a class="btn btn-ghost btn-sm" href="#" data-discord>Open Discord →</a>
             </div>
             <div style="height:1px;background:var(--line);"></div>
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
               <div>
                 <div style="font-weight:600;font-size:.93rem;color:var(--red);">Cancel</div>
-                <div style="color:var(--muted);font-size:.83rem;">Your loyalty tier is saved for 30 days if you come back</div>
+                <div style="color:var(--muted);font-size:.83rem;">Sends a cancellation request to Mario. Your tier is saved for 30 days.</div>
               </div>
-              <button class="btn btn-danger btn-sm" onclick="if(confirm('Cancel your Wingman subscription?')) showToast('Cancellation submitted')">Cancel</button>
+              <button class="btn btn-danger btn-sm" onclick="requestCancel()">Cancel</button>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- ══════════════
+           DOWNLOADS
+      ══════════════ -->
+      <div id="page-downloads" style="display:none">
+        <div class="sec-header">
+          <div class="sec-title">Downloads</div>
+          <div style="font-size:.82rem;color:var(--muted)">Files &amp; resources from Mario</div>
+        </div>
+        <div class="card" id="downloads-list">
+          <div style="padding:2.5rem;text-align:center;color:var(--muted);font-size:.9rem;">Loading…</div>
         </div>
       </div>
 
@@ -800,12 +702,12 @@ var readState = [false, false, true];
 
 // ── Navigation ──
 function showPage(name) {
-  ['dashboard','schedule','messages','plan'].forEach(function(p) {
+  ['dashboard','schedule','messages','plan','downloads'].forEach(function(p) {
     document.getElementById('page-' + p).style.display = p === name ? 'block' : 'none';
     var nav = document.getElementById('nav-' + p);
     if (nav) nav.classList.toggle('active', p === name);
   });
-  document.getElementById('page-title').textContent = { dashboard:'Dashboard', schedule:'Schedule', messages:'Messages', plan:'My Plan' }[name] || name;
+  document.getElementById('page-title').textContent = { dashboard:'Dashboard', schedule:'Schedule', messages:'Messages', plan:'My Plan', downloads:'Downloads' }[name] || name;
   if (name === 'messages') {
     document.getElementById('view-inbox').style.display = 'block';
     document.getElementById('view-detail').style.display = 'none';
@@ -870,31 +772,217 @@ function updateBadge() {
   document.getElementById('notif-dot').style.display = count > 0 ? 'block' : 'none';
 }
 
+// ══════════════════════════════════════════
+//  CALENDAR ENGINE
+// ══════════════════════════════════════════
+var SESSION_META = {
+  london:    { color:'#FBBF24', text:'rgba(0,0,0,.88)', label:'London' },
+  premarket: { color:'#60A5FA', text:'rgba(0,0,0,.88)', label:'Pre-Market' },
+  nyopen:    { color:'#B9D77A', text:'rgba(0,0,0,.88)', label:'NY Open' },
+  recap:     { color:'#E8946F', text:'rgba(0,0,0,.88)', label:'Recap' },
+  custom:    { color:'#C084FC', text:'rgba(0,0,0,.88)', label:'Custom' }
+};
+
+var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+var DAY_SHORT   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function loadEvents() {
+  try { return JSON.parse(localStorage.getItem('wm_events') || '[]'); } catch(e) { return []; }
+}
+
+// Seed sample events so calendar looks great on first load
+(function seedEvents() {
+  if (localStorage.getItem('wm_events') || (window.WMCloud && WMCloud.enabled)) return;
+  var seed = [
+    { id:'e1',  date:'2026-10-26', sessType:'london',    sessTypeLabel:'London',     instruments:['GC','MGC'],           start:'06:00', end:'08:00', notes:'Gold setup — watch key structure' },
+    { id:'e2',  date:'2026-10-26', sessType:'premarket', sessTypeLabel:'Pre-Market', instruments:['NQ','ES'],             start:'08:30', end:'09:30', notes:'Game plan + levels drop' },
+    { id:'e3',  date:'2026-10-27', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','MNQ','ES'],       start:'09:30', end:'11:30', notes:'' },
+    { id:'e4',  date:'2026-10-28', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','ES','GC'],        start:'09:30', end:'11:30', notes:'' },
+    { id:'e5',  date:'2026-10-29', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','ES'],             start:'09:30', end:'11:30', notes:'' },
+    { id:'e6',  date:'2026-10-30', sessType:'recap',     sessTypeLabel:'Recap',      instruments:['NQ','ES','GC'],        start:'16:00', end:'17:00', notes:'Week in review' },
+    { id:'e7',  date:'2026-11-03', sessType:'premarket', sessTypeLabel:'Pre-Market', instruments:['NQ','ES'],             start:'08:30', end:'09:30', notes:'Nov game plan' },
+    { id:'e8',  date:'2026-11-04', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','MNQ','ES','MES'], start:'09:30', end:'11:30', notes:'' },
+    { id:'e9',  date:'2026-11-05', sessType:'london',    sessTypeLabel:'London',     instruments:['GC','MGC'],            start:'06:00', end:'08:00', notes:'' },
+    { id:'e10', date:'2026-11-05', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','ES','GC'],        start:'09:30', end:'11:30', notes:'' },
+    { id:'e11', date:'2026-11-06', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','ES'],             start:'09:30', end:'11:30', notes:'' },
+    { id:'e12', date:'2026-11-07', sessType:'recap',     sessTypeLabel:'Recap',      instruments:['NQ','ES','GC'],        start:'16:00', end:'17:00', notes:'Week in review' }
+  ];
+  try { localStorage.setItem('wm_events', JSON.stringify(seed)); } catch(e) {}
+})();
+
+// Calendar state
+var M_CAL_YEAR, M_CAL_MONTH;
+
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+function fmtTime12(t) {
+  if (!t) return '';
+  var p = t.split(':'); var h = parseInt(p[0]); var m = p[1];
+  var ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+  return h + (m !== '00' ? ':' + m : '') + ' ' + ap;
+}
+
+function mCalInit() {
+  var now = new Date();
+  M_CAL_YEAR  = now.getFullYear();
+  M_CAL_MONTH = now.getMonth();
+  mCalRender();
+  mShowNextSession();
+}
+
+function mCalPrev() {
+  M_CAL_MONTH--;
+  if (M_CAL_MONTH < 0) { M_CAL_MONTH = 11; M_CAL_YEAR--; }
+  mCalRender();
+  document.getElementById('m-cal-detail').style.display = 'none';
+}
+
+function mCalNext() {
+  M_CAL_MONTH++;
+  if (M_CAL_MONTH > 11) { M_CAL_MONTH = 0; M_CAL_YEAR++; }
+  mCalRender();
+  document.getElementById('m-cal-detail').style.display = 'none';
+}
+
+function mCalRender() {
+  var lbl = document.getElementById('m-cal-label');
+  if (lbl) lbl.textContent = MONTH_NAMES[M_CAL_MONTH] + ' ' + M_CAL_YEAR;
+
+  var events = loadEvents();
+  var evtMap = {};
+  events.forEach(function(e) { if (!evtMap[e.date]) evtMap[e.date] = []; evtMap[e.date].push(e); });
+
+  var today = new Date(); today.setHours(0,0,0,0);
+  var firstDay = new Date(M_CAL_YEAR, M_CAL_MONTH, 1);
+  var lastDay  = new Date(M_CAL_YEAR, M_CAL_MONTH + 1, 0);
+  var startDow = (firstDay.getDay() + 6) % 7; // Mon=0
+  var totalCells = Math.ceil((startDow + lastDay.getDate()) / 7) * 7;
+
+  var grid = document.getElementById('m-cal-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  for (var i = 0; i < totalCells; i++) {
+    var cellDate = new Date(M_CAL_YEAR, M_CAL_MONTH, 1 - startDow + i);
+    var isThisMonth = cellDate.getMonth() === M_CAL_MONTH;
+    var isToday     = cellDate.getTime() === today.getTime();
+    var isWeekend   = cellDate.getDay() === 0 || cellDate.getDay() === 6;
+    var dateStr = cellDate.getFullYear() + '-' + pad2(cellDate.getMonth()+1) + '-' + pad2(cellDate.getDate());
+    var dayEvts = evtMap[dateStr] || [];
+
+    var cls = 'm-cal-day';
+    if (!isThisMonth) cls += ' other-month';
+    if (isToday)      cls += ' today';
+    if (isWeekend)    cls += ' is-weekend';
+    if (dayEvts.length && isThisMonth) cls += ' has-events';
+
+    var inner = '<div class="m-cal-dn">' + cellDate.getDate() + '</div>';
+    var shown = Math.min(dayEvts.length, 2);
+    for (var j = 0; j < shown; j++) {
+      var ev  = dayEvts[j];
+      var mt  = SESSION_META[ev.sessType] || SESSION_META.custom;
+      inner  += '<span class="m-cal-chip" style="background:' + mt.color + ';color:' + mt.text + '">' + mt.label + '</span>';
+    }
+    if (dayEvts.length > 2) inner += '<div class="m-cal-more">+' + (dayEvts.length - 2) + ' more</div>';
+
+    var cell = document.createElement('div');
+    cell.className = cls;
+    cell.innerHTML = inner;
+    if (dayEvts.length && isThisMonth) {
+      (function(ds) { cell.onclick = function() { mShowDay(ds); }; })(dateStr);
+    }
+    grid.appendChild(cell);
+  }
+}
+
+function mShowDay(dateStr) {
+  var events = loadEvents().filter(function(e) { return e.date === dateStr; });
+  var detail = document.getElementById('m-cal-detail');
+  var dateLbl = document.getElementById('m-detail-date');
+  var evtCont = document.getElementById('m-detail-events');
+  if (!detail) return;
+
+  if (!events.length) { detail.style.display = 'none'; return; }
+
+  var d = new Date(dateStr + 'T12:00:00');
+  dateLbl.textContent = DAY_SHORT[d.getDay()] + ', ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+
+  evtCont.innerHTML = events.map(function(ev) {
+    var mt   = SESSION_META[ev.sessType] || SESSION_META.custom;
+    var inst = (ev.instruments && ev.instruments.length) ? ev.instruments.join(' · ') : '';
+    var time = fmtTime12(ev.start) + (ev.end ? ' – ' + fmtTime12(ev.end) : '') + ' ET';
+    return '<div class="m-evt-row">' +
+      '<div class="m-evt-bar" style="background:' + mt.color + '"></div>' +
+      '<div class="m-evt-body">' +
+        '<div class="m-evt-label" style="color:' + mt.color + '">' + mt.label + '</div>' +
+        '<div class="m-evt-title">' + ev.sessTypeLabel + '</div>' +
+        '<div class="m-evt-time">' + time + '</div>' +
+        (inst ? '<div class="m-evt-inst">Instruments: ' + inst + '</div>' : '') +
+        (ev.notes ? '<div class="m-evt-notes">' + ev.notes + '</div>' : '') +
+      '</div></div>';
+  }).join('');
+
+  detail.style.display = 'block';
+  setTimeout(function() { detail.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 50);
+}
+
+function mShowNextSession() {
+  var now = new Date();
+  var upcoming = loadEvents().filter(function(e) {
+    var d = new Date(e.date + 'T' + (e.start || '00:00') + ':00');
+    return d > now;
+  }).sort(function(a, b) {
+    return new Date(a.date + 'T' + (a.start||'00:00')).getTime() -
+           new Date(b.date + 'T' + (b.start||'00:00')).getTime();
+  });
+
+  var el = document.getElementById('m-next-sess');
+  if (!el) return;
+  if (!upcoming.length) { el.style.display = 'none'; return; }
+
+  var ev = upcoming[0];
+  var d  = new Date(ev.date + 'T12:00:00');
+  var inst = (ev.instruments && ev.instruments.length) ? ev.instruments.join(' · ') : '';
+  document.getElementById('m-next-title').textContent =
+    ev.sessTypeLabel + ' · ' + DAY_SHORT[d.getDay()] + ' ' + MONTH_NAMES[d.getMonth()].slice(0,3) + ' ' + d.getDate() + ' · ' + fmtTime12(ev.start) + ' ET';
+  document.getElementById('m-next-sub').textContent = inst ? 'Instruments: ' + inst : '';
+  el.style.display = 'block';
+}
+
+// Refresh calendar when admin pushes wm_events
+window.addEventListener('storage', function(e) {
+  if (e.key === 'wm_events') { mCalRender(); mShowNextSession(); }
+});
+
 // ── Mario online/offline status ──
-// This is set by admin panel via shared localStorage key "mario_status"
+// Admin sets localStorage 'mario_status' = 'live' | 'offline'
 function checkMarioStatus() {
   var status;
   try { status = localStorage.getItem('mario_status') || 'live'; } catch(e) { status = 'live'; }
   var bar = document.getElementById('mario-status-bar');
   var label = document.getElementById('mario-status-label');
-  var alert = document.getElementById('alert-banner');
-  var alertText = document.getElementById('alert-text');
+  var banner = document.getElementById('live-session-banner');
+  var pulse = document.getElementById('lb-pulse');
+  var title = document.getElementById('lb-title');
+  var sub = document.getElementById('lb-sub');
+  var joinBtn = document.getElementById('lb-join-btn');
+
   if (status === 'live') {
-    bar.className = 'sb-online live';
-    label.textContent = 'Mario is online';
-    if (alert) {
-      alert.className = 'alert-banner online';
-      alert.innerHTML = '<div class="alert-banner-dot"></div><span>Mario just went live — join on Discord</span><a href="https://discord.gg/PLACEHOLDER" target="_blank" style="margin-left:auto;color:var(--accent);font-size:.82rem;text-decoration:none;white-space:nowrap;font-weight:600;">Join →</a>';
-      alert.style.display = 'flex';
-    }
+    if (bar) { bar.className = 'sb-online live'; }
+    if (label) { label.textContent = 'Mario is online'; }
+    if (banner) { banner.className = 'live-banner online'; }
+    if (pulse) { pulse.style.display = 'block'; }
+    if (title) { title.style.color = 'var(--red)'; title.textContent = 'Mario is trading live now'; }
+    if (sub) { sub.textContent = 'Join on Discord to participate'; }
+    if (joinBtn) { joinBtn.style.display = 'inline-flex'; }
   } else {
-    bar.className = 'sb-online offline';
-    label.textContent = 'Mario is offline';
-    if (alert) {
-      alert.className = 'alert-banner offline';
-      alert.innerHTML = '<div class="alert-banner-dot"></div><span>Mario is offline — next session Wed 9:30 AM CT</span>';
-      alert.style.display = 'flex';
-    }
+    if (bar) { bar.className = 'sb-online offline'; }
+    if (label) { label.textContent = 'Mario is offline'; }
+    if (banner) { banner.className = 'live-banner offline'; }
+    if (pulse) { pulse.style.display = 'none'; }
+    if (title) { title.style.color = 'var(--muted)'; title.textContent = 'Mario is currently offline'; }
+    if (sub) { sub.textContent = 'Check back for the next session — usually Tue & Thu 9:30 AM ET'; }
+    if (joinBtn) { joinBtn.style.display = 'none'; }
   }
 }
 
@@ -910,6 +998,59 @@ function showToast(msg) {
 function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
 
+// ── Downloads / Files ──
+function loadFiles() {
+  try { return JSON.parse(localStorage.getItem('wm_files') || '[]'); } catch(e) { return []; }
+}
+
+function dlFileIcon(type) {
+  if (type === 'pdf') return '<svg viewBox="0 0 16 16" fill="none" style="width:16px;height:16px"><rect x="2" y="1" width="10" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+  if (type === 'img') return '<svg viewBox="0 0 16 16" fill="none" style="width:16px;height:16px"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><circle cx="5.5" cy="6.5" r="1" fill="currentColor"/><path d="M2 12l3.5-3.5 2.5 2.5 2-2 3.5 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  return '<svg viewBox="0 0 16 16" fill="none" style="width:16px;height:16px"><path d="M3 1h7l4 4v10H3V1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M10 1v4h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+}
+
+function fmtFileDate(ds) {
+  var d = new Date(ds + 'T12:00:00');
+  return MONTH_NAMES[d.getMonth()].slice(0,3) + ' ' + d.getDate() + ', ' + d.getFullYear();
+}
+
+function renderDownloads() {
+  var files = loadFiles();
+  var cont = document.getElementById('downloads-list');
+  if (!cont) return;
+  if (!files.length) {
+    cont.innerHTML = '<div style="padding:2.5rem;text-align:center;color:var(--muted);font-size:.9rem;">No files yet — Mario will drop resources here</div>';
+    return;
+  }
+  cont.innerHTML = files.slice().reverse().map(function(f, i, arr) {
+    var last = i === arr.length - 1;
+    return '<div style="display:flex;align-items:center;gap:1rem;padding:1rem 1.3rem;' + (last ? '' : 'border-bottom:1px solid var(--line);') + '">' +
+      '<div style="width:38px;height:38px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--accent);flex:none;">' + dlFileIcon(f.type) + '</div>' +
+      '<div style="flex:1;min-width:0;">' +
+        '<div style="font-family:\'Space Grotesk\',sans-serif;font-weight:600;font-size:.93rem;margin-bottom:.1rem;">' + f.label + '</div>' +
+        '<div style="font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + f.desc + '</div>' +
+        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:.54rem;color:var(--muted);margin-top:.3rem;letter-spacing:.06em;">' + fmtFileDate(f.date) + ' · ' + f.size + '</div>' +
+      '</div>' +
+      '<a class="btn btn-ghost btn-sm" href="#" onclick="showToast(\'Saving ' + f.name + '…\');return false;" style="white-space:nowrap;flex:none;gap:.4rem;">' +
+        '<svg viewBox="0 0 14 14" fill="none" style="width:12px;height:12px"><path d="M7 1v8m0 0L4 6m3 3l3-3M1 11v1a1.5 1.5 0 001.5 1.5h9A1.5 1.5 0 0013 12v-1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        'Save' +
+      '</a>' +
+    '</div>';
+  }).join('');
+}
+
+window.addEventListener('storage', function(e) {
+  if (e.key === 'wm_files') renderDownloads();
+});
+
+// ── Patch showPage to init calendar on first nav ──
+var _origShowPage = showPage;
+showPage = function(name) {
+  _origShowPage(name);
+  if (name === 'schedule' && !M_CAL_YEAR) { mCalInit(); }
+  if (name === 'downloads') { renderDownloads(); }
+};
+
 // ── Init ──
 updateBadge();
 checkMarioStatus();
@@ -917,6 +1058,257 @@ checkMarioStatus();
 setInterval(checkMarioStatus, 10000);
 // Also listen for storage changes from admin panel (same browser)
 window.addEventListener('storage', checkMarioStatus);
+// Pre-init calendar in background so first open is instant
+mCalInit();
+</script>
+
+<script>
+// ══════════ ACCOUNT-AWARE LAYER (overrides earlier static demo data) ══════════
+var ME = null, ROSTER_ME = null;
+function lsGet(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e) { return d; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e) { return false; } }
+function esc(t) { return WMAuth.esc(t); }
+var CLOUD = !!(window.WMCloud && WMCloud.enabled), _links = (window.WM_CONFIG && WM_CONFIG.links) || {};
+function settings() { var s = lsGet('wm_settings', {}); return { discord: s.discord || _links.discord || '', billing: s.billing || _links.billingPortal || '' }; }
+function doSignOut() { WMAuth.signOut(); location.reload(); }
+
+function refreshMe() {
+  ME = WMAuth.user();
+  ROSTER_ME = WMAuth.rosterEntry();
+}
+function rateFor(w) { return w <= 1 ? 200 : w === 2 ? 180 : w === 3 ? 160 : 140; }
+function nextMonday() {
+  var d = new Date(); d.setHours(12,0,0,0);
+  var add = (8 - d.getDay()) % 7 || 7;
+  d.setDate(d.getDate() + add);
+  return MONTH_NAMES[d.getMonth()] + ' ' + d.getDate();
+}
+
+function renderIdentity() {
+  if (!ME) return;
+  var parts = ME.name.trim().split(/\s+/);
+  var ini = (parts[0][0] + (parts.length > 1 ? parts[parts.length-1][0] : '')).toUpperCase();
+  document.getElementById('sb-avatar').textContent = ini;
+  document.getElementById('sb-name').textContent = ME.name;
+  var st = ROSTER_ME ? ROSTER_ME.status : (ME.role === 'admin' ? 'admin' : 'pending');
+  var tier = st === 'pending' ? 'Seat requested' : st === 'admin' ? 'Host preview' : st === 'paused' ? 'Paused' : 'Week ' + (ROSTER_ME.week || 1) + ' · ' + (st === 'trial' ? 'Day pass' : 'Active member');
+  document.getElementById('sb-tier').textContent = tier;
+  var pend = document.getElementById('pending-note');
+  if (pend) pend.style.display = st === 'pending' ? 'block' : 'none';
+  var pay = document.getElementById('pay-btn'), wl = _links.weekly;
+  if (pay) { if (st === 'pending' && wl) { pay.href = wl + (wl.indexOf('?') < 0 ? '?' : '&') + 'client_reference_id=' + encodeURIComponent(ME.id); pay.style.display = 'inline-flex'; } else pay.style.display = 'none'; }
+}
+
+// Discord + billing links (set by Mario in admin → Settings)
+document.addEventListener('click', function(e) {
+  var a = e.target.closest ? e.target.closest('[data-discord],[data-billing]') : null;
+  if (!a) return;
+  e.preventDefault();
+  var cfg = settings();
+  if (a.hasAttribute('data-discord')) {
+    var st = ROSTER_ME ? ROSTER_ME.status : null;
+    if (st === 'pending') { showToast('Your seat is pending. Mario will unlock the room link.'); return; }
+    if (!cfg.discord) { showToast('Mario has not posted the Discord invite yet.'); return; }
+    window.open(cfg.discord, '_blank', 'noopener');
+  } else {
+    if (!cfg.billing) { showToast('Billing portal link is not set up yet. Message Mario.'); return; }
+    window.open(cfg.billing, '_blank', 'noopener');
+  }
+});
+
+// ── This week (from wm_events) ──
+function dstr(d) { return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate()); }
+function renderWeek() {
+  var el = document.getElementById('week-list'); if (!el) return;
+  var now = new Date(), start = new Date(now); start.setHours(0,0,0,0); start.setDate(start.getDate() - start.getDay());
+  var end = new Date(start); end.setDate(end.getDate() + 6);
+  var evs = loadEvents().filter(function(ev) { return ev.date >= dstr(start) && ev.date <= dstr(end); })
+    .sort(function(a,b) { return (a.date + a.start).localeCompare(b.date + b.start); });
+  if (!evs.length) { el.innerHTML = '<div style="padding:1.6rem;text-align:center;color:var(--muted);font-size:.9rem">No sessions posted for this week yet.</div>'; return; }
+  var today = dstr(now), hm = pad2(now.getHours()) + ':' + pad2(now.getMinutes());
+  el.innerHTML = evs.map(function(ev) {
+    var d = new Date(ev.date + 'T12:00:00');
+    var title = ev.sessType === 'premarket' ? 'Game Plan' : ev.sessType === 'recap' ? 'Week Recap' : 'Live Chart Session';
+    var badge = 'upcoming', label = 'Upcoming';
+    if (ev.date < today || (ev.date === today && hm >= ev.end)) { badge = 'done'; label = 'Done'; }
+    else if (ev.date === today && hm >= ev.start) { badge = 'live'; label = 'Live'; }
+    else if (ev.date === today) { label = 'Today'; }
+    var inst = (ev.instruments || []).join(' · ');
+    return '<div class="session-item"><div class="si-date">' + DAY_SHORT[d.getDay()].toUpperCase() + '</div>' +
+      '<div class="si-body"><div class="si-title">' + esc(title) + '</div><div class="si-time">' + fmtTime12(ev.start) + ' ET' + (inst ? ' · ' + esc(inst) : '') + (ev.notes ? ' · ' + esc(ev.notes) : '') + '</div></div>' +
+      '<div class="si-badge ' + badge + '">' + label + '</div></div>';
+  }).join('');
+}
+window.addEventListener('storage', function(e) { if (e.key === 'wm_events') renderWeek(); });
+
+// ── Messages (welcome + admin broadcasts) ──
+function fmtStamp(t) { return t || ''; }
+function buildMessages() {
+  var list = [];
+  var hist = lsGet('wm_sent_history', []);
+  var st = ROSTER_ME ? ROSTER_ME.status : 'pending', wk = ROSTER_ME ? (ROSTER_ME.week || 1) : 1;
+  hist.forEach(function(h, i) {
+    var a = h.audience || 'all';
+    var ok = a === 'all' || (a === 'weekly' && st === 'active') || (a === 'daypass' && st === 'trial') || (a === 'week4plus' && wk >= 4);
+    if (!ok) return;
+    var tag = { update:'Update', alert:'Alert', trade:'Trade call', session:'Session' }[h.type] || 'Message';
+    list.push({ id: h.id || ('h' + h.time), subject: tag, date: h.time, body: '<p>' + esc(h.msg).replace(/\n/g, '</p><p>') + '</p><p>Mario</p>', attachments: h.attachments || [] });
+  });
+  list.push({ id: 'welcome', subject: 'Welcome to Wingman', date: ME ? new Date(ME.created).toLocaleDateString() : '',
+    body: '<p>Welcome to the room.</p><p>Live chart sessions run <b>Monday through Thursday</b> on Discord Stage. The pre-week game plan lands Sunday into Monday, and Friday we recap.</p><p>One rule: stay off the keyboard while I\'m in a trade. Questions are for between setups.</p><p>Mario</p>', attachments: [] });
+  return list;
+}
+function readSet() { return lsGet('wm_read_' + (ME ? ME.id : 'x'), []); }
+function renderMessages() {
+  MESSAGES = buildMessages();
+  var rs = readSet();
+  readState = MESSAGES.map(function(m) { return rs.indexOf(m.id) >= 0; });
+  var box = document.getElementById('msg-list');
+  box.innerHTML = MESSAGES.map(function(m, i) {
+    var prev = m.body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 90);
+    return '<div class="msg-item' + (readState[i] ? '' : ' unread') + '" id="msg-' + i + '" onclick="openMessage(' + i + ')">' +
+      '<div class="msg-av">M</div><div class="msg-body"><div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">' + esc(fmtStamp(m.date)) + '</span></div>' +
+      '<div class="msg-subject">' + esc(m.subject) + '</div><div class="msg-preview">' + esc(prev) + '</div>' +
+      (m.attachments && m.attachments.length ? '<div class="msg-attach-note">' + m.attachments.map(function(a) { return esc(a.name); }).join(' · ') + '</div>' : '') +
+      '</div>' + (readState[i] ? '' : '<div class="unread-dot" id="dot-' + i + '"></div>') + '</div>';
+  }).join('');
+  var lc = document.getElementById('latest-card'), m0 = MESSAGES[0];
+  lc.style.cursor = 'pointer'; lc.onclick = function() { openMessage(0); showPage('messages'); };
+  lc.innerHTML = '<div class="msg-item' + (readState[0] ? '' : ' unread') + '"><div class="msg-av">M</div><div class="msg-body"><div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">' + esc(fmtStamp(m0.date)) + '</span></div>' +
+    '<div class="msg-subject">' + esc(m0.subject) + '</div><div class="msg-preview">' + esc(m0.body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 110)) + '</div></div>' + (readState[0] ? '' : '<div class="unread-dot"></div>') + '</div>';
+  updateBadge();
+}
+openMessage = function(idx) {
+  var msg = MESSAGES[idx]; if (!msg) return;
+  document.getElementById('md-subject').textContent = msg.subject;
+  document.getElementById('md-date').textContent = msg.date;
+  document.getElementById('md-body').innerHTML = msg.body;
+  var attEl = document.getElementById('md-attachments'), grid = document.getElementById('md-attach-grid');
+  if (msg.attachments && msg.attachments.length) {
+    grid.innerHTML = msg.attachments.map(function(a, j) {
+      return '<a class="attach-pill" href="#" onclick="return saveAttachment(' + idx + ',' + j + ')">' + esc(a.name) + '<span class="attach-pill-size">' + esc(a.size || '') + '</span></a>';
+    }).join('');
+    attEl.style.display = 'block';
+  } else attEl.style.display = 'none';
+  if (!readState[idx]) {
+    readState[idx] = true;
+    var rs = readSet(); if (rs.indexOf(msg.id) < 0) rs.push(msg.id); lsSet('wm_read_' + ME.id, rs);
+    var item = document.getElementById('msg-' + idx); if (item) item.classList.remove('unread');
+    var dot = document.getElementById('dot-' + idx); if (dot) dot.style.display = 'none';
+    updateBadge();
+  }
+  document.getElementById('view-inbox').style.display = 'none';
+  document.getElementById('view-detail').style.display = 'block';
+};
+function saveAttachment(i, j) { return saveBlob(MESSAGES[i].attachments[j]); }
+function saveBlob(f) {
+  if (f.data) {
+    var a = document.createElement('a'); a.href = f.data; a.download = f.name; document.body.appendChild(a); a.click(); a.remove();
+  } else if (f.url) { window.open(f.url, '_blank', 'noopener'); }
+  else showToast('This file has no content attached.');
+  return false;
+}
+window.addEventListener('storage', function(e) { if (e.key === 'wm_sent_history' || e.key === 'wm_members') { refreshMe(); renderIdentity(); renderMessages(); renderPlan(); } });
+
+// ── Downloads ──
+renderDownloads = function() {
+  var files = loadFiles(), cont = document.getElementById('downloads-list'); if (!cont) return;
+  if (!files.length) { cont.innerHTML = '<div style="padding:2.5rem;text-align:center;color:var(--muted);font-size:.9rem;">No files yet. Resources from Mario show up here.</div>'; return; }
+  cont.innerHTML = files.slice().reverse().map(function(f, i, arr) {
+    var last = i === arr.length - 1, idx = files.indexOf(f);
+    return '<div style="display:flex;align-items:center;gap:1rem;padding:1rem 1.3rem;' + (last ? '' : 'border-bottom:1px solid var(--line);') + '">' +
+      '<div style="width:38px;height:38px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--accent);flex:none;">' + dlFileIcon(f.type) + '</div>' +
+      '<div style="flex:1;min-width:0;"><div style="font-family:\'Space Grotesk\',sans-serif;font-weight:600;font-size:.93rem;margin-bottom:.1rem;">' + esc(f.label || f.name) + '</div>' +
+      (f.desc ? '<div style="font-size:.8rem;color:var(--muted);">' + esc(f.desc) + '</div>' : '') +
+      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:.54rem;color:var(--muted);margin-top:.3rem;letter-spacing:.06em;">' + fmtFileDate(f.date) + (f.size ? ' · ' + esc(f.size) : '') + '</div></div>' +
+      '<button class="btn btn-ghost btn-sm" onclick="saveBlob(loadFiles()[' + idx + '])" style="white-space:nowrap;flex:none;">' + (f.url && !f.data ? 'Open' : 'Save') + '</button></div>';
+  }).join('');
+};
+
+// ── My Plan ──
+var STORE = [
+  { id: 'ebook', name: '📖 Johnny Cake Method Ebook', desc: "Full strategy breakdown, Mario's system in writing", cost: 20 },
+  { id: 'indicator', name: '📈 NQ Levels Indicator', desc: 'TradingView indicator, key grain levels auto-plotted', cost: 80 },
+  { id: 'freeweek', name: '🆓 Free Week Renewal', desc: "Skip one week's payment. Seat held, tier protected", cost: 100 }
+];
+function myPoints() { return ROSTER_ME ? (ROSTER_ME.points || 0) : 0; }
+function renderPlan() {
+  if (!document.getElementById('plan-week')) return;
+  var wk = ROSTER_ME ? (ROSTER_ME.week || 1) : 1, st = ROSTER_ME ? ROSTER_ME.status : 'pending';
+  document.getElementById('plan-week').textContent = st === 'pending' ? 'Pending' : 'Week ' + wk;
+  document.getElementById('plan-renew').textContent = st === 'pending' ? 'Awaiting seat confirmation' : 'Renews Monday, ' + nextMonday();
+  document.getElementById('plan-pts').textContent = myPoints();
+  document.getElementById('bill-line').textContent = st === 'pending' ? 'No active seat yet' : 'Renews ' + nextMonday() + ' · $' + rateFor(wk) + ' (Week ' + Math.min(wk, 4) + ' rate)';
+  var rows = [[1,'$200','—','—'],[2,'$180','10%','—'],[3,'$160','20%','—'],[4,'$140','30% cap','+20 pts/wk']];
+  document.getElementById('plan-rows').innerHTML = rows.map(function(r) {
+    var n = r[0], cur = st !== 'pending' && (n === 4 ? wk >= 4 : wk === n), done = st !== 'pending' && wk > n && n < 4;
+    var label = 'Week ' + n + (n === 4 ? '+' : '') + (cur ? ' ← You' : '');
+    var status = cur ? '<span style="color:var(--accent)">● Active</span>' : done ? '<span style="color:var(--accent);font-size:.78rem">✓ Done</span>' : '<span style="color:var(--muted)">Upcoming</span>';
+    return '<tr' + (cur ? ' class="you"' : n === 4 ? ' class="pts-row"' : '') + '><td' + (cur ? ' style="color:var(--accent);font-weight:600"' : '') + '>' + label + '</td><td' + (cur ? ' style="color:var(--accent);font-weight:600"' : '') + '>' + r[1] + '</td><td>' + r[2] + '</td><td>' + (n === 4 ? '<span class="pts-earn-badge">' + r[3] + '</span>' : '—') + '</td><td>' + status + '</td></tr>';
+  }).join('');
+  document.getElementById('store-label').textContent = myPoints() + ' pts available';
+  document.getElementById('store-list').innerHTML = STORE.map(function(it, i) {
+    var can = myPoints() >= it.cost && st !== 'pending';
+    return (i ? '<div style="height:1px;background:var(--line);"></div>' : '') +
+      '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;"><div><div style="font-weight:600;font-size:.95rem;">' + it.name + '</div><div style="color:var(--muted);font-size:.82rem;">' + it.desc + '</div></div>' +
+      '<div style="display:flex;align-items:center;gap:.7rem;"><span style="font-family:\'JetBrains Mono\',monospace;font-size:.78rem;color:var(--warm);font-weight:600;">' + it.cost + ' pts</span>' +
+      '<button class="btn btn-ghost btn-sm" ' + (can ? 'onclick="redeem(\'' + it.id + '\')"' : 'disabled style="opacity:.4;cursor:default;"') + '>Redeem</button></div></div>';
+  }).join('');
+}
+function postRequest(type, detail) {
+  var reqs = lsGet('wm_requests', []);
+  reqs.unshift({ id: 'r' + Date.now(), type: type, detail: detail, name: ME.name, email: ME.email, discord: ME.discord || '', time: new Date().toLocaleString(), done: false });
+  return lsSet('wm_requests', reqs.slice(0, 200));
+}
+function redeem(id) {
+  var it = STORE.filter(function(x) { return x.id === id; })[0];
+  if (!it || !ROSTER_ME || myPoints() < it.cost) return;
+  if (!confirm('Redeem ' + it.cost + ' pts for: ' + it.name.replace(/^\S+\s/, '') + '?')) return;
+  var roster = lsGet('wm_members', []);
+  for (var i = 0; i < roster.length; i++) if (roster[i].userId === ME.id) { roster[i].points = (roster[i].points || 0) - it.cost; }
+  lsSet('wm_members', roster);
+  postRequest('redeem', it.name.replace(/^\S+\s/, '') + ' (' + it.cost + ' pts)');
+  refreshMe(); renderPlan(); showToast('Redeemed. Mario will send it over.');
+}
+function requestCancel() {
+  if (!ROSTER_ME) { showToast('You have no active seat to cancel.'); return; }
+  if (!confirm('Send a cancellation request to Mario?')) return;
+  postRequest('cancel', 'Cancellation requested');
+  showToast('Cancellation request sent.');
+}
+
+// ── Boot ──
+if(!window.WMAuth){document.documentElement.style.visibility='visible';document.body.innerHTML='<p style="padding:40px;font:16px Inter,sans-serif;color:#E6E9E2">auth.js is missing. Upload it to the same folder as this page.</p>';}else // Cloud-mode behaviour (Supabase). Demo mode keeps the browser-only versions above.
+var _saveBlobLocal = saveBlob;
+saveBlob = function(f) { if (CLOUD && f.path) { WMCloud.openFile(f.path); return false; } return _saveBlobLocal(f); };
+if (CLOUD) {
+  redeem = function(id) {
+    var it = STORE.filter(function(x) { return x.id === id; })[0];
+    if (!it || myPoints() < it.cost) return;
+    if (!confirm('Redeem ' + it.cost + ' pts for: ' + it.name.replace(/^\S+\s/, '') + '?')) return;
+    WMCloud.rpc('redeem_item', { item: id }).then(function(r) {
+      if (r.error) { showToast('Could not redeem: ' + r.error.message); return; }
+      WMCloud.pull().then(function() { refreshMe(); renderPlan(); showToast('Redeemed. Mario will send it over.'); });
+    });
+  };
+  requestCancel = function() {
+    if (!ROSTER_ME) { showToast('You have no active seat to cancel.'); return; }
+    if (!confirm('Send a cancellation request to Mario?')) return;
+    WMCloud.rpc('request_cancel').then(function(r) { showToast(r.error ? 'Could not send: ' + r.error.message : 'Cancellation request sent.'); });
+  };
+}
+
+function refreshAll() {
+  refreshMe(); renderIdentity(); renderWeek(); renderMessages(); renderPlan(); renderDownloads(); checkMarioStatus();
+  try { mCalRender(); mShowNextSession(); } catch (e) {}
+}
+if (!window.WMAuth) {
+  document.documentElement.style.visibility = 'visible';
+  document.body.innerHTML = '<p style="padding:40px;font:16px Inter,sans-serif;color:#E6E9E2">auth.js is missing. Upload it to the same folder as this page.</p>';
+} else WMAuth.guard('member', function() {
+  refreshAll();
+  setInterval(renderWeek, 60000);
+}, refreshAll);
 </script>
 </body>
 </html>

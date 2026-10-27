@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Wingman Trading Room — Johnny Cake Method</title>
-<meta name="description" content="Mario trades live. 12 seats. Watch, learn, ask questions in real time.">
-<meta property="og:title" content="Wingman Trading Room — Johnny Cake Method">
-<meta property="og:description" content="Mario trades live. 12 seats. Watch, learn, ask questions in real time.">
+<title>Prop Firm Wingman — Live Trade Room</title>
+<meta name="description" content="Failed another prop firm eval? Trade NQ live with a wingman. 12 seats, real entries, real time.">
+<meta property="og:title" content="Prop Firm Wingman — Live Trade Room">
+<meta property="og:description" content="Failed another prop firm eval? Trade NQ live with a wingman. 12 seats, real entries, real time.">
 <meta property="og:image" content="https://www.smartmoneystore.com/og-image.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -15,22 +15,26 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
 <style>
 :root {
-  --bg: #0B0D11;
-  --panel: #13171E;
-  --line: #232830;
-  --fg: #F0EDE6;
-  --muted: #6B7280;
-  --accent: #C8F169;
-  --accent-dim: rgba(200,241,105,.08);
-  --accent-border: rgba(200,241,105,.18);
-  --warm: #FF8A6B;
-  --red: #FF4D4D;
+  --bg: #0E1210;
+  --panel: #151B18;
+  --line: #26302B;
+  --fg: #E6E9E2;
+  --muted: #8D978F;
+  --accent: #B9D77A;
+  --accent-dim: rgba(185,215,122,.08);
+  --accent-border: rgba(185,215,122,.18);
+  --warm: #E8946F;
+  --red: #E5675F;
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 110% 55% at 50% -5%, rgba(30, 44, 35, 0.75) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 0% 100%, rgba(22, 32, 26, 0.5) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 100% 30%, rgba(18, 26, 21, 0.4) 0%, transparent 60%);
   color: var(--fg);
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px;
@@ -53,15 +57,16 @@ body {
 
 /* ══ BANNER ══ */
 .banner {
-  background: var(--accent);
-  color: #0B1400;
+  background: rgba(185,215,122,.09);
+  border-bottom: 1px solid rgba(185,215,122,.16);
+  color: var(--accent);
   text-align: center;
   padding: .55rem 24px;
   font-size: .85rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: .01em;
 }
-.banner b { font-weight: 700; }
+.banner b { font-weight: 600; color: var(--fg); }
 
 /* ══ NAV ══ */
 nav {
@@ -89,7 +94,7 @@ nav {
 .brand-mark svg { width: 14px; height: 14px; }
 .nav-cta {
   font-weight: 600; font-size: .85rem;
-  background: var(--accent); color: #0B1400;
+  background: var(--accent); color: #101A08;
   border: none; border-radius: 8px; padding: .5rem 1.1rem;
   text-decoration: none; cursor: pointer;
   min-height: 38px; display: flex; align-items: center;
@@ -97,6 +102,9 @@ nav {
   transition: opacity .15s;
 }
 .nav-cta:hover { opacity: .88; }
+.nav-actions { display: flex; align-items: center; gap: 1.1rem; }
+.nav-link { color: var(--muted); font-weight: 500; font-size: .88rem; text-decoration: none; transition: color .15s; }
+.nav-link:hover { color: var(--fg); }
 
 /* ══ HERO ══ */
 .hero {
@@ -111,18 +119,20 @@ nav {
   content: "";
   position: absolute; inset: 0; pointer-events: none;
   background-image:
-    linear-gradient(to right, #232830 1px, transparent 1px),
-    linear-gradient(to bottom, #232830 1px, transparent 1px);
+    linear-gradient(to right, #26302B 1px, transparent 1px),
+    linear-gradient(to bottom, #26302B 1px, transparent 1px);
   background-size: 72px 72px;
   opacity: .3;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black 20%, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black 20%, transparent 80%);
 }
-/* Glow */
+/* Glow — warm + lime dual tone for battle energy */
 .hero::after {
   content: "";
   position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse 60% 55% at 50% 45%, rgba(200,241,105,.06) 0%, transparent 70%);
+  background:
+    radial-gradient(ellipse 50% 40% at 30% 50%, rgba(229,103,95,.05) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 55% at 65% 40%, rgba(185,215,122,.06) 0%, transparent 70%);
 }
 
 .hero-inner {
@@ -134,7 +144,7 @@ nav {
 /* Live pill */
 .live-pill {
   display: inline-flex; align-items: center; gap: .5rem;
-  background: rgba(255,77,77,.1); border: 1px solid rgba(255,77,77,.25);
+  background: rgba(229,103,95,.1); border: 1px solid rgba(229,103,95,.25);
   border-radius: 100px; padding: .32rem .85rem;
   font-family: 'JetBrains Mono', monospace;
   font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--red);
@@ -150,13 +160,25 @@ nav {
 .hero h1 {
   font-family: 'Bricolage Grotesque', serif;
   font-weight: 800;
-  font-size: clamp(3.2rem, 12vw, 7.5rem);
+  font-size: clamp(3.2rem, 12vw, 7.4rem);
   line-height: .92;
   letter-spacing: -.04em;
-  max-width: 12ch;
+  max-width: 10ch;
   margin-bottom: 1.6rem;
 }
 .hero h1 em { font-style: normal; color: var(--accent); }
+/* VS separator — small caps, spaced, muted */
+.vs-sep {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(.85rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: .42em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-block: .3em;
+  padding-left: .42em; /* optical center for letter-spacing */
+}
 
 .hero-sub {
   font-size: clamp(1rem, 2.4vw, 1.2rem);
@@ -169,16 +191,16 @@ nav {
 
 .hero-cta {
   display: inline-flex; align-items: center; gap: .6rem;
-  background: var(--accent); color: #0B1400;
+  background: var(--accent); color: #101A08;
   font-weight: 700; font-size: 1.05rem;
   border: none; border-radius: 12px;
   padding: 1rem 2rem; text-decoration: none; cursor: pointer;
   min-height: 54px;
-  box-shadow: 0 0 0 0 rgba(200,241,105,0);
+  box-shadow: 0 0 0 0 rgba(185,215,122,0);
   transition: transform .2s, box-shadow .2s;
   -webkit-tap-highlight-color: transparent;
 }
-.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(200,241,105,.25); }
+.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(185,215,122,.16); }
 .hero-cta:active { transform: scale(.97); }
 .hero-cta svg { width: 18px; height: 18px; }
 
@@ -266,9 +288,9 @@ nav {
 .proof-item:last-child { border-right: none; }
 .proof-num {
   font-family: 'Bricolage Grotesque', serif;
-  font-weight: 800; font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 800; font-size: clamp(1.7rem, 5vw, 2.8rem);
   letter-spacing: -.04em; line-height: 1;
-  color: var(--accent);
+  color: var(--accent); white-space: nowrap;
 }
 .proof-lbl { font-size: .88rem; color: var(--muted); line-height: 1.4; }
 @media (max-width: 480px) {
@@ -361,7 +383,7 @@ nav {
 .dp-badge {
   font-family: 'JetBrains Mono', monospace;
   font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
-  background: rgba(255,138,107,.1); border: 1px solid rgba(255,138,107,.25);
+  background: rgba(232,148,111,.1); border: 1px solid rgba(232,148,111,.25);
   color: var(--warm); border-radius: 100px; padding: .3rem .9rem;
 }
 .dp-title {
@@ -372,8 +394,8 @@ nav {
 .dp-title em { font-style: normal; color: var(--warm); }
 .dp-copy { color: var(--muted); font-size: .98rem; line-height: 1.7; max-width: 36ch; }
 .dp-guarantee {
-  background: rgba(255,138,107,.06);
-  border: 1px solid rgba(255,138,107,.18);
+  background: rgba(232,148,111,.06);
+  border: 1px solid rgba(232,148,111,.18);
   border-radius: 12px; padding: 1rem 1.4rem;
   font-weight: 600; font-size: .95rem; color: var(--warm); width: 100%;
 }
@@ -417,7 +439,7 @@ nav {
   content: "";
   position: absolute; left: 7px; top: 0; bottom: 0; width: 7px;
   border-radius: 2px;
-  background: linear-gradient(180deg, var(--accent), #7aaa1a);
+  background: linear-gradient(180deg, var(--accent), #7E9A45);
 }
 .book-lbl {
   font-family: 'JetBrains Mono', monospace;
@@ -435,7 +457,7 @@ nav {
 .book-foot { font-family: 'JetBrains Mono', monospace; font-size: .5rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding-left: 8px; }
 .book-glow {
   position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
-  background: linear-gradient(transparent, rgba(200,241,105,.04));
+  background: linear-gradient(transparent, rgba(185,215,122,.04));
   pointer-events: none;
 }
 
@@ -450,7 +472,7 @@ nav {
   color: var(--accent); letter-spacing: .1em;
   padding: 1rem .5rem 1rem 1rem;
   border-right: 1px solid var(--line);
-  background: rgba(200,241,105,.03);
+  background: rgba(185,215,122,.03);
   display: flex; align-items: flex-start;
 }
 .step-body { padding: .9rem 1.2rem; }
@@ -476,18 +498,17 @@ nav {
 }
 .offer-card.hero-card {
   border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent), 0 8px 48px rgba(200,241,105,.1);
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 48px rgba(185,215,122,.1);
 }
-.offer-card.dimmed {
-  opacity: .45; pointer-events: none; user-select: none;
-}
+.offer-card.dimmed { user-select: none; }
+.offer-card.dimmed > :not(:last-child) { opacity: .45; pointer-events: none; }
 .offer-badge {
   position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
   font-family: 'JetBrains Mono', monospace;
   font-size: .58rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
   padding: 4px 14px; border-radius: 100px; white-space: nowrap;
 }
-.offer-badge.lime { background: var(--accent); color: #0B1400; }
+.offer-badge.lime { background: var(--accent); color: #101A08; }
 .offer-badge.warm { background: var(--warm); color: #1a0800; }
 .offer-badge.muted { background: #2a2f38; color: var(--muted); }
 .offer-name {
@@ -509,7 +530,7 @@ nav {
   transition: opacity .15s, transform .15s;
   -webkit-tap-highlight-color: transparent;
 }
-.offer-btn.lime { background: var(--accent); color: #0B1400; }
+.offer-btn.lime { background: var(--accent); color: #101A08; }
 .offer-btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
 .offer-btn.ghost:hover { border-color: var(--muted); }
 .offer-btn.lime:hover { opacity: .88; transform: translateY(-1px); }
@@ -576,7 +597,9 @@ details[open] .faq-plus { transform: rotate(45deg); }
 
 /* ══ FINAL CTA ══ */
 .final {
-  background: var(--accent); padding: 96px 0;
+  background: linear-gradient(180deg, #131A16 0%, #18221C 100%);
+  border-top: 1px solid var(--line);
+  padding: 96px 0;
 }
 .final-inner {
   display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.4rem;
@@ -585,20 +608,20 @@ details[open] .faq-plus { transform: rotate(45deg); }
   font-family: 'Bricolage Grotesque', serif;
   font-weight: 800; font-size: clamp(2.2rem, 7vw, 4rem);
   letter-spacing: -.04em; line-height: .96;
-  color: #0B1400; max-width: 14ch;
+  color: var(--fg); max-width: 14ch;
 }
-.final p { color: #1f4400; font-size: 1rem; max-width: 34ch; line-height: 1.6; }
+.final p { color: var(--muted); font-size: 1rem; max-width: 34ch; line-height: 1.6; }
 .final-btn {
   display: inline-flex; align-items: center; gap: .6rem;
-  background: #0B1400; color: var(--accent);
+  background: var(--accent); color: #101A08;
   font-weight: 700; font-size: 1.05rem;
   border: none; border-radius: 12px; padding: 1rem 2.2rem;
   text-decoration: none; cursor: pointer; min-height: 54px;
-  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+  box-shadow: 0 8px 28px rgba(0,0,0,.25);
   transition: opacity .15s;
 }
 .final-btn:hover { opacity: .88; }
-.final-note { font-family: 'JetBrains Mono', monospace; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: #1f4400; }
+
 
 /* ══ FOOTER ══ */
 footer {
@@ -613,6 +636,18 @@ footer {
   font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
 }
 
+/* ── Grain overlay ── */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+  opacity: .022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+/* Everything sits above grain */
+nav, section, .proof, footer, .banner { position: relative; z-index: 1; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
   [data-r] { opacity: 1; transform: none; }
@@ -623,7 +658,7 @@ footer {
 
 <!-- ══ BANNER ══ -->
 <div class="banner">
-  Use code <b>CAKE20</b> at checkout — limited time offer
+  Prop firm traders — your wingman is live on the NQ. <b>12 seats. Let's get you funded.</b>
 </div>
 
 <!-- ══ NAV ══ -->
@@ -632,12 +667,15 @@ footer {
     <a class="brand" href="#">
       <div class="brand-mark">
         <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M7 1L12 4V10L7 13L2 10V4L7 1Z" fill="#0B1400"/>
+          <path d="M7 1L12 4V10L7 13L2 10V4L7 1Z" fill="#101A08"/>
         </svg>
       </div>
-      Johnny Cake Method
+      Wingman Live
     </a>
-    <a class="nav-cta" href="#offers">Tap In</a>
+    <div class="nav-actions">
+      <a class="nav-link" href="#" id="nav-signin" data-auth="signin">Sign in</a>
+      <a class="nav-cta" href="#" id="nav-join" data-auth="signup">Join</a>
+    </div>
   </div>
 </nav>
 
@@ -647,26 +685,22 @@ footer {
     <div class="hero-inner">
       <div class="live-pill" data-r>
         <span class="live-dot"></span>
-        Wingman Live — @MarioVsNQ
+        Live trade room · NQ · ES · GC · Futures &amp; Micros
       </div>
 
       <h1 data-r="up2">
-        The trade<br>
-        room.<br>
-        <em>Mario's live.</em>
+        Prop Firm<br><em>Wingman.</em>
       </h1>
 
       <p class="hero-sub" data-r="up3">
-        Mario trades live. You're in the room.<br>
-        <b>Watch, ask questions, learn the setup — in real time.</b><br>
-        12 seats. 3 sessions a week. No replays.
+        <b>Failed another prop firm eval?</b><br>
+        Your wingman is live on the charts. Watch real NQ entries and the decisions that get traders funded, in real time. 12 seats.
       </p>
 
-      <a class="hero-cta" href="#offers" data-r>
-        See the Offers
+      <a class="hero-cta" href="#wingman" data-r>
+        Learn more
         <svg viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <p class="hero-note" data-r>12 seats max · cancel anytime</p>
 
       <!-- Chart visual -->
       <div class="chart-wrap" data-r="scale">
@@ -678,72 +712,48 @@ footer {
             </div>
             <div class="chart-live-badge">
               <span class="chart-live-dot"></span>
-              Mario is live
+              Wingman · Live
             </div>
           </div>
           <div class="chart-body">
             <svg width="100%" height="140" viewBox="0 0 600 140" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
               <!-- Grid lines -->
-              <line x1="0" y1="35" x2="600" y2="35" stroke="#232830" stroke-width="1"/>
-              <line x1="0" y1="70" x2="600" y2="70" stroke="#232830" stroke-width="1"/>
-              <line x1="0" y1="105" x2="600" y2="105" stroke="#232830" stroke-width="1"/>
+              <line x1="0" y1="35" x2="600" y2="35" stroke="#26302B" stroke-width="1"/>
+              <line x1="0" y1="70" x2="600" y2="70" stroke="#26302B" stroke-width="1"/>
+              <line x1="0" y1="105" x2="600" y2="105" stroke="#26302B" stroke-width="1"/>
               <!-- Grain line -->
-              <line x1="0" y1="88" x2="600" y2="88" stroke="#FF8A6B" stroke-width="1.2" stroke-dasharray="6 5" opacity=".5"/>
-              <text x="8" y="84" font-family="JetBrains Mono" font-size="8" fill="#FF8A6B" opacity=".7" letter-spacing="1.5">GRAIN</text>
+              <line x1="0" y1="88" x2="600" y2="88" stroke="#E8946F" stroke-width="1.2" stroke-dasharray="6 5" opacity=".5"/>
+              <text x="8" y="84" font-family="JetBrains Mono" font-size="8" fill="#E8946F" opacity=".7" letter-spacing="1.5">GRAIN</text>
               <!-- Bear candles left -->
-              <rect x="14" y="72" width="14" height="35" fill="#FF4D4D" opacity=".55" rx="1.5"/>
-              <line x1="21" y1="60" x2="21" y2="115" stroke="#FF4D4D" stroke-width="1.2" opacity=".55"/>
-              <rect x="36" y="78" width="14" height="32" fill="#FF4D4D" opacity=".55" rx="1.5"/>
-              <line x1="43" y1="68" x2="43" y2="118" stroke="#FF4D4D" stroke-width="1.2" opacity=".55"/>
-              <rect x="58" y="82" width="14" height="36" fill="#FF4D4D" opacity=".55" rx="1.5"/>
-              <line x1="65" y1="72" x2="65" y2="126" stroke="#FF4D4D" stroke-width="1.2" opacity=".55"/>
+              <rect x="14" y="72" width="14" height="35" fill="#E5675F" opacity=".55" rx="1.5"/>
+              <line x1="21" y1="60" x2="21" y2="115" stroke="#E5675F" stroke-width="1.2" opacity=".55"/>
+              <rect x="36" y="78" width="14" height="32" fill="#E5675F" opacity=".55" rx="1.5"/>
+              <line x1="43" y1="68" x2="43" y2="118" stroke="#E5675F" stroke-width="1.2" opacity=".55"/>
+              <rect x="58" y="82" width="14" height="36" fill="#E5675F" opacity=".55" rx="1.5"/>
+              <line x1="65" y1="72" x2="65" y2="126" stroke="#E5675F" stroke-width="1.2" opacity=".55"/>
               <!-- Entry marker -->
-              <circle cx="86" cy="88" r="7" fill="none" stroke="#C8F169" stroke-width="1.8" opacity=".9"/>
-              <circle cx="86" cy="88" r="2.5" fill="#C8F169" opacity=".9"/>
+              <circle cx="86" cy="88" r="7" fill="none" stroke="#B9D77A" stroke-width="1.8" opacity=".9"/>
+              <circle cx="86" cy="88" r="2.5" fill="#B9D77A" opacity=".9"/>
               <!-- Bull candles -->
-              <rect x="94" y="66" width="16" height="32" fill="#C8F169" opacity=".7" rx="1.5"/>
-              <line x1="102" y1="54" x2="102" y2="100" stroke="#C8F169" stroke-width="1.4" opacity=".7"/>
-              <rect x="118" y="50" width="16" height="44" fill="#C8F169" opacity=".85" rx="1.5"/>
-              <line x1="126" y1="38" x2="126" y2="96" stroke="#C8F169" stroke-width="1.4" opacity=".85"/>
-              <rect x="142" y="32" width="18" height="52" fill="#C8F169" rx="1.5"/>
-              <line x1="151" y1="18" x2="151" y2="86" stroke="#C8F169" stroke-width="1.6"/>
-              <rect x="168" y="36" width="16" height="40" fill="#C8F169" opacity=".75" rx="1.5"/>
-              <line x1="176" y1="24" x2="176" y2="80" stroke="#C8F169" stroke-width="1.4" opacity=".75"/>
-              <rect x="192" y="28" width="16" height="44" fill="#C8F169" opacity=".65" rx="1.5"/>
-              <line x1="200" y1="18" x2="200" y2="74" stroke="#C8F169" stroke-width="1.4" opacity=".65"/>
-              <rect x="216" y="20" width="16" height="42" fill="#C8F169" opacity=".6" rx="1.5"/>
-              <line x1="224" y1="12" x2="224" y2="64" stroke="#C8F169" stroke-width="1.4" opacity=".6"/>
+              <rect x="94" y="66" width="16" height="32" fill="#B9D77A" opacity=".7" rx="1.5"/>
+              <line x1="102" y1="54" x2="102" y2="100" stroke="#B9D77A" stroke-width="1.4" opacity=".7"/>
+              <rect x="118" y="50" width="16" height="44" fill="#B9D77A" opacity=".85" rx="1.5"/>
+              <line x1="126" y1="38" x2="126" y2="96" stroke="#B9D77A" stroke-width="1.4" opacity=".85"/>
+              <rect x="142" y="32" width="18" height="52" fill="#B9D77A" rx="1.5"/>
+              <line x1="151" y1="18" x2="151" y2="86" stroke="#B9D77A" stroke-width="1.6"/>
+              <rect x="168" y="36" width="16" height="40" fill="#B9D77A" opacity=".75" rx="1.5"/>
+              <line x1="176" y1="24" x2="176" y2="80" stroke="#B9D77A" stroke-width="1.4" opacity=".75"/>
+              <rect x="192" y="28" width="16" height="44" fill="#B9D77A" opacity=".65" rx="1.5"/>
+              <line x1="200" y1="18" x2="200" y2="74" stroke="#B9D77A" stroke-width="1.4" opacity=".65"/>
+              <rect x="216" y="20" width="16" height="42" fill="#B9D77A" opacity=".6" rx="1.5"/>
+              <line x1="224" y1="12" x2="224" y2="64" stroke="#B9D77A" stroke-width="1.4" opacity=".6"/>
               <!-- Live cursor -->
-              <line x1="244" y1="0" x2="244" y2="140" stroke="#6B7280" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/>
+              <line x1="244" y1="0" x2="244" y2="140" stroke="#8D978F" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/>
               <!-- Pending candles (dimmer) -->
-              <rect x="252" y="56" width="14" height="28" fill="#232830" rx="1.5"/>
-              <rect x="274" y="50" width="14" height="32" fill="#232830" rx="1.5"/>
-              <rect x="296" y="44" width="14" height="36" fill="#232830" rx="1.5"/>
+              <rect x="252" y="56" width="14" height="28" fill="#26302B" rx="1.5"/>
+              <rect x="274" y="50" width="14" height="32" fill="#26302B" rx="1.5"/>
+              <rect x="296" y="44" width="14" height="36" fill="#26302B" rx="1.5"/>
             </svg>
-          </div>
-          <div class="chart-footer">
-            <div class="cf-stat">
-              <div class="cf-val green">+1.42%</div>
-              <div class="cf-lbl">Session P&amp;L</div>
-            </div>
-            <div class="cf-stat">
-              <div class="cf-val">9 / 12</div>
-              <div class="cf-lbl">Seats live</div>
-            </div>
-            <div class="cf-stat">
-              <div class="cf-val" style="color:var(--warm)">NQ</div>
-              <div class="cf-lbl">Instrument</div>
-            </div>
-          </div>
-          <div class="chat-strip">
-            <div class="chat-msg">
-              <div class="chat-av" style="background:rgba(200,241,105,.12);color:var(--accent)">M</div>
-              <div class="chat-text"><b>Mario:</b> <span class="hi">grain is right here</span> — watching for the trap before I enter</div>
-            </div>
-            <div class="chat-msg">
-              <div class="chat-av" style="background:var(--line);color:var(--muted)">J</div>
-              <div class="chat-text">I see it — holding off on the 842 level</div>
-            </div>
           </div>
         </div>
       </div>
@@ -761,12 +771,12 @@ footer {
         <div class="proof-lbl">Seats max.<br>Stays intimate.</div>
       </div>
       <div class="proof-item" data-r="up2">
-        <div class="proof-num">3×</div>
-        <div class="proof-lbl">Live sessions<br>every week.</div>
+        <div class="proof-num">Mon–Thu</div>
+        <div class="proof-lbl">Live chart<br>sessions.</div>
       </div>
       <div class="proof-item" data-r="up3">
-        <div class="proof-num">&lt; 1</div>
-        <div class="proof-lbl">Eval's cost.<br>Infinite returns.</div>
+        <div class="proof-num">Sun–Mon</div>
+        <div class="proof-lbl">Pre-week<br>game plan.</div>
       </div>
     </div>
   </div>
@@ -779,18 +789,18 @@ footer {
       <div>
         <div class="label section-label" data-r>Wingman Live</div>
         <h2 class="section-h" data-r>Not a course.<br>Not a signal.<br><em>A live trade room.</em></h2>
-        <p class="section-p" data-r>Mario trades live. You're in the room watching, asking questions, seeing every decision as it happens. Same chart, same price, same moment. Not a replay. Not a mod.</p>
+        <p class="section-p" data-r>Prop firm evals don't fail you because you lack strategy. They fail you because you've never seen real execution in real time. Mario trades live — you're in the room watching every entry, every decision, every exit. Same chart, same price, same moment. Not a replay.</p>
       </div>
       <div class="schedule" data-r="up2">
         <div class="sched-card">
-          <div class="sched-day">Mon</div>
+          <div class="sched-day">Sun–Mon</div>
           <div class="sched-body">
             <div class="sched-title">Pre-Week Game Plan</div>
             <div class="sched-desc">Key levels, weekly bias, what to watch and what to ignore.</div>
           </div>
         </div>
         <div class="sched-card">
-          <div class="sched-day">Tue–Thu</div>
+          <div class="sched-day">Mon–Thu</div>
           <div class="sched-body">
             <div class="sched-title">Live Chart Sessions</div>
             <div class="sched-desc">Real setups. Real entries. Real exits. Live, as it happens.</div>
@@ -815,33 +825,33 @@ footer {
     <div class="includes-grid">
       <div class="inc-card" data-r>
         <div class="inc-icon">📡</div>
-        <div class="inc-title">Live Trade Room × 3</div>
-        <div class="inc-desc">Mario trades live Tue–Thu during market hours. You're in the room watching every decision unfold.</div>
+        <div class="inc-title">Live Chart Sessions</div>
+        <div class="inc-desc">Mario trades live Monday through Thursday during market hours. You're in the room watching every decision unfold.</div>
       </div>
       <div class="inc-card" data-r="up2">
         <div class="inc-icon">🗺</div>
-        <div class="inc-title">Monday Game Plan</div>
-        <div class="inc-desc">Key levels, weekly bias, what to watch. Week starts with a plan, not a guess.</div>
+        <div class="inc-title">Pre-Week Game Plan</div>
+        <div class="inc-desc">Sunday into Monday: key levels, weekly bias, what to watch. The week starts with a plan, not a guess.</div>
       </div>
       <div class="inc-card" data-r="up3">
         <div class="inc-icon">📋</div>
         <div class="inc-title">Friday Recap</div>
-        <div class="inc-desc">What fired, what didn't, what changes next week. No sugarcoating.</div>
+        <div class="inc-desc">What fired, what didn't, and what changes next week.</div>
       </div>
       <div class="inc-card" data-r>
         <div class="inc-icon">💬</div>
         <div class="inc-title">Discord Access</div>
-        <div class="inc-desc">Members-only channel, notes between sessions, direct line to the room.</div>
+        <div class="inc-desc">Members-only channel and notes between sessions.</div>
       </div>
       <div class="inc-card" data-r="up2">
         <div class="inc-icon">🔒</div>
         <div class="inc-title">12 Seats. That's It.</div>
-        <div class="inc-desc">Intentionally small. Mario knows who's in the room. You're not a username in a crowd.</div>
+        <div class="inc-desc">Intentionally small, so Mario knows who's in the room.</div>
       </div>
       <div class="inc-card" data-r="up3">
         <div class="inc-icon">🔓</div>
         <div class="inc-title">Cancel Anytime</div>
-        <div class="inc-desc">No contracts. No lock-ins. Stay because it's working — not because you're trapped.</div>
+        <div class="inc-desc">No contracts and no lock-ins.</div>
       </div>
     </div>
   </div>
@@ -853,14 +863,13 @@ footer {
     <div class="dp-card" data-r="scale">
       <div class="dp-badge">Day Pass</div>
       <div class="dp-title">One session.<br><em>No commitment.</em></div>
-      <p class="dp-copy">Try Wingman for a single live session. 1–3 hours or until the profit target hits — whichever comes first. Max 6 day-pass seats per session.</p>
+      <p class="dp-copy">Try Wingman for a single live session. 1–3 hours or until the profit target hits, whichever comes first. Max 6 day-pass seats per session.</p>
       <div class="dp-guarantee">
         "If we don't trade — you don't pay."
       </div>
-      <a class="dp-btn" href="mailto:mariovsng@gmail.com?subject=Day+Pass+Seat">
+      <a class="dp-btn" href="#" data-lead="daypass">
         Book a Day Pass
       </a>
-      <p class="offer-note">DM to confirm your session slot</p>
     </div>
   </div>
 </section>
@@ -872,13 +881,12 @@ footer {
       <div>
         <div class="label section-label" data-r>The Book</div>
         <h2 class="section-h" data-r>Trading<br><em>The Grain.</em><br>Start here.</h2>
-        <p class="section-p" data-r>The Johnny Cake Method in full. 9 chapters, zero filler. Most Wingman members read the book first — it's the playbook that makes the live sessions click.</p>
+        <p class="section-p" data-r>The Johnny Cake Method in full: 9 chapters. Most Wingman members read the book first. It's the playbook behind the live sessions.</p>
         <div style="margin-top:1.8rem" data-r>
           <a class="hero-cta" href="#" data-buy style="display:inline-flex;width:auto">
             Get the Ebook
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <p style="font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.7rem;">Code CAKE20 saves $20 · instant delivery</p>
         </div>
       </div>
       <div data-r="up2">
@@ -941,15 +949,15 @@ footer {
 
     <div class="offers-grid">
 
-      <!-- Book -->
+      <!-- Trading the Grain -->
       <div class="offer-card" data-r>
         <div>
-          <div class="offer-name">The Book</div>
+          <div class="offer-name">Trading the Grain</div>
           <div class="offer-sub">Ebook · Instant Access</div>
         </div>
         <ul class="offer-list">
           <li><span class="ck">✓</span> Full Johnny Cake Method ebook</li>
-          <li><span class="ck">✓</span> 9 chapters, zero filler</li>
+          <li><span class="ck">✓</span> 9 chapters</li>
           <li><span class="ck">✓</span> Hunter Psychology framework</li>
           <li><span class="ck">✓</span> Discord community access</li>
           <li><span class="ck">✓</span> Instant delivery</li>
@@ -958,51 +966,49 @@ footer {
           <a class="offer-btn lime" href="#" data-buy>
             Get the Book
           </a>
-          <p class="offer-note">Code CAKE20 saves $20</p>
         </div>
       </div>
 
-      <!-- Wingman Weekly (hero) -->
+      <!-- Wingman (hero) -->
       <div class="offer-card hero-card" data-r="up2">
         <div class="offer-badge lime">Most Popular</div>
         <div>
-          <div class="offer-name">Wingman Weekly</div>
+          <div class="offer-name">Wingman</div>
           <div class="offer-sub">Live Charts · 12 Seats Max</div>
         </div>
         <ul class="offer-list">
-          <li><span class="ck">✓</span> 3 live trade room sessions / week</li>
-          <li><span class="ck">✓</span> Monday game plan</li>
+          <li><span class="ck">✓</span> Live chart sessions Mon–Thu</li>
+          <li><span class="ck">✓</span> Pre-week game plan, Sun–Mon</li>
           <li><span class="ck">✓</span> Friday recap</li>
-          <li><span class="ck">✓</span> Mario trading live — not a replay</li>
-          <li><span class="ck">✓</span> 12 seats max, no exceptions</li>
+          <li><span class="ck">✓</span> Mario trading live, not a replay</li>
+          <li><span class="ck">✓</span> 12 seats max</li>
           <li><span class="ck">✓</span> Cancel anytime</li>
           <li><span class="ck">✓</span> Discord access</li>
         </ul>
         <div>
-          <a class="offer-btn lime" href="mailto:mariovsng@gmail.com?subject=Wingman+Weekly+Seat">
+          <a class="offer-btn lime" href="#" data-auth="signup">
             Claim a Seat
           </a>
-          <p class="offer-note">DM to confirm · limited seats</p>
         </div>
       </div>
 
       <!-- Private Session (dimmed) -->
       <div class="offer-card dimmed" data-r="up3">
-        <div class="offer-badge warm">Seats Full</div>
+        <div class="offer-badge warm">Waitlist</div>
         <div>
-          <div class="offer-name">Private Session</div>
-          <div class="offer-sub">1-on-1 · Live Chart Walkthrough</div>
+          <div class="offer-name">Bootcamp</div>
+          <div class="offer-sub">Training Room · 1-on-1</div>
         </div>
         <ul class="offer-list">
           <li><span class="ck dim">✓</span> Ebook included</li>
-          <li><span class="ck dim">✓</span> Private live session with Mario</li>
-          <li><span class="ck dim">✓</span> Live chart walkthrough on your setups</li>
+          <li><span class="ck dim">✓</span> Private training room session with Mario</li>
+          <li><span class="ck dim">✓</span> Live chart walkthrough of your setups</li>
           <li><span class="ck dim">✓</span> Open Q&amp;A during the session</li>
           <li><span class="ck dim">✓</span> 2 custom TradingView indicators — yours to keep</li>
           <li><span class="ck dim">✓</span> Discord access</li>
         </ul>
         <div>
-          <a class="offer-btn ghost" href="mailto:mariovsng@gmail.com?subject=Private+Session+Waitlist">
+          <a class="offer-btn ghost" href="#" data-lead="bootcamp">
             Join the Waitlist
           </a>
         </div>
@@ -1016,7 +1022,7 @@ footer {
 <section class="compare">
   <div class="wrap">
     <div class="label" data-r>Why Wingman</div>
-    <h2 class="section-h" style="margin-top:.5rem;margin-bottom:0;max-width:20ch" data-r>Less than what you're already spending.</h2>
+    <h2 class="section-h" style="margin-top:.5rem;margin-bottom:0;max-width:20ch" data-r>Less than one reset.<br>More than any replay.</h2>
     <div class="compare-table" style="margin-top:2.4rem" data-r>
       <div class="ct-row header">
         <div class="ct-cell"> </div>
@@ -1026,7 +1032,7 @@ footer {
       <div class="ct-row">
         <div class="ct-cell" style="color:var(--muted);font-size:.85rem">Cost</div>
         <div class="ct-cell muted">$150 – $500 / reset</div>
-        <div class="ct-cell active">See offer ↑</div>
+        <div class="ct-cell active">Weekly seat</div>
       </div>
       <div class="ct-row">
         <div class="ct-cell" style="color:var(--muted);font-size:.85rem">Live mentor</div>
@@ -1059,8 +1065,8 @@ footer {
       <div class="author-av">MRJ</div>
       <div>
         <div class="author-name">Romario Johnson</div>
-        <p class="author-copy">I trade NQ futures. I built the Johnny Cake Method from years of getting it wrong — chasing moves, getting stopped at the exact wrong level, watching the market do exactly what I called after I already exited. I opened the trade room because I wished I could have watched a real trader work through it live. Now you can.</p>
-        <p class="author-handle">@MarioVsNQ · TikTok &amp; Instagram</p>
+        <p class="author-copy">I trade NQ futures. I built the Johnny Cake Method from years of getting it wrong — chasing moves, getting stopped at the exact wrong level, watching the market do exactly what I called after I already exited. The number one thing I hear from traders is: "I get the strategy but I keep failing the eval." That's not a strategy problem. That's a live execution problem. That's what Wingman fixes.</p>
+        <p class="author-handle">@MarioVsNQ · @propfirm.wingman</p>
       </div>
     </div>
   </div>
@@ -1073,6 +1079,10 @@ footer {
     <h2 class="section-h" style="margin-top:.5rem" data-r>Questions.</h2>
 
     <details>
+      <summary>Will this help me pass my prop firm eval? <span class="faq-plus">+</span></summary>
+      <p class="faq-body">That's the goal. Most traders fail evals not because they lack a strategy — but because they've never seen real execution under pressure. Watching Mario trade live on NQ shows you what controlled execution looks like under pressure. No result is guaranteed.</p>
+    </details>
+    <details>
       <summary>Is this coaching or financial advice? <span class="faq-plus">+</span></summary>
       <p class="faq-body">Neither. Wingman is a live trade room — Mario trades live and members watch, observe, and ask questions in real time. This is not financial advice, investment advice, or coaching. It's access to a live trader's process, for educational purposes only.</p>
     </details>
@@ -1082,11 +1092,11 @@ footer {
     </details>
     <details>
       <summary>What if I join mid-week? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">Weekly seats lock in on Monday. Mid-week, grab a Day Pass for any remaining sessions that week — then roll into a weekly seat from the following Monday.</p>
+      <p class="faq-body">Weekly seats start Monday. Mid-week, grab a Day Pass for the remaining sessions that week, then roll into a weekly seat the following Monday.</p>
     </details>
     <details>
       <summary>Is the book included with Wingman Weekly? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">Not included by default — the book is a separate purchase. Most members grab it first. DM Mario about member discounts.</p>
+      <p class="faq-body">The book is a separate purchase. Most members grab it first.</p>
     </details>
     <details>
       <summary>What markets does the room cover? <span class="faq-plus">+</span></summary>
@@ -1094,15 +1104,15 @@ footer {
     </details>
     <details>
       <summary>Can I cancel anytime? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">Yes. No contracts. No lock-ins. Stay because it's working.</p>
+      <p class="faq-body">Yes. No contracts and no lock-ins.</p>
     </details>
     <details>
       <summary>What happens on a Day Pass if no trades fire? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">Full refund or rollover to the next session — your call. If we don't trade, you don't pay.</p>
+      <p class="faq-body">Full refund or rollover to the next session, your call.</p>
     </details>
     <details>
       <summary>How many people are in the room? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">12 weekly seats. Hard cap, no exceptions. Mario knows everyone in the room.</p>
+      <p class="faq-body">12 weekly seats, hard cap.</p>
     </details>
   </div>
 </section>
@@ -1111,13 +1121,12 @@ footer {
 <section class="final">
   <div class="wrap">
     <div class="final-inner">
-      <h2>Stop trading alone.</h2>
-      <p>12 seats. Live charts. Real talk. The seat won't be open long.</p>
-      <a class="final-btn" href="mailto:mariovsng@gmail.com?subject=Wingman+Weekly+Seat">
-        Tap In
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="#C8F169" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h2>Let's get you funded.</h2>
+      <p>Your wingman is live on the NQ. 12 seats.</p>
+      <a class="final-btn" href="#" data-auth="signup">
+        Claim a Seat
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="#101A08" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <span class="final-note">@MarioVsNQ · Free Discord for all</span>
     </div>
   </div>
 </section>
@@ -1136,15 +1145,65 @@ footer {
   </div>
 </footer>
 
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" crossorigin="anonymous" onerror="window.WMSUPA_FAIL=1"></script>
+<script src="cloud.js"></script>
+<script src="auth.js" onerror="window.WMAUTH_MISSING=1"></script>
 <script>
-var CHECKOUT_URL = "https://buy.stripe.com/28EdR95TD3xz4os4ccgnK04";
+var CFG = window.WM_CONFIG || {}, LINKS = CFG.links || {};
+var CHECKOUT_URL = LINKS.ebook || "https://buy.stripe.com/28EdR95TD3xz4os4ccgnK04";
 
 document.querySelectorAll('[data-buy]').forEach(function(el) {
   el.addEventListener('click', function(e) {
     e.preventDefault();
     if (CHECKOUT_URL) window.location.href = CHECKOUT_URL;
+    else location.href = 'mailto:' + (CFG.contactEmail || '') + '?subject=' + encodeURIComponent('Trading the Grain ebook');
   });
 });
+
+// Day Pass + Bootcamp waitlist
+document.querySelectorAll('[data-lead]').forEach(function(el) {
+  el.addEventListener('click', function(e) {
+    e.preventDefault();
+    var t = el.getAttribute('data-lead');
+    if (t === 'daypass' && LINKS.daypass) { location.href = LINKS.daypass; return; }
+    var cfg = t === 'daypass'
+      ? { type: 'daypass', title: 'Book a Day Pass', sub: 'Leave your details and Mario will confirm your session slot.', button: 'Request my slot', subject: 'Day Pass Seat' }
+      : { type: 'bootcamp', title: 'Join the Bootcamp waitlist', sub: "We'll email you when a spot opens.", button: 'Join the waitlist', subject: 'Bootcamp Waitlist' };
+    if (window.WMAuth) WMAuth.openLead(cfg);
+    else location.href = 'mailto:' + (CFG.contactEmail || '') + '?subject=' + encodeURIComponent(cfg.subject);
+  });
+});
+
+// Accounts
+(function() {
+  if (!window.WMAuth) {
+    document.querySelectorAll('[data-auth]').forEach(function(el) {
+      el.addEventListener('click', function(e) { e.preventDefault(); location.href = 'mailto:' + (CFG.contactEmail || '') + '?subject=Wingman+Seat'; });
+    });
+    return;
+  }
+  function go(mode) { WMAuth.openModal({ mode: mode, redirect: 'members.html' }); }
+  document.querySelectorAll('[data-auth]').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (WMAuth.user()) { location.href = WMAuth.user().role === 'admin' ? 'admin.html' : 'members.html'; return; }
+      go(el.getAttribute('data-auth'));
+    });
+  });
+  function paint() {
+  var u = WMAuth.user();
+  if (u) {
+    var si = document.getElementById('nav-signin'), jn = document.getElementById('nav-join');
+    if (si) { si.textContent = 'Sign out'; si.removeAttribute('data-auth'); si.onclick = function(e) { e.preventDefault(); WMAuth.signOut(); location.reload(); }; }
+    if (jn) { jn.textContent = 'Dashboard'; }
+  }
+  }
+  paint(); WMAuth.ready().then(paint);
+})();
+
+// Failsafe: if anything above fails, never leave content hidden
+setTimeout(function() { document.querySelectorAll('[data-r]:not(.on)').forEach(function(el) { el.classList.add('on'); }); }, 2500);
 
 // Scroll reveal
 (function() {
