@@ -1400,7 +1400,9 @@ function refreshAdmin() {
 if(!window.WMAuth){document.documentElement.style.visibility='visible';document.body.innerHTML='<p style="padding:40px;font:16px Inter,sans-serif;color:#E6E9E2">auth.js is missing. Upload it to the same folder as this page.</p>';}else WMAuth.guard('admin', function(u) {
   document.getElementById('sb-name').textContent = u.name;
   document.getElementById('sb-avatar').textContent = (u.name || 'A').trim()[0].toUpperCase();
+  try { DAY_SLOTS = lsGet('wm_dayslots', DAY_SLOTS); DAYS_THIS = lsGet('wm_days_this', DAYS_THIS); DAYS_NEXT = lsGet('wm_days_next', DAYS_NEXT); } catch (e) {}
   refreshAdmin(); loadSettings();
+  try { renderDayMeters(); syncDayBtns('day-grid', DAYS_THIS); syncDayBtns('next-day-grid', DAYS_NEXT); } catch (e) {}
 }, refreshAdmin);
 </script>
 </body>

@@ -137,6 +137,7 @@
       var admin = mode.indexOf('admin') === 0;
       var root = document.createElement('div'); root.id = 'wma-root'; root.className = 'wma-back';
       function render() {
+        if (mode === 'forgot' || mode === 'reset') { renderReset(); return; }
         var signup = mode === 'signup' || mode === 'admin-setup';
         var title = mode === 'admin-setup' ? 'Create admin account' : admin ? 'Admin sign in' : signup ? 'Create your account' : 'Welcome back';
         var sub = mode === 'admin-setup' ? 'First-time setup for the trade room host.' : admin ? 'Trade room host access.' : signup ? 'Request your seat in the room. Mario confirms it after you sign up.' : 'Sign in to your member portal.';
@@ -152,9 +153,11 @@
           '<label class="wma-f"><span>Password</span><input name="password" type="password" autocomplete="' + (signup ? 'new-password' : 'current-password') + '" maxlength="128"></label>' +
           '<div class="wma-err" role="alert"></div>' +
           '<button class="wma-go" type="submit">' + (mode === 'admin-setup' ? 'Create admin account' : signup ? 'Create account' : 'Sign in') + '</button></form>' +
-          (signup && !admin ? '<p class="wma-fine">Passwords are hashed and stored only in this browser until the full member backend goes live.</p>' : '') +
+          (!signup && cloud() ? '<p class="wma-fine"><a href="#" data-forgot style="color:#B9D77A">Forgot password?</a></p>' : '') +
+          (signup && !admin && !cloud() ? '<p class="wma-fine">Passwords are hashed and stored only in this browser until the full member backend goes live.</p>' : '') +
           '</div>';
         var x = root.querySelector('[data-x]'); if (x) x.onclick = function () { root.remove(); };
+        var fg = root.querySelector('[data-forgot]'); if (fg) fg.onclick = function (e) { e.preventDefault(); mode = 'forgot'; render(); };
         root.querySelectorAll('.wma-tab').forEach(function (t) { t.onclick = function () { mode = t.getAttribute('data-m'); render(); }; });
         var form = root.querySelector('form'), err = root.querySelector('.wma-err'), btn = root.querySelector('.wma-go');
         form.onsubmit = function (ev) {
@@ -168,6 +171,47 @@
             root.remove();
             if (opts.onDone) opts.onDone(r.user);
             else if (opts.redirect) location.href = (r.user.role === 'admin' ? 'admin.html' : opts.redirect);
+          });
+        };
+        var first = form.querySelector('input'); if (first) setTimeout(function () { first.focus(); }, 30);
+      }
+      function renderReset() {
+        var isReset = mode === 'reset';
+        root.innerHTML =
+          '<div class="wma-card" role="dialog" aria-modal="true" aria-labelledby="wma-t">' +
+          (opts.dismissible === false ? '' : '<button class="wma-x" aria-label="Close" data-x>&times;</button>') +
+          '<h2 class="wma-h" id="wma-t">' + (isReset ? 'Set a new password' : 'Reset your password') + '</h2>' +
+          '<p class="wma-sub">' + (isReset ? 'Choose a new password for your account.' : 'Enter your email and we will send you a link to set a new one.') + '</p><form novalidate>' +
+          (isReset
+            ? '<label class="wma-f"><span>New password</span><input name="password" type="password" autocomplete="new-password" maxlength="128"></label><label class="wma-f"><span>Confirm password</span><input name="confirm" type="password" autocomplete="new-password" maxlength="128"></label>'
+            : '<label class="wma-f"><span>Email</span><input name="email" type="email" autocomplete="email" maxlength="120"></label>') +
+          '<div class="wma-err" role="alert"></div><button class="wma-go" type="submit">' + (isReset ? 'Save password' : 'Send reset link') + '</button></form>' +
+          (isReset ? '' : '<p class="wma-fine"><a href="#" data-back style="color:#B9D77A">Back to sign in</a></p>') + '</div>';
+        var x = root.querySelector('[data-x]'); if (x) x.onclick = function () { root.remove(); };
+        var back = root.querySelector('[data-back]'); if (back) back.onclick = function (e) { e.preventDefault(); mode = 'signin'; render(); };
+        var form = root.querySelector('form'), err = root.querySelector('.wma-err'), btn = root.querySelector('.wma-go');
+        form.onsubmit = function (ev) {
+          ev.preventDefault(); err.style.color = ''; err.textContent = '';
+          var f = form.elements;
+          if (!isReset) {
+            if (!validEmail(f.email.value.trim())) { err.textContent = 'Enter a valid email.'; return; }
+            btn.disabled = true;
+            window.WMCloud.requestReset(f.email.value.trim()).then(function (r) {
+              btn.disabled = false;
+              if (!r.ok) { err.textContent = r.error; return; }
+              err.style.color = '#B9D77A'; err.textContent = 'If that email has an account, a reset link is on its way. Check your inbox.';
+            });
+            return;
+          }
+          if (f.password.value.length < 8) { err.textContent = 'Password must be at least 8 characters.'; return; }
+          if (f.password.value !== f.confirm.value) { err.textContent = 'Passwords do not match.'; return; }
+          btn.disabled = true;
+          window.WMCloud.setPassword(f.password.value).then(function (r) {
+            if (!r.ok) { err.textContent = r.error; btn.disabled = false; return; }
+            root.querySelector('.wma-card').innerHTML = '<h2 class="wma-h">Password updated</h2><p class="wma-sub">You are signed in.</p><button class="wma-go" id="wma-ok">Continue</button>';
+            root.querySelector('#wma-ok').onclick = function () {
+              window.WMCloud.ready.then(function () { var u = Auth.user(); location.href = (u && u.role === 'admin') ? 'admin.html' : 'members.html'; });
+            };
           });
         };
         var first = form.querySelector('input'); if (first) setTimeout(function () { first.focus(); }, 30);
@@ -249,4 +293,10 @@
   };
   Auth.esc = esc;
   window.WMAuth = Auth;
+  /* password-recovery link: Supabase signs the visitor in with a temporary session, then we ask for a new password */
+  if (cloud()) {
+    var openReset = function () { Auth.openModal({ mode: 'reset', dismissible: false }); };
+    window.addEventListener('wm-recovery', openReset);
+    if (window.WMCloud.recovering) openReset();
+  }
 })();

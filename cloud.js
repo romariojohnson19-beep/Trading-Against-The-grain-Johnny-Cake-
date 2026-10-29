@@ -18,13 +18,20 @@
   Cloud.enabled = true;
 
   var sb = window.supabase.createClient(C.supabaseUrl, C.supabaseAnonKey, {
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false }
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
   Cloud.client = sb;
+  Cloud.recovering = false;
+  try {
+    if (sb.auth.onAuthStateChange) sb.auth.onAuthStateChange(function (ev) {
+      if (ev === 'PASSWORD_RECOVERY') { Cloud.recovering = true; try { window.dispatchEvent(new Event('wm-recovery')); } catch (e) {} }
+    });
+  } catch (e) {}
 
   var rawSet = Storage.prototype.setItem, rawRemove = Storage.prototype.removeItem;
   var suppress = false, profile = null, known = { events: {}, files: {}, history: {}, roster: {}, requests: {} };
-  var SYNCED = ['wm_events', 'wm_files', 'wm_sent_history', 'wm_settings', 'mario_status', 'wm_seats', 'wm_members', 'wm_requests', 'wm_profile'];
+  var ADMIN_KEYS = ['wm_days_this', 'wm_days_next', 'wm_next_week', 'wm_dayslots', 'wm_schedule', 'wm_latest_msg'];
+  var SYNCED = ['wm_events', 'wm_files', 'wm_sent_history', 'wm_settings', 'mario_status', 'wm_seats', 'wm_members', 'wm_requests', 'wm_profile'].concat(ADMIN_KEYS);
 
   function jget(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function put(k, v) { suppress = true; try { rawSet.call(localStorage, k, JSON.stringify(v)); } catch (e) {} suppress = false; }
@@ -86,6 +93,17 @@
       });
     }, function (e) { return { ok: false, error: friendly(e && e.message) }; });
   };
+  Cloud.requestReset = function (email) {
+    return sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + '/' }).then(function (r) {
+      return r && r.error ? { ok: false, error: friendly(r.error.message) } : { ok: true };
+    }, function (e) { return { ok: false, error: friendly(e && e.message) }; });
+  };
+  Cloud.setPassword = function (pw) {
+    return sb.auth.updateUser({ password: pw }).then(function (r) {
+      if (r && r.error) return { ok: false, error: friendly(r.error.message) };
+      Cloud.recovering = false; return { ok: true };
+    }, function (e) { return { ok: false, error: friendly(e && e.message) }; });
+  };
   Cloud.signOut = function () {
     try { Object.keys(localStorage).filter(function (k) { return /^sb-/.test(k); }).forEach(function (k) { rawRemove.call(localStorage, k); }); } catch (e) {}
     clearCaches(); profile = null;
@@ -123,6 +141,7 @@
       if (map.discord !== undefined) s.discord = map.discord || '';
       if (map.billing !== undefined) s.billing = map.billing || '';
       put('wm_settings', s);
+      if (admin) ADMIN_KEYS.forEach(function (k) { if (map['ls:' + k] !== undefined && map['ls:' + k] !== null) put(k, map['ls:' + k]); });
       if (map.status !== undefined && map.status !== null) putRaw('mario_status', map.status);
       if (map.seats !== undefined && map.seats !== null) putRaw('wm_seats', map.seats);
     }));
@@ -220,6 +239,13 @@
       return Promise.all(jobs);
     }
   };
+
+  ADMIN_KEYS.forEach(function (k) {
+    HANDLERS[k] = function (v) {
+      var val; try { val = JSON.parse(v); } catch (e) { return Promise.resolve(); }
+      return sb.from('settings').upsert([{ key: 'ls:' + k, value: val, visibility: 'members' }]).then(function (r) { if (r.error) throw new Error(k); });
+    };
+  });
 
   var timers = {};
   Storage.prototype.setItem = function (k, v) {

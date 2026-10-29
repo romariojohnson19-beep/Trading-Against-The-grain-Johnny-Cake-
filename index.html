@@ -17,6 +17,7 @@
 :root {
   --bg: #0E1210;
   --panel: #151B18;
+  --panel2: #1B221E;
   --line: #26302B;
   --fg: #E6E9E2;
   --muted: #8D978F;
@@ -256,6 +257,57 @@ nav {
 .cf-val.green { color: var(--accent); }
 .cf-val.red { color: var(--red); }
 .cf-lbl { font-family: 'JetBrains Mono', monospace; font-size: .55rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+
+/* ── Live session proof ── */
+.live-wrap { width: 100%; max-width: 980px; margin: 4rem auto 0; position: relative; }
+.live-grid {
+  display: grid; grid-template-columns: 1fr; gap: 2.2rem; align-items: center;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 1.6rem;
+  text-align: left;
+}
+@media (min-width: 820px) { .live-grid { grid-template-columns: 1.1fr .9fr; padding: 2.4rem 2.6rem; gap: 3rem; } }
+.live-kicker {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: 'JetBrains Mono', monospace; font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--warm);
+}
+.live-h { font-family: 'Bricolage Grotesque', serif; font-weight: 800; font-size: clamp(1.8rem, 4vw, 2.6rem); letter-spacing: -.03em; line-height: 1; margin: .8rem 0 .7rem; }
+.live-p { color: var(--muted); font-size: .98rem; line-height: 1.6; max-width: 34ch; }
+.live-list { list-style: none; margin-top: 1.4rem; display: flex; flex-direction: column; gap: .9rem; }
+.live-list li { display: flex; flex-direction: column; gap: .1rem; padding-left: 1rem; border-left: 2px solid var(--accent); }
+.live-list b { font-weight: 700; font-size: .98rem; }
+.live-list span { color: var(--muted); font-size: .85rem; line-height: 1.5; }
+.live-phone { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .8rem; }
+.phone-frame {
+  position: relative; width: 100%; max-width: 270px; aspect-ratio: 540 / 984;
+  background: #0A0E0C; border: 1px solid var(--line); border-radius: 30px; padding: 8px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(185,215,122,.08);
+  overflow: hidden;
+}
+.phone-frame video { width: 100%; height: 100%; object-fit: cover; border-radius: 22px; display: block; background: #0A0E0C; }
+.vid-toggle {
+  position: absolute; right: 16px; bottom: 16px;
+  background: rgba(14,18,16,.82); color: var(--fg); border: 1px solid var(--line); border-radius: 100px;
+  font: 600 .66rem 'JetBrains Mono', monospace; letter-spacing: .1em; text-transform: uppercase;
+  padding: 7px 12px; cursor: pointer; min-height: 32px;
+}
+.vid-toggle:hover { border-color: var(--accent); }
+.live-phone figcaption { font-family: 'JetBrains Mono', monospace; font-size: .56rem; letter-spacing: .08em; color: var(--muted); text-align: center; max-width: 34ch; line-height: 1.6; }
+
+/* ── Week strip ── */
+.week-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: .4rem; margin-bottom: .9rem; }
+.wk { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: .7rem .3rem; text-align: center; }
+.wk b { display: block; font-family: 'JetBrains Mono', monospace; font-size: .62rem; letter-spacing: .12em; color: var(--muted); }
+.wk span { display: block; margin-top: .35rem; font-size: .66rem; line-height: 1.25; color: var(--muted); }
+.wk.plan { border-color: rgba(232,148,111,.5); } .wk.plan b { color: var(--warm); }
+.wk.live { border-color: rgba(185,215,122,.55); background: var(--panel2); } .wk.live b { color: var(--accent); } .wk.live span { color: var(--fg); }
+@media (max-width: 480px) { .wk span { font-size: .6rem; } .wk { padding: .6rem .15rem; } }
+
+/* ── Wingman card gets the spotlight ── */
+@media (min-width: 900px) {
+  .offer-card.hero-card { transform: translateY(-14px); padding: 2.4rem 1.8rem; background: linear-gradient(180deg, var(--panel2), var(--panel)); }
+  .offer-card.hero-card .offer-name { font-size: 1.7rem; }
+}
 
 /* Chat strip */
 .chat-strip {
@@ -702,59 +754,29 @@ nav, section, .proof, footer, .banner { position: relative; z-index: 1; }
         <svg viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
 
-      <!-- Chart visual -->
-      <div class="chart-wrap" data-r="scale">
-        <div class="chart-frame">
-          <div class="chart-header">
-            <div class="chart-header-left">
-              <span class="chart-ticker">NQ1! · 15m</span>
-              <span class="chart-tf">Live</span>
-            </div>
-            <div class="chart-live-badge">
-              <span class="chart-live-dot"></span>
-              Wingman · Live
-            </div>
+      <!-- Live session proof -->
+      <div class="live-wrap" data-r="scale">
+        <div class="live-grid">
+          <div class="live-notes">
+            <div class="live-kicker"><span class="chart-live-dot"></span> Real session · Oct 28</div>
+            <h3 class="live-h">This is the room.</h3>
+            <p class="live-p">A real MNQ session, recorded on a phone. Entry, stop and size are on the chart before the move, not explained after it.</p>
+            <ul class="live-list">
+              <li><b>Entry called live</b><span>You see the level and the trigger as it prints.</span></li>
+              <li><b>Stop set before the click</b><span>Risk is defined first, every time.</span></li>
+              <li><b>Size on the screen</b><span>No guessing what the trade is worth taking.</span></li>
+            </ul>
           </div>
-          <div class="chart-body">
-            <svg width="100%" height="140" viewBox="0 0 600 140" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Grid lines -->
-              <line x1="0" y1="35" x2="600" y2="35" stroke="#26302B" stroke-width="1"/>
-              <line x1="0" y1="70" x2="600" y2="70" stroke="#26302B" stroke-width="1"/>
-              <line x1="0" y1="105" x2="600" y2="105" stroke="#26302B" stroke-width="1"/>
-              <!-- Grain line -->
-              <line x1="0" y1="88" x2="600" y2="88" stroke="#E8946F" stroke-width="1.2" stroke-dasharray="6 5" opacity=".5"/>
-              <text x="8" y="84" font-family="JetBrains Mono" font-size="8" fill="#E8946F" opacity=".7" letter-spacing="1.5">GRAIN</text>
-              <!-- Bear candles left -->
-              <rect x="14" y="72" width="14" height="35" fill="#E5675F" opacity=".55" rx="1.5"/>
-              <line x1="21" y1="60" x2="21" y2="115" stroke="#E5675F" stroke-width="1.2" opacity=".55"/>
-              <rect x="36" y="78" width="14" height="32" fill="#E5675F" opacity=".55" rx="1.5"/>
-              <line x1="43" y1="68" x2="43" y2="118" stroke="#E5675F" stroke-width="1.2" opacity=".55"/>
-              <rect x="58" y="82" width="14" height="36" fill="#E5675F" opacity=".55" rx="1.5"/>
-              <line x1="65" y1="72" x2="65" y2="126" stroke="#E5675F" stroke-width="1.2" opacity=".55"/>
-              <!-- Entry marker -->
-              <circle cx="86" cy="88" r="7" fill="none" stroke="#B9D77A" stroke-width="1.8" opacity=".9"/>
-              <circle cx="86" cy="88" r="2.5" fill="#B9D77A" opacity=".9"/>
-              <!-- Bull candles -->
-              <rect x="94" y="66" width="16" height="32" fill="#B9D77A" opacity=".7" rx="1.5"/>
-              <line x1="102" y1="54" x2="102" y2="100" stroke="#B9D77A" stroke-width="1.4" opacity=".7"/>
-              <rect x="118" y="50" width="16" height="44" fill="#B9D77A" opacity=".85" rx="1.5"/>
-              <line x1="126" y1="38" x2="126" y2="96" stroke="#B9D77A" stroke-width="1.4" opacity=".85"/>
-              <rect x="142" y="32" width="18" height="52" fill="#B9D77A" rx="1.5"/>
-              <line x1="151" y1="18" x2="151" y2="86" stroke="#B9D77A" stroke-width="1.6"/>
-              <rect x="168" y="36" width="16" height="40" fill="#B9D77A" opacity=".75" rx="1.5"/>
-              <line x1="176" y1="24" x2="176" y2="80" stroke="#B9D77A" stroke-width="1.4" opacity=".75"/>
-              <rect x="192" y="28" width="16" height="44" fill="#B9D77A" opacity=".65" rx="1.5"/>
-              <line x1="200" y1="18" x2="200" y2="74" stroke="#B9D77A" stroke-width="1.4" opacity=".65"/>
-              <rect x="216" y="20" width="16" height="42" fill="#B9D77A" opacity=".6" rx="1.5"/>
-              <line x1="224" y1="12" x2="224" y2="64" stroke="#B9D77A" stroke-width="1.4" opacity=".6"/>
-              <!-- Live cursor -->
-              <line x1="244" y1="0" x2="244" y2="140" stroke="#8D978F" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/>
-              <!-- Pending candles (dimmer) -->
-              <rect x="252" y="56" width="14" height="28" fill="#26302B" rx="1.5"/>
-              <rect x="274" y="50" width="14" height="32" fill="#26302B" rx="1.5"/>
-              <rect x="296" y="44" width="14" height="36" fill="#26302B" rx="1.5"/>
-            </svg>
-          </div>
+          <figure class="live-phone">
+            <div class="phone-frame">
+              <video id="live-vid" muted loop playsinline preload="metadata" poster="media/session-poster.jpg" aria-label="Screen recording of a live MNQ trading session with entry and stop on the chart">
+                <source src="media/session.mp4" type="video/mp4">
+                <source src="media/session.webm" type="video/webm">
+              </video>
+              <button type="button" class="vid-toggle" id="vid-toggle" aria-label="Pause video">Pause</button>
+            </div>
+            <figcaption>Actual session recording. Dollar amounts hidden. Trading involves risk and results vary.</figcaption>
+          </figure>
         </div>
       </div>
 
@@ -792,6 +814,14 @@ nav, section, .proof, footer, .banner { position: relative; z-index: 1; }
         <p class="section-p" data-r>Prop firm evals don't fail you because you lack strategy. They fail you because you've never seen real execution in real time. Mario trades live — you're in the room watching every entry, every decision, every exit. Same chart, same price, same moment. Not a replay.</p>
       </div>
       <div class="schedule" data-r="up2">
+        <div class="week-strip" aria-label="Weekly schedule">
+          <div class="wk plan"><b>SUN</b><span>Game plan</span></div>
+          <div class="wk live"><b>MON</b><span>Plan + live</span></div>
+          <div class="wk live"><b>TUE</b><span>Live</span></div>
+          <div class="wk live"><b>WED</b><span>Live</span></div>
+          <div class="wk live"><b>THU</b><span>Live</span></div>
+          <div class="wk plan"><b>FRI</b><span>Recap</span></div>
+        </div>
         <div class="sched-card">
           <div class="sched-day">Sun–Mon</div>
           <div class="sched-body">
@@ -1221,6 +1251,19 @@ setTimeout(function() { document.querySelectorAll('[data-r]:not(.on)').forEach(f
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
   els.forEach(function(el) { io.observe(el); });
+})();
+</script>
+<script>
+(function(){
+  var v=document.getElementById('live-vid'), b=document.getElementById('vid-toggle'); if(!v||!b) return;
+  var reduce=false; try{ reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+  function label(){ b.textContent = v.paused ? 'Play' : 'Pause'; b.setAttribute('aria-label', v.paused ? 'Play video' : 'Pause video'); }
+  b.onclick=function(){ if(v.paused){ var p=v.play(); if(p&&p.catch)p.catch(function(){}); } else v.pause(); label(); };
+  v.addEventListener('play',label); v.addEventListener('pause',label);
+  if('IntersectionObserver' in window && !reduce){
+    new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ var p=v.play(); if(p&&p.catch)p.catch(function(){}); } else if(!v.paused) v.pause(); }); },{threshold:.35}).observe(v);
+  }
+  label();
 })();
 </script>
 </body>
