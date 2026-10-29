@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wingman — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#0E1210;--panel:#151B18;--panel2:#1B221E;--line:#26302B;
+  --fg:#E6E9E2;--muted:#8D978F;--accent:#E8946F;--lime:#B9D77A;
+  --red:#E5675F;--green:#86C99B;
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --sb:240px;--rad:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background-color:var(--bg);background-image:radial-gradient(ellipse 110% 50% at 50% -5%,rgba(30,44,35,.7) 0%,transparent 65%);background-attachment:fixed;color:var(--fg);font-family:var(--font-body);font-size:14px;display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sb{width:var(--sb);background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sb-brand{padding:22px 18px 16px;border-bottom:1px solid var(--line)}
+.sb-logo{font-family:var(--font-display);font-weight:700;font-size:20px;letter-spacing:-.5px;color:var(--fg)}
+.sb-logo span{color:var(--accent)}
+.sb-tagline{font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)}
+
+/* ONLINE/OFFLINE MASTER TOGGLE */
+.status-toggle-wrap{padding:14px 14px 12px;border-bottom:1px solid var(--line)}
+#status-btn{
+  width:100%;padding:11px 14px;border-radius:8px;border:none;cursor:pointer;
+  font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:.2px;
+  display:flex;align-items:center;gap:8px;justify-content:center;
+  transition:background .2s,color .2s;
+}
+#status-btn.online{background:#1B3A2A;color:#A7DDB6}
+#status-btn.offline{background:#3f3f46;color:#a1a1aa}
+#status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;transition:background .2s}
+#status-btn.online #status-dot{background:#86C99B;box-shadow:0 0 6px #86c99baa}
+#status-btn.offline #status-dot{background:#71717a}
+.status-sub{font-size:10px;color:var(--muted);text-align:center;margin-top:6px;font-family:var(--font-mono)}
+
+/* LIVE SESSION STRIP */
+.live-strip{padding:10px 14px;border-bottom:1px solid var(--line)}
+.live-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.live-label{font-size:11px;font-weight:600;color:var(--muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.5px}
+#live-toggle-btn{font-size:11px;padding:4px 10px;border-radius:5px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--font-body);transition:all .2s}
+#live-toggle-btn.active{border-color:var(--red);color:var(--red)}
+.session-time{font-family:var(--font-mono);font-size:12px;color:var(--accent);font-weight:600}
+#session-timer{font-family:var(--font-mono);font-size:11px;color:var(--muted)}
+
+/* NAV */
+.sb-nav{padding:8px 10px;flex:1}
+.nav-section{margin-top:10px}
+.nav-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;padding:4px 8px;margin-bottom:4px;font-family:var(--font-mono)}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:7px;cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;transition:all .15s;position:relative;font-family:var(--font-body)}
+.nav-item:hover{background:var(--panel2);color:var(--fg)}
+.nav-item.active{background:var(--panel2);color:var(--fg)}
+.nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--accent);border-radius:0 3px 3px 0}
+.nav-icon{width:16px;text-align:center;font-size:14px}
+.nav-badge{margin-left:auto;background:var(--accent);color:#000;font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;font-family:var(--font-mono)}
+
+/* SB FOOTER */
+.sb-footer{padding:14px 14px;border-top:1px solid var(--line)}
+.sb-user{display:flex;align-items:center;gap:10px}
+.sb-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#d97706);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#000;font-family:var(--font-display);flex-shrink:0}
+.sb-name{font-size:13px;font-weight:600;font-family:var(--font-display)}
+.sb-role{font-size:11px;color:var(--accent);font-family:var(--font-mono)}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.topbar{padding:16px 28px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--panel);position:sticky;top:0;z-index:10}
+.page-title{font-family:var(--font-display);font-size:20px;font-weight:700;letter-spacing:-.3px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.btn{padding:8px 16px;border-radius:7px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s;font-family:var(--font-body)}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{filter:brightness(1.1)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.btn-ghost:hover{color:var(--fg);border-color:var(--muted)}
+.btn-sm{padding:5px 11px;font-size:12px;border-radius:6px}
+.btn-danger{background:#7f1d1d;color:#fca5a5}
+.btn-green{background:#1B3A2A;color:#A7DDB6}
+
+.content{padding:24px 28px;flex:1}
+
+/* ── CARDS ── */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);padding:20px}
+.card-title{font-family:var(--font-display);font-weight:700;font-size:15px;margin-bottom:16px;letter-spacing:-.2px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--rad);padding:18px}
+.stat-val{font-family:var(--font-display);font-size:28px;font-weight:700;margin-bottom:4px}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-family:var(--font-mono)}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:6px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:8px 12px;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--line);font-family:var(--font-mono)}
+td{padding:11px 12px;border-bottom:1px solid var(--line);font-size:13px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--panel2)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;font-family:var(--font-mono)}
+.badge-green{background:#1B3A2A;color:#A7DDB6}
+.badge-amber{background:#78350f;color:#fcd34d}
+.badge-red{background:#7f1d1d;color:#fca5a5}
+.badge-blue{background:#1e3a5f;color:#93c5fd}
+.badge-gray{background:#27272a;color:#a1a1aa}
+
+/* PAGES */
+.page{display:none}
+.page.active{display:block}
+
+/* SEAT METERS */
+.seat-meter-wrap{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.seat-meter{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:14px}
+.meter-label{font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
+.meter-bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.meter-fill{height:100%;border-radius:3px;background:var(--lime);transition:width .3s}
+.meter-fill.warn{background:var(--accent)}
+.meter-fill.full{background:var(--red)}
+.meter-nums{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:var(--font-mono)}
+.meter-nums span:first-child{color:var(--fg);font-weight:600}
+
+/* DAY TOGGLES */
+.day-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.day-btn{padding:6px 12px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-mono);transition:all .15s}
+.day-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+
+/* SESSION TYPE + INSTRUMENT TAGS */
+.tag-btn{padding:5px 13px;border-radius:20px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-mono);transition:all .15s;letter-spacing:.04em}
+.tag-btn.active{background:rgba(232,148,111,.15);color:var(--warm);border-color:var(--warm)}
+.inst-ref-tag{padding:3px 10px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);font-size:11px;font-family:var(--font-mono);font-weight:600}
+.inst-ref-tag.gold{border-color:rgba(255,200,80,.3);color:#ffc850;background:rgba(255,200,80,.07)}
+
+/* BROADCAST */
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{padding:5px 12px;border-radius:20px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:12px;cursor:pointer;font-family:var(--font-body);transition:all .15s}
+.chip.selected{background:var(--accent);color:#000;border-color:var(--accent)}
+textarea.msg-box{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:12px;color:var(--fg);font-family:var(--font-body);font-size:13px;resize:vertical;min-height:100px;outline:none}
+textarea.msg-box:focus{border-color:var(--muted)}
+
+/* HISTORY */
+.hist-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.hist-item:last-child{border-bottom:none}
+.hist-icon{width:32px;height:32px;border-radius:7px;background:var(--panel2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.hist-body{flex:1}
+.hist-type{font-size:11px;font-weight:600;font-family:var(--font-mono);color:var(--accent);text-transform:uppercase;margin-bottom:2px}
+.hist-text{font-size:13px;line-height:1.4}
+.hist-time{font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-top:2px}
+
+/* LOYALTY OVERRIDE */
+.loyalty-override-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.loyalty-override-row:last-child{border-bottom:none}
+.lo-info{flex:1}
+.lo-name{font-size:13px;font-weight:600}
+.lo-detail{font-size:11px;color:var(--muted);font-family:var(--font-mono);margin-top:2px}
+.week-input{width:64px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:5px 8px;color:var(--fg);font-family:var(--font-mono);font-size:12px;text-align:center;outline:none}
+.week-preview{font-size:12px;color:var(--lime);font-family:var(--font-mono);font-weight:600;min-width:60px}
+
+/* TOAST */
+#toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);
+  background:var(--panel);border:1px solid var(--line);border-radius:9px;
+  padding:11px 20px;font-size:13px;font-weight:500;font-family:var(--font-body);
+  color:var(--fg);z-index:9999;opacity:0;transition:all .3s;white-space:nowrap;
+  box-shadow:0 8px 32px rgba(0,0,0,.5)
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* INPUT */
+.input-group{margin-bottom:14px}
+.input-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;font-family:var(--font-mono);display:block}
+input.field{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:9px 12px;color:var(--fg);font-size:13px;font-family:var(--font-body);outline:none}
+input.field:focus{border-color:var(--muted)}
+select.field{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:9px 12px;color:var(--fg);font-size:13px;font-family:var(--font-body);outline:none;cursor:pointer}
+
+/* SECTION DIVIDER */
+.section-gap{height:24px}
+.section-title{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px}
+
+/* ACTIONS ROW */
+.actions-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* FILE DROP */
+.file-drop{border:2px dashed var(--line);border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:border-color .15s;color:var(--muted);font-size:13px;margin-bottom:14px}
+.file-drop:hover{border-color:var(--muted)}
+.file-drop.drag-over{border-color:var(--accent)}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+
+@media(max-width:768px){
+  .sb{position:fixed;left:-100%;top:0;height:100%;z-index:200;transition:left .25s}
+  .sb.open{left:0}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:199}
+  .overlay.open{display:block}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .seat-meter-wrap{grid-template-columns:1fr}
+  .content{padding:16px}
+}
+</style>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" crossorigin="anonymous" onerror="window.WMSUPA_FAIL=1"></script>
+<script src="cloud.js"></script>
+<script src="auth.js"></script>
+<script>try{var _u=WMAuth.user();if(!_u||_u.role!=='admin')document.documentElement.style.visibility='hidden';}catch(e){}</script>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sb" id="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">WINGMAN<span>.</span></div>
+    <div class="sb-tagline">@MarioVsNQ // ADMIN</div>
+  </div>
+
+  <!-- ONLINE/OFFLINE MASTER TOGGLE -->
+  <div class="status-toggle-wrap">
+    <button id="status-btn" class="online" onclick="toggleOnlineStatus()">
+      <span id="status-dot"></span>
+      <span id="status-label">ONLINE — Members Can See You</span>
+    </button>
+    <div class="status-sub" id="status-sub">Set offline to pause alerts to members</div>
+  </div>
+
+  <!-- LIVE SESSION STRIP -->
+  <div class="live-strip">
+    <div class="live-row">
+      <span class="live-label">Live Session</span>
+      <button id="live-toggle-btn" class="btn btn-sm" onclick="toggleLive()">Start</button>
+    </div>
+    <div id="session-timer" style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">Not live</div>
+  </div>
+
+  <nav class="sb-nav">
+    <div class="nav-label">Manage</div>
+    <div class="nav-item active" onclick="showPage('roster')">
+      <span class="nav-icon">👥</span> Roster
+      <span class="nav-badge" id="member-count-badge">0</span>
+    </div>
+    <div class="nav-item" onclick="showPage('sessions')">
+      <span class="nav-icon">📅</span> Sessions
+    </div>
+    <div class="nav-item" onclick="showPage('seats')">
+      <span class="nav-icon">🪑</span> Seat Control
+    </div>
+    <div class="nav-item" onclick="showPage('broadcast')">
+      <span class="nav-icon">📣</span> Broadcast
+    </div>
+    <div class="nav-item" onclick="showPage('loyalty')">
+      <span class="nav-icon">⭐</span> Loyalty
+    </div>
+    <div class="nav-label" style="margin-top:14px">Operate</div>
+    <div class="nav-item" onclick="showPage('files')">
+      <span class="nav-icon">📁</span> Files
+    </div>
+    <div class="nav-item" onclick="showPage('inbox')">
+      <span class="nav-icon">📥</span> Inbox
+      <span class="nav-badge" id="inbox-badge" style="display:none">0</span>
+    </div>
+    <div class="nav-item" onclick="showPage('settings')">
+      <span class="nav-icon">⚙️</span> Settings
+    </div>
+  </nav>
+
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-avatar">M</div>
+      <div style="min-width:0;flex:1">
+        <div class="sb-name" id="sb-name">Mario</div>
+        <div class="sb-role">Trade Room Host</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="doSignOut()" style="font-size:11px;padding:4px 8px">Sign out</button>
+    </div>
+  </div>
+</aside>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="btn btn-ghost btn-sm" onclick="openSidebar()" style="display:none" id="menu-btn">☰</button>
+      <span class="page-title" id="page-title">Roster</span>
+    </div>
+    <div class="topbar-right">
+      <span id="topbar-status" style="font-size:12px;font-family:var(--font-mono);color:var(--green);font-weight:600">● ONLINE</span>
+      <button class="btn btn-primary btn-sm" onclick="exportCSV()">Export CSV</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══ ROSTER ══ -->
+    <div class="page active" id="page-roster">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-val" id="s-active">0</div>
+          <div class="stat-label">Active Members</div>
+          <div class="stat-sub" id="s-active-sub">of 12 seats</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="s-seats">12</div>
+          <div class="stat-label">Seats Available</div>
+          <div class="stat-sub">Day pass slots separate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="s-revenue">$0</div>
+          <div class="stat-label">Weekly Revenue</div>
+          <div class="stat-sub">From weekly members</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="s-pts">0</div>
+          <div class="stat-label">Points Issued</div>
+          <div class="stat-sub">Across all members</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <div class="card-title" style="margin-bottom:0">Member Roster</div>
+          <div class="actions-row">
+            <button class="btn btn-primary btn-sm" onclick="openAddModal()">+ Add Member</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Week #</th>
+                <th>Rate</th>
+                <th>Points</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="roster-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADD MEMBER FORM (hidden) -->
+      <div id="add-modal" style="display:none;margin-top:20px">
+        <div class="card">
+          <div class="card-title">Add New Member</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="input-group">
+              <label class="input-label">Name</label>
+              <input id="new-name" class="field" placeholder="Full name" type="text">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Discord Handle</label>
+              <input id="new-discord" class="field" placeholder="@handle" type="text">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Week # (loyalty)</label>
+              <input id="new-week" class="field" type="number" value="1" min="1">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Status</label>
+              <select id="new-status" class="field">
+                <option value="active">Active</option>
+                <option value="paused">Paused</option>
+                <option value="trial">Trial</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions-row" style="margin-top:4px">
+            <button class="btn btn-primary" onclick="addMember()">Save Member</button>
+            <button class="btn btn-ghost" onclick="closeAddModal()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SESSIONS ══ -->
+    <div class="page" id="page-sessions">
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Schedule This Week's Sessions</div>
+        <div class="day-grid" id="day-grid">
+          <button class="day-btn active" onclick="toggleDay(this,'Mon')">Mon</button>
+          <button class="day-btn active" onclick="toggleDay(this,'Tue')">Tue</button>
+          <button class="day-btn active" onclick="toggleDay(this,'Wed')">Wed</button>
+          <button class="day-btn active" onclick="toggleDay(this,'Thu')">Thu</button>
+          <button class="day-btn" onclick="toggleDay(this,'Fri')">Fri</button>
+          <button class="day-btn" onclick="toggleDay(this,'Sun')" title="Sunday game plan">Sun</button>
+        </div>
+
+        <!-- Session Type -->
+        <div class="input-group" style="margin-top:16px">
+          <label class="input-label">Session Type</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap" id="sess-type-btns">
+            <button class="tag-btn" onclick="selectSessType(this,'london')">London</button>
+            <button class="tag-btn" onclick="selectSessType(this,'premarket')">Pre-Market</button>
+            <button class="tag-btn active" onclick="selectSessType(this,'nyopen')">NY Open</button>
+            <button class="tag-btn" onclick="selectSessType(this,'recap')">Recap</button>
+            <button class="tag-btn" onclick="selectSessType(this,'custom')">Custom</button>
+          </div>
+        </div>
+
+        <!-- Instruments -->
+        <div class="input-group" style="margin-top:14px">
+          <label class="input-label">Instruments <span style="color:var(--muted);font-weight:400">(select all that apply)</span></label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap" id="inst-btns">
+            <button class="tag-btn active" onclick="toggleInst(this,'NQ')">NQ</button>
+            <button class="tag-btn" onclick="toggleInst(this,'MNQ')">MNQ</button>
+            <button class="tag-btn" onclick="toggleInst(this,'ES')">ES</button>
+            <button class="tag-btn" onclick="toggleInst(this,'MES')">MES</button>
+            <button class="tag-btn" onclick="toggleInst(this,'GC')">GC</button>
+            <button class="tag-btn" onclick="toggleInst(this,'MGC')">MGC</button>
+            <button class="tag-btn" onclick="toggleAllInst(this)">All</button>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="input-group">
+            <label class="input-label">Start Time (ET)</label>
+            <input id="sess-start" class="field" type="time" value="09:30">
+          </div>
+          <div class="input-group">
+            <label class="input-label">End Time (ET)</label>
+            <input id="sess-end" class="field" type="time" value="12:00">
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Session Notes</label>
+          <textarea class="msg-box" id="sess-notes" placeholder="What to expect, market conditions, focus area…" style="min-height:70px"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="saveSchedule()">Save Schedule</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Next Week Preview</div>
+        <div class="day-grid" id="next-day-grid">
+          <button class="day-btn active" onclick="toggleNextDay(this,'Mon')">Mon</button>
+          <button class="day-btn active" onclick="toggleNextDay(this,'Tue')">Tue</button>
+          <button class="day-btn active" onclick="toggleNextDay(this,'Wed')">Wed</button>
+          <button class="day-btn active" onclick="toggleNextDay(this,'Thu')">Thu</button>
+          <button class="day-btn" onclick="toggleNextDay(this,'Fri')">Fri</button>
+          <button class="day-btn" onclick="toggleNextDay(this,'Sun')" title="Sunday game plan">Sun</button>
+        </div>
+        <div style="margin-top:12px">
+          <div class="input-group">
+            <label class="input-label">Teaser Note for Members</label>
+            <textarea class="msg-box" id="next-notes" placeholder="What's coming next week…" style="min-height:60px"></textarea>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="saveNextWeek()">Save Preview</button>
+        </div>
+      </div>
+
+      <!-- Session Guide Reference -->
+      <div class="card" style="border-color:rgba(232,148,111,.18)">
+        <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="toggleGuide()">
+          <div class="card-title" style="margin-bottom:0">📖 Session Guide</div>
+          <span style="font-family:var(--font-mono);font-size:11px;color:var(--muted)" id="guide-toggle-lbl">show ▾</span>
+        </div>
+        <div id="session-guide" style="display:none;margin-top:16px">
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Reference for picking instruments & times. Fully flexible — use what fits your day.</p>
+          <div style="display:grid;gap:10px">
+            <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
+              <div style="font-family:var(--font-mono);font-size:11px;color:var(--warm);letter-spacing:.08em;margin-bottom:6px">LONDON SESSION</div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px">~6:00 – 9:30 AM ET</div>
+              <div style="font-size:12px;color:var(--muted)">GC / MGC are strongest here. European banks move gold. NQ is quieter but watching pre-market levels.</div>
+              <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+                <span class="inst-ref-tag gold">GC</span><span class="inst-ref-tag gold">MGC</span>
+              </div>
+            </div>
+            <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
+              <div style="font-family:var(--font-mono);font-size:11px;color:var(--warm);letter-spacing:.08em;margin-bottom:6px">PRE-MARKET</div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px">8:00 – 9:30 AM ET</div>
+              <div style="font-size:12px;color:var(--muted)">Game plan time. Levels set, bias decided. Futures active on all instruments. Good for the game plan session.</div>
+              <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+                <span class="inst-ref-tag">NQ</span><span class="inst-ref-tag">ES</span><span class="inst-ref-tag">GC</span>
+              </div>
+            </div>
+            <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
+              <div style="font-family:var(--font-mono);font-size:11px;color:var(--warm);letter-spacing:.08em;margin-bottom:6px">NY OPEN — PRIMARY SESSION</div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px">9:30 – 11:30 AM ET</div>
+              <div style="font-size:12px;color:var(--muted)">Highest volume, cleanest setups. NQ and ES are at their best here. Micros great for members sizing down.</div>
+              <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+                <span class="inst-ref-tag">NQ</span><span class="inst-ref-tag">MNQ</span><span class="inst-ref-tag">ES</span><span class="inst-ref-tag">MES</span>
+              </div>
+            </div>
+            <div style="background:var(--bg);border-radius:10px;padding:12px 14px">
+              <div style="font-family:var(--font-mono);font-size:11px;color:var(--warm);letter-spacing:.08em;margin-bottom:6px">FRIDAY RECAP</div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:4px">Flexible time</div>
+              <div style="font-size:12px;color:var(--muted)">Review the week. What worked, what didn't. Good for the method more than live trades.</div>
+            </div>
+          </div>
+          <p style="font-size:11px;color:var(--muted);margin-top:12px;font-family:var(--font-mono)">This is a reminder only — every session selector above is fully open.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SEAT CONTROL ══ -->
+    <div class="page" id="page-seats">
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Weekly Member Seats</div>
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+          <button class="btn btn-ghost btn-sm" onclick="adjustSeats(-1)">−</button>
+          <div style="text-align:center">
+            <div style="font-family:var(--font-display);font-size:32px;font-weight:700" id="seat-count-display">12</div>
+            <div style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">MAX SEATS</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="adjustSeats(1)">+</button>
+        </div>
+        <div class="meter-bar" style="height:10px">
+          <div class="meter-fill" id="seat-fill" style="width:0%"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--muted);font-family:var(--font-mono)">
+          <span id="seat-used-label">0 filled</span>
+          <span id="seat-avail-label">12 available</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Day Pass Availability</div>
+        <div class="seat-meter-wrap" id="day-meters"></div>
+        <div class="section-gap" style="height:16px"></div>
+        <div style="font-size:12px;color:var(--muted)">Tap a day to toggle day pass availability. Day pass: $99/session.</div>
+      </div>
+    </div>
+
+    <!-- ══ BROADCAST ══ -->
+    <div class="page" id="page-broadcast">
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Send Message to Members</div>
+        <div class="section-title">Audience</div>
+        <div class="chip-row" id="audience-chips">
+          <button class="chip selected" onclick="toggleChip(this,'all')">All Members</button>
+          <button class="chip" onclick="toggleChip(this,'weekly')">Weekly Only</button>
+          <button class="chip" onclick="toggleChip(this,'daypass')">Day Pass</button>
+          <button class="chip" onclick="toggleChip(this,'week4plus')">Week 4+ (Points)</button>
+        </div>
+
+        <div class="section-title">Type</div>
+        <div class="chip-row" id="type-chips">
+          <button class="chip selected" onclick="toggleTypeChip(this,'update')">📋 Update</button>
+          <button class="chip" onclick="toggleTypeChip(this,'alert')">🚨 Alert</button>
+          <button class="chip" onclick="toggleTypeChip(this,'trade')">📊 Trade Call</button>
+          <button class="chip" onclick="toggleTypeChip(this,'session')">🎯 Session</button>
+        </div>
+
+        <div class="section-title">Message</div>
+        <textarea class="msg-box" id="broadcast-msg" placeholder="Type your message to members…"></textarea>
+
+        <div class="file-drop" id="file-drop" onclick="document.getElementById('file-input').click()">
+          📎 Attach file or image (optional)
+          <input type="file" id="file-input" style="display:none" onchange="handleFileAttach(this)">
+        </div>
+        <div id="attached-file" style="display:none;font-size:12px;color:var(--lime);font-family:var(--font-mono);margin-bottom:14px"></div>
+
+        <div class="actions-row">
+          <button class="btn btn-primary" onclick="sendBroadcast()">Send Message</button>
+          <button class="btn btn-ghost" onclick="clearBroadcast()">Clear</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Sent History</div>
+        <div id="sent-history">
+          <div style="color:var(--muted);font-size:13px;text-align:center;padding:20px 0">No messages sent yet</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ LOYALTY ══ -->
+    <div class="page" id="page-loyalty">
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Loyalty Rate Model</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Week Range</th><th>Rate</th><th>Discount</th><th>Points/Week</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Week 1</td><td style="color:var(--fg);font-family:var(--font-mono)">$200</td><td><span class="badge badge-gray">0%</span></td><td>—</td><td style="color:var(--muted)">Full rate</td></tr>
+              <tr><td>Week 2</td><td style="color:var(--fg);font-family:var(--font-mono)">$180</td><td><span class="badge badge-blue">10%</span></td><td>—</td><td style="color:var(--muted)">Loyal discount</td></tr>
+              <tr><td>Week 3</td><td style="color:var(--fg);font-family:var(--font-mono)">$160</td><td><span class="badge badge-amber">20%</span></td><td>—</td><td style="color:var(--muted)">Loyal discount</td></tr>
+              <tr><td>Week 4+</td><td style="color:var(--lime);font-family:var(--font-mono);font-weight:700">$140</td><td><span class="badge badge-green">30% CAP</span></td><td style="color:var(--lime);font-family:var(--font-mono);font-weight:600">+20 pts</td><td style="color:var(--muted)">Locked — earns points</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Points Store</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Item</th><th>Cost</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td>📘 Ebook</td><td style="color:var(--lime);font-family:var(--font-mono);font-weight:600">20 pts</td><td style="color:var(--muted)">Trading guide / strategy ebook</td></tr>
+              <tr><td>📈 NQ Indicator</td><td style="color:var(--lime);font-family:var(--font-mono);font-weight:600">80 pts</td><td style="color:var(--muted)">Custom indicator when offered</td></tr>
+              <tr><td>🔄 Free Renewal</td><td style="color:var(--lime);font-family:var(--font-mono);font-weight:600">100 pts</td><td style="color:var(--muted)">One week free at current rate</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Member Loyalty Override</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:16px">Manually adjust a member's week number to change their loyalty tier and rate.</div>
+        <div id="loyalty-list"></div>
+      </div>
+    </div>
+
+    <!-- ══ FILES ══ -->
+    <div class="page" id="page-files">
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Push a file to members</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Shows up instantly in every member's Downloads tab. Files up to 1.5 MB are stored directly; for anything bigger paste a share link instead.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="input-group"><label class="input-label">Title</label><input id="file-label" class="field" placeholder="Weekly game plan" type="text" maxlength="80"></div>
+          <div class="input-group"><label class="input-label">Description</label><input id="file-desc" class="field" placeholder="NQ levels + bias" type="text" maxlength="140"></div>
+          <div class="input-group"><label class="input-label">File</label><input id="file-pick" class="field" type="file"></div>
+          <div class="input-group"><label class="input-label">…or share link</label><input id="file-url" class="field" placeholder="https://" type="url"></div>
+        </div>
+        <div class="actions-row"><button class="btn btn-primary" onclick="pushFile()">Push to members</button></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Sent files</div>
+        <div id="files-list"></div>
+      </div>
+    </div>
+
+    <!-- ══ INBOX ══ -->
+    <div class="page" id="page-inbox">
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">Seat requests</div>
+        <div id="seat-requests"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Member requests</div>
+        <div id="member-requests"></div>
+      </div>
+    </div>
+
+    <!-- ══ SETTINGS ══ -->
+    <div class="page" id="page-settings">
+      <div class="card" style="max-width:560px">
+        <div class="card-title">Links members use</div>
+        <div class="input-group"><label class="input-label">Discord invite URL</label><input id="set-discord" class="field" placeholder="https://discord.gg/…" type="url"></div>
+        <div class="input-group"><label class="input-label">Billing portal URL (Stripe customer portal)</label><input id="set-billing" class="field" placeholder="https://billing.stripe.com/…" type="url"></div>
+        <div class="actions-row"><button class="btn btn-primary" onclick="saveSettings()">Save links</button></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<div id="toast"></div>
+
+<script>
+// ── STATE ──
+var MEMBERS = [];
+try { var saved = localStorage.getItem('wm_members'); if (saved) MEMBERS = JSON.parse(saved); } catch(e) {}
+
+var isOnline = true;
+try { var st = localStorage.getItem('mario_status'); if (st !== null) isOnline = (st !== 'offline'); } catch(e) {}
+
+var isLive = false;
+var liveStart = null;
+var liveTimer = null;
+
+var TOTAL_SEATS = 12;
+try { var ss = localStorage.getItem('wm_seats'); if (ss) TOTAL_SEATS = parseInt(ss)||12; } catch(e) {}
+
+var DAY_SLOTS = {Mon:3,Tue:3,Wed:3,Thu:3,Fri:3};
+try { var ds = localStorage.getItem('wm_dayslots'); if (ds) DAY_SLOTS = JSON.parse(ds); } catch(e) {}
+
+var DAYS_THIS = ['Mon','Tue','Wed','Thu'];
+try { var dt = localStorage.getItem('wm_days_this'); if (dt) DAYS_THIS = JSON.parse(dt); } catch(e) {}
+
+var DAYS_NEXT = ['Mon','Tue','Wed','Thu'];
+try { var dn = localStorage.getItem('wm_days_next'); if (dn) DAYS_NEXT = JSON.parse(dn); } catch(e) {}
+
+var sentHistory = [];
+try { var sh = localStorage.getItem('wm_sent_history'); if (sh) sentHistory = JSON.parse(sh); } catch(e) {}
+
+var selectedAudience = 'all';
+var selectedType = 'update';
+
+// ── INIT ──
+function init() {
+  updateOnlineUI();
+  updateStats();
+  renderRoster();
+  renderSeatMeter();
+  renderDayMeters();
+  renderLoyalty();
+  renderSentHistory();
+  syncDayBtns('day-grid', DAYS_THIS);
+  syncDayBtns('next-day-grid', DAYS_NEXT);
+  try { document.getElementById('seat-count-display').textContent = TOTAL_SEATS; } catch(e) {}
+  updateMemberCountBadge();
+}
+
+// ── ONLINE/OFFLINE ──
+function toggleOnlineStatus() {
+  isOnline = !isOnline;
+  try { localStorage.setItem('mario_status', isOnline ? 'live' : 'offline'); } catch(e) {}
+  updateOnlineUI();
+  showToast(isOnline ? '✅ Online — members notified you\'re live' : '⏸ Offline — members see you as away');
+}
+function updateOnlineUI() {
+  var btn = document.getElementById('status-btn');
+  var label = document.getElementById('status-label');
+  var sub = document.getElementById('status-sub');
+  var topbar = document.getElementById('topbar-status');
+  if (isOnline) {
+    btn.className = 'online';
+    label.textContent = 'ONLINE — Members Can See You';
+    sub.textContent = 'Click to go offline / pause alerts';
+    topbar.style.color = 'var(--green)';
+    topbar.textContent = '● ONLINE';
+  } else {
+    btn.className = 'offline';
+    label.textContent = 'OFFLINE — You Are Away';
+    sub.textContent = 'Click to go online and alert members';
+    topbar.style.color = 'var(--muted)';
+    topbar.textContent = '○ OFFLINE';
+  }
+}
+
+// ── LIVE SESSION ──
+function toggleLive() {
+  isLive = !isLive;
+  var btn = document.getElementById('live-toggle-btn');
+  if (isLive) {
+    liveStart = Date.now();
+    btn.textContent = 'End';
+    btn.classList.add('active');
+    liveTimer = setInterval(tickTimer, 1000);
+    tickTimer();
+    showToast('🔴 Session started — members see you live');
+  } else {
+    clearInterval(liveTimer);
+    liveTimer = null;
+    btn.textContent = 'Start';
+    btn.classList.remove('active');
+    document.getElementById('session-timer').textContent = 'Not live';
+    showToast('Session ended');
+  }
+}
+function tickTimer() {
+  if (!liveStart) return;
+  var diff = Math.floor((Date.now() - liveStart) / 1000);
+  var h = Math.floor(diff/3600), m = Math.floor((diff%3600)/60), s = diff%60;
+  var str = (h > 0 ? h + 'h ' : '') + pad(m) + ':' + pad(s);
+  document.getElementById('session-timer').textContent = '🔴 Live · ' + str;
+}
+function pad(n){return n<10?'0'+n:n}
+
+// ── LOYALTY CALC ──
+function rateForWeek(w) {
+  w = parseInt(w)||1;
+  if (w <= 0) return 99;
+  if (w === 1) return 200;
+  if (w === 2) return 180;
+  if (w === 3) return 160;
+  return 140; // 30% cap — never goes lower
+}
+function pointsForWeek(w) {
+  return 20; // every renewal earns 20 pts
+}
+
+// ── MEMBERS ──
+function saveMembers() {
+  try { localStorage.setItem('wm_members', JSON.stringify(MEMBERS)); } catch(e) {}
+}
+
+function updateStats() {
+  var active = MEMBERS.filter(m=>m.status==='active');
+  var revenue = active.reduce(function(acc,m){return acc+rateForWeek(m.week)},0);
+  var pts = MEMBERS.reduce(function(acc,m){return acc+(m.points||0)},0);
+  try {
+    document.getElementById('s-active').textContent = active.length;
+    document.getElementById('s-active-sub').textContent = 'of '+TOTAL_SEATS+' seats';
+    document.getElementById('s-seats').textContent = Math.max(0, TOTAL_SEATS - active.length);
+    document.getElementById('s-revenue').textContent = '$'+revenue.toLocaleString();
+    document.getElementById('s-pts').textContent = pts;
+  } catch(e) {}
+}
+
+function updateMemberCountBadge() {
+  try { document.getElementById('member-count-badge').textContent = MEMBERS.length; } catch(e) {}
+}
+
+function renderRoster() {
+  var tbody = document.getElementById('roster-tbody');
+  if (!tbody) return;
+  if (MEMBERS.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">No members yet — add your first member</td></tr>';
+    return;
+  }
+  tbody.innerHTML = MEMBERS.map(function(m, idx) {
+    var rate = rateForWeek(m.week);
+    var pts = m.points || 0;
+    var statusBadge = m.status === 'active' ? '<span class="badge badge-green">Active</span>'
+      : m.status === 'paused' ? '<span class="badge badge-amber">Paused</span>'
+      : '<span class="badge badge-blue">Trial</span>';
+    return '<tr>'+
+      '<td><div style="font-weight:600">'+esc(m.name)+'</div><div style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">'+esc(m.discord||'—')+'</div></td>'+
+      '<td style="font-family:var(--font-mono)">Wk '+m.week+(m.week>=4?' <span style="color:var(--lime);font-size:10px">★</span>':'')+'</td>'+
+      '<td style="font-family:var(--font-mono);color:var(--lime)">$'+rate+'/wk</td>'+
+      '<td style="font-family:var(--font-mono);color:var(--accent)">'+pts+' pts</td>'+
+      '<td>'+statusBadge+'</td>'+
+      '<td>'+
+        '<div style="display:flex;gap:6px">'+
+          '<button class="btn btn-ghost btn-sm" onclick="cycleMemberStatus('+idx+')">Toggle</button>'+
+          '<button class="btn btn-ghost btn-sm" onclick="removeMember('+idx+')" style="color:var(--red);border-color:var(--red)">Remove</button>'+
+        '</div>'+
+      '</td>'+
+    '</tr>';
+  }).join('');
+}
+
+function cycleMemberStatus(idx) {
+  var order = ['active','paused','trial'];
+  var cur = MEMBERS[idx].status || 'active';
+  MEMBERS[idx].status = order[(order.indexOf(cur)+1)%order.length];
+  saveMembers(); renderRoster(); updateStats();
+  showToast('Status updated: '+MEMBERS[idx].name+' → '+MEMBERS[idx].status);
+}
+
+function removeMember(idx) {
+  var name = MEMBERS[idx].name;
+  MEMBERS.splice(idx,1);
+  saveMembers(); renderRoster(); renderLoyalty(); updateStats(); updateMemberCountBadge();
+  showToast('Removed '+name);
+}
+
+function openAddModal() {
+  document.getElementById('add-modal').style.display='block';
+}
+function closeAddModal() {
+  document.getElementById('add-modal').style.display='none';
+  document.getElementById('new-name').value='';
+  document.getElementById('new-discord').value='';
+  document.getElementById('new-week').value='1';
+  document.getElementById('new-status').value='active';
+}
+function addMember() {
+  var name = document.getElementById('new-name').value.trim();
+  if (!name) { showToast('⚠ Enter a name'); return; }
+  var week = parseInt(document.getElementById('new-week').value)||1;
+  var pts = (week - 1) * 20; // every week earns 20 pts, backfill on entry
+  MEMBERS.push({
+    name: name,
+    discord: document.getElementById('new-discord').value.trim(),
+    week: week,
+    status: document.getElementById('new-status').value,
+    points: pts,
+    joined: new Date().toISOString()
+  });
+  saveMembers(); renderRoster(); renderLoyalty(); updateStats(); updateMemberCountBadge();
+  closeAddModal();
+  showToast('✅ Added '+name);
+}
+
+// ── SESSIONS ──
+function toggleDay(btn, day) {
+  btn.classList.toggle('active');
+  if (btn.classList.contains('active')) {
+    if (DAYS_THIS.indexOf(day) < 0) DAYS_THIS.push(day);
+  } else {
+    DAYS_THIS = DAYS_THIS.filter(function(d){return d!==day});
+  }
+}
+function toggleNextDay(btn, day) {
+  btn.classList.toggle('active');
+  if (btn.classList.contains('active')) {
+    if (DAYS_NEXT.indexOf(day) < 0) DAYS_NEXT.push(day);
+  } else {
+    DAYS_NEXT = DAYS_NEXT.filter(function(d){return d!==day});
+  }
+}
+function syncDayBtns(gridId, arr) {
+  var days = ['Mon','Tue','Wed','Thu','Fri','Sun'];
+  var btns = document.getElementById(gridId).querySelectorAll('.day-btn');
+  btns.forEach(function(btn, i) {
+    if (arr.indexOf(days[i]) >= 0) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+}
+/* ── SESSION TYPE ── */
+var SESS_TYPE = 'nyopen';
+function selectSessType(btn, type) {
+  SESS_TYPE = type;
+  document.querySelectorAll('#sess-type-btns .tag-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+/* ── INSTRUMENTS ── */
+var INSTRUMENTS = ['NQ'];
+function toggleInst(btn, inst) {
+  // deactivate "All" if individual selected
+  var allBtn = document.querySelector('#inst-btns .tag-btn:last-child');
+  allBtn.classList.remove('active');
+  if (INSTRUMENTS[0] === 'All') INSTRUMENTS = [];
+  var idx = INSTRUMENTS.indexOf(inst);
+  if (idx >= 0) { INSTRUMENTS.splice(idx,1); btn.classList.remove('active'); }
+  else { INSTRUMENTS.push(inst); btn.classList.add('active'); }
+  if (INSTRUMENTS.length === 0) { INSTRUMENTS = ['NQ']; document.querySelector('#inst-btns .tag-btn').classList.add('active'); }
+}
+function toggleAllInst(btn) {
+  INSTRUMENTS = ['All'];
+  document.querySelectorAll('#inst-btns .tag-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+/* ── GUIDE TOGGLE ── */
+function toggleGuide() {
+  var el = document.getElementById('session-guide');
+  var lbl = document.getElementById('guide-toggle-lbl');
+  if (el.style.display === 'none') { el.style.display = 'block'; lbl.textContent = 'hide ▴'; }
+  else { el.style.display = 'none'; lbl.textContent = 'show ▾'; }
+}
+
+function _pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+function saveSchedule() {
+  try { localStorage.setItem('wm_days_this', JSON.stringify(DAYS_THIS)); } catch(e) {}
+  var notes = document.getElementById('sess-notes').value.trim();
+  var start = document.getElementById('sess-start').value;
+  var end   = document.getElementById('sess-end').value;
+  var sessTypeLabels = {london:'London', premarket:'Pre-Market', nyopen:'NY Open', recap:'Recap', custom:'Custom'};
+  var label = sessTypeLabels[SESS_TYPE] || SESS_TYPE;
+  // Keep legacy key for backward compat
+  var schedule = {days:DAYS_THIS, start:start, end:end, notes:notes, sessType:SESS_TYPE, sessTypeLabel:label, instruments:INSTRUMENTS};
+  try { localStorage.setItem('wm_schedule', JSON.stringify(schedule)); } catch(e) {}
+
+  // Convert to wm_events dated entries for member calendar
+  var today = new Date();
+  var dow = today.getDay(); // 0=Sun
+  var monday = new Date(today);
+  monday.setDate(today.getDate() - (dow === 0 ? 6 : dow - 1));
+  monday.setHours(0, 0, 0, 0);
+  var dayOffset = {Sun:-1, Mon:0, Tue:1, Wed:2, Thu:3, Fri:4};
+
+  // Collect this week's Mon-Fri dates to clear
+  var weekDates = [];
+  for (var di = -1; di < 5; di++) {
+    var d = new Date(monday); d.setDate(monday.getDate() + di);
+    weekDates.push(d.getFullYear() + '-' + _pad2(d.getMonth()+1) + '-' + _pad2(d.getDate()));
+  }
+
+  var existing;
+  try { existing = JSON.parse(localStorage.getItem('wm_events') || '[]'); } catch(e) { existing = []; }
+  // Remove auto-saved events for this week only (leave manually added ones)
+  existing = existing.filter(function(e) { return weekDates.indexOf(e.date) < 0 || e.id.indexOf('adm_') !== 0; });
+
+  // Add one event per selected day
+  DAYS_THIS.forEach(function(day) {
+    var off = dayOffset[day];
+    if (off === undefined) return;
+    var evtDate = new Date(monday); evtDate.setDate(monday.getDate() + off);
+    var dateStr = evtDate.getFullYear() + '-' + _pad2(evtDate.getMonth()+1) + '-' + _pad2(evtDate.getDate());
+    existing.push({
+      id: 'adm_' + dateStr + '_' + SESS_TYPE,
+      date: dateStr,
+      sessType: SESS_TYPE,
+      sessTypeLabel: label,
+      instruments: INSTRUMENTS.slice(),
+      start: start || '09:30',
+      end: end || '',
+      notes: notes
+    });
+  });
+
+  try { localStorage.setItem('wm_events', JSON.stringify(existing)); } catch(e) {}
+  showToast('✅ Schedule saved — member calendar updated');
+}
+function saveNextWeek() {
+  try { localStorage.setItem('wm_days_next', JSON.stringify(DAYS_NEXT)); } catch(e) {}
+  var notes = document.getElementById('next-notes').value.trim();
+  try { localStorage.setItem('wm_next_week', JSON.stringify({days:DAYS_NEXT,notes})); } catch(e) {}
+  showToast('✅ Next week preview saved');
+}
+
+// ── SEAT CONTROL ──
+function adjustSeats(delta) {
+  var active = MEMBERS.filter(function(m){return m.status==='active'}).length;
+  TOTAL_SEATS = Math.max(active, Math.min(20, TOTAL_SEATS + delta));
+  try { localStorage.setItem('wm_seats', TOTAL_SEATS); } catch(e) {}
+  renderSeatMeter();
+  updateStats();
+}
+function renderSeatMeter() {
+  var active = MEMBERS.filter(function(m){return m.status==='active'}).length;
+  var pct = TOTAL_SEATS > 0 ? Math.round((active/TOTAL_SEATS)*100) : 0;
+  try {
+    document.getElementById('seat-count-display').textContent = TOTAL_SEATS;
+    var fill = document.getElementById('seat-fill');
+    fill.style.width = pct + '%';
+    fill.className = 'meter-fill' + (pct>=100?' full':pct>=75?' warn':'');
+    document.getElementById('seat-used-label').textContent = active + ' filled';
+    document.getElementById('seat-avail-label').textContent = Math.max(0,TOTAL_SEATS-active) + ' available';
+  } catch(e) {}
+}
+function renderDayMeters() {
+  var wrap = document.getElementById('day-meters');
+  if (!wrap) return;
+  var days = ['Mon','Tue','Wed','Thu','Fri'];
+  wrap.innerHTML = days.map(function(d){
+    var max = DAY_SLOTS[d]||3;
+    var used = 0; // in production, would track actual day pass bookings
+    var avail = max - used;
+    var pct = max > 0 ? Math.round((used/max)*100) : 0;
+    var active = DAYS_THIS.indexOf(d) >= 0;
+    return '<div class="seat-meter" style="opacity:'+(active?1:.4)+'">'+
+      '<div class="meter-label">'+d+' Day Pass <span style="float:right;cursor:pointer;font-size:10px;color:var(--accent)" onclick="editDaySlots(\''+d+'\')">edit</span></div>'+
+      '<div class="meter-bar"><div class="meter-fill'+(pct>=100?' full':pct>=75?' warn':'')+'" style="width:'+pct+'%"></div></div>'+
+      '<div class="meter-nums"><span>'+avail+' open</span><span>'+max+' max</span></div>'+
+    '</div>';
+  }).join('');
+}
+function editDaySlots(day) {
+  var cur = DAY_SLOTS[day]||3;
+  var val = prompt('Max day pass slots for '+day+' (current: '+cur+')', cur);
+  if (val !== null) {
+    DAY_SLOTS[day] = parseInt(val)||3;
+    try { localStorage.setItem('wm_dayslots', JSON.stringify(DAY_SLOTS)); } catch(e) {}
+    renderDayMeters();
+    showToast(day+' slots set to '+DAY_SLOTS[day]);
+  }
+}
+
+// ── BROADCAST ──
+function toggleChip(btn, audience) {
+  document.querySelectorAll('#audience-chips .chip').forEach(function(c){c.classList.remove('selected')});
+  btn.classList.add('selected');
+  selectedAudience = audience;
+}
+function toggleTypeChip(btn, type) {
+  document.querySelectorAll('#type-chips .chip').forEach(function(c){c.classList.remove('selected')});
+  btn.classList.add('selected');
+  selectedType = type;
+}
+function handleFileAttach(input) {
+  var f = input.files[0];
+  if (f) {
+    document.getElementById('attached-file').style.display='block';
+    document.getElementById('attached-file').textContent = '📎 '+f.name+' ('+Math.round(f.size/1024)+'KB)';
+  }
+}
+function sendBroadcast() {
+  var msg = document.getElementById('broadcast-msg').value.trim();
+  if (!msg) { showToast('⚠ Write a message first'); return; }
+  var entry = {
+    type: selectedType,
+    audience: selectedAudience,
+    msg: msg,
+    time: new Date().toLocaleString()
+  };
+  sentHistory.unshift(entry);
+  try { localStorage.setItem('wm_sent_history', JSON.stringify(sentHistory.slice(0,50))); } catch(e) {}
+  // Also write to key that members.html reads
+  try { localStorage.setItem('wm_latest_msg', JSON.stringify(entry)); } catch(e) {}
+  clearBroadcast();
+  renderSentHistory();
+  showToast('✅ Message sent to '+selectedAudience.replace('all','all members'));
+}
+function clearBroadcast() {
+  document.getElementById('broadcast-msg').value = '';
+  document.getElementById('attached-file').style.display='none';
+  document.getElementById('file-input').value='';
+}
+function renderSentHistory() {
+  var wrap = document.getElementById('sent-history');
+  if (!wrap) return;
+  if (sentHistory.length === 0) {
+    wrap.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px 0">No messages sent yet</div>';
+    return;
+  }
+  var icons = {update:'📋',alert:'🚨',trade:'📊',session:'🎯'};
+  wrap.innerHTML = sentHistory.slice(0,10).map(function(h){
+    return '<div class="hist-item">'+
+      '<div class="hist-icon">'+(icons[h.type]||'📣')+'</div>'+
+      '<div class="hist-body">'+
+        '<div class="hist-type">'+h.type.toUpperCase()+' → '+h.audience+'</div>'+
+        '<div class="hist-text">'+esc(h.msg)+'</div>'+
+        '<div class="hist-time">'+h.time+'</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+// ── LOYALTY OVERRIDE ──
+function renderLoyalty() {
+  var list = document.getElementById('loyalty-list');
+  if (!list) return;
+  if (MEMBERS.length === 0) {
+    list.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px 0">No members to display</div>';
+    return;
+  }
+  list.innerHTML = MEMBERS.map(function(m, idx) {
+    var rate = rateForWeek(m.week);
+    var pts = m.points || 0;
+    return '<div class="loyalty-override-row">'+
+      '<div class="lo-info">'+
+        '<div class="lo-name">'+esc(m.name)+'</div>'+
+        '<div class="lo-detail">$'+rate+'/wk · '+pts+' pts'+(m.week>=4?' · +20 pts/wk':'')+'</div>'+
+      '</div>'+
+      '<div style="display:flex;align-items:center;gap:8px">'+
+        '<span style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">Wk</span>'+
+        '<input class="week-input" type="number" min="1" max="52" value="'+m.week+'" id="week-inp-'+idx+'" oninput="previewRate('+idx+')">'+
+        '<span class="week-preview" id="week-prev-'+idx+'">$'+rate+'/wk</span>'+
+        '<button class="btn btn-primary btn-sm" onclick="saveWeek('+idx+')">Save</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+function previewRate(idx) {
+  var inp = document.getElementById('week-inp-'+idx);
+  var prev = document.getElementById('week-prev-'+idx);
+  if (!inp||!prev) return;
+  var w = parseInt(inp.value)||1;
+  prev.textContent = '$'+rateForWeek(w)+'/wk';
+}
+function saveWeek(idx) {
+  var inp = document.getElementById('week-inp-'+idx);
+  if (!inp) return;
+  var w = parseInt(inp.value)||1;
+  MEMBERS[idx].week = w;
+  if (w >= 4) MEMBERS[idx].points = (MEMBERS[idx].points||0); // preserve existing points
+  saveMembers(); renderRoster(); renderLoyalty(); updateStats();
+  showToast('✅ '+MEMBERS[idx].name+' → Week '+w+' ($'+rateForWeek(w)+'/wk)');
+}
+
+// ── EXPORT ──
+function exportCSV() {
+  if (MEMBERS.length === 0) { showToast('No members to export'); return; }
+  var rows = [['Name','Discord','Week','Rate','Points','Status','Joined']];
+  MEMBERS.forEach(function(m){
+    rows.push([m.name, m.discord||'', m.week, '$'+rateForWeek(m.week), m.points||0, m.status, m.joined||'']);
+  });
+  var csv = rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
+  var blob = new Blob([csv],{type:'text/csv'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'wingman-roster-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click(); URL.revokeObjectURL(url);
+  showToast('✅ CSV downloaded');
+}
+
+// ── PAGE NAV ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
+  document.getElementById('page-'+name).classList.add('active');
+  var titles = {roster:'Roster',sessions:'Sessions',seats:'Seat Control',broadcast:'Broadcast',loyalty:'Loyalty',files:'Files',inbox:'Inbox',settings:'Settings'};
+  document.getElementById('page-title').textContent = titles[name]||name;
+  var icons = {roster:'👥',sessions:'📅',seats:'🪑',broadcast:'📣',loyalty:'⭐',files:'📁',inbox:'📥',settings:'⚙️'};
+  document.querySelectorAll('.nav-item').forEach(function(n){
+    if (n.textContent.trim().indexOf(icons[name]) >= 0) n.classList.add('active');
+  });
+  closeSidebar();
+}
+
+// ── SIDEBAR ──
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('overlay').classList.add('open')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
+
+// ── TOAST ──
+var toastTimer;
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){t.classList.remove('show')}, 3000);
+}
+
+// ── UTIL ──
+function esc(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── RESPONSIVE ──
+(function(){
+  function check(){
+    var btn = document.getElementById('menu-btn');
+    if (!btn) return;
+    btn.style.display = window.innerWidth <= 768 ? 'inline-flex' : 'none';
+  }
+  window.addEventListener('resize', check); check();
+})();
+
+// ── FILE DROP ──
+(function(){
+  var drop = document.getElementById('file-drop');
+  if (!drop) return;
+  drop.addEventListener('dragover',function(e){e.preventDefault();drop.classList.add('drag-over')});
+  drop.addEventListener('dragleave',function(){drop.classList.remove('drag-over')});
+  drop.addEventListener('drop',function(e){
+    e.preventDefault(); drop.classList.remove('drag-over');
+    var f = e.dataTransfer.files[0];
+    if (f) {
+      document.getElementById('attached-file').style.display='block';
+      document.getElementById('attached-file').textContent = '📎 '+f.name+' ('+Math.round(f.size/1024)+'KB)';
+    }
+  });
+})();
+
+// ── START ──
+init();
+</script>
+
+<script>
+// ══════════ ACCOUNT-AWARE LAYER ══════════
+function lsGet(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e) { return d; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e) { return false; } }
+function doSignOut() { WMAuth.signOut(); location.reload(); }
+function reloadMembers() { MEMBERS = lsGet('wm_members', []); }
+function httpsUrl(v) { try { var u = new URL(v); return u.protocol === 'https:' ? u.href : ''; } catch(e) { return ''; } }
+
+// Roster with pending + request flags
+renderRoster = function() {
+  var tbody = document.getElementById('roster-tbody'); if (!tbody) return;
+  if (!MEMBERS.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">No members yet. Add one, or they appear here when they create an account.</td></tr>'; return; }
+  var cancels = lsGet('wm_requests', []).filter(function(r) { return r.type === 'cancel' && !r.done; }).map(function(r) { return r.email; });
+  tbody.innerHTML = MEMBERS.map(function(m, idx) {
+    var rate = rateForWeek(m.week), pts = m.points || 0;
+    var badge = m.status === 'active' ? '<span class="badge badge-green">Active</span>' : m.status === 'paused' ? '<span class="badge badge-amber">Paused</span>' : m.status === 'pending' ? '<span class="badge badge-red">Pending</span>' : '<span class="badge badge-blue">Trial</span>';
+    if (m.email && cancels.indexOf(m.email) >= 0) badge += ' <span class="badge badge-amber">Cancel req.</span>';
+    var primary = m.status === 'pending' ? '<button class="btn btn-primary btn-sm" onclick="approveMember(' + idx + ')">Approve</button>' : '<button class="btn btn-ghost btn-sm" onclick="cycleMemberStatus(' + idx + ')">Toggle</button>';
+    return '<tr><td><div style="font-weight:600">' + esc(m.name) + '</div><div style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">' + esc(m.discord || m.email || '—') + '</div></td>' +
+      '<td style="font-family:var(--font-mono)">Wk ' + m.week + (m.week >= 4 ? ' <span style="color:var(--lime);font-size:10px">★</span>' : '') + '</td>' +
+      '<td style="font-family:var(--font-mono);color:var(--lime)">$' + rate + '/wk</td><td style="font-family:var(--font-mono);color:var(--accent)">' + pts + ' pts</td><td>' + badge + '</td>' +
+      '<td><div style="display:flex;gap:6px">' + primary + '<button class="btn btn-ghost btn-sm" onclick="removeMember(' + idx + ')" style="color:var(--red);border-color:var(--red)">Remove</button></div></td></tr>';
+  }).join('');
+};
+function approveMember(idx) {
+  var m = MEMBERS[idx]; if (!m) return;
+  var active = MEMBERS.filter(function(x) { return x.status === 'active'; }).length;
+  if (active >= TOTAL_SEATS) { showToast('All ' + TOTAL_SEATS + ' seats are full. Raise the seat count first.'); return; }
+  m.status = 'active'; saveMembers(); renderRoster(); updateStats(); renderInbox();
+  showToast('Approved ' + m.name);
+}
+removeMember = function(idx) {
+  var m = MEMBERS[idx]; if (!m) return;
+  if (!confirm('Remove ' + m.name + ' from the roster?')) return;
+  MEMBERS.splice(idx, 1); saveMembers(); renderRoster(); renderLoyalty(); updateStats(); updateMemberCountBadge(); renderInbox();
+  showToast('Removed ' + m.name);
+};
+
+// Sessions: game plan Sunday-Monday, live sessions Monday-Thursday are the defaults.
+
+// Broadcast with real attachments
+sendBroadcast = function() {
+  var msg = document.getElementById('broadcast-msg').value.trim();
+  if (!msg) { showToast('⚠ Write a message first'); return; }
+  var f = document.getElementById('file-input').files[0];
+  function finish(att) {
+    var entry = { id: 'b' + Date.now(), type: selectedType, audience: selectedAudience, msg: msg, time: new Date().toLocaleString(), attachments: att };
+    sentHistory.unshift(entry);
+    var ok = lsSet('wm_sent_history', sentHistory.slice(0, 50));
+    lsSet('wm_latest_msg', { id: entry.id, type: entry.type, audience: entry.audience, msg: entry.msg, time: entry.time });
+    if (!ok) { sentHistory.shift(); showToast('⚠ Not saved: browser storage is full. Remove old messages or use a smaller file.'); return; }
+    clearBroadcast(); renderSentHistory();
+    showToast('✅ Message sent to ' + selectedAudience.replace('all', 'all members'));
+  }
+  if (!f) return finish([]);
+  if (f.size > 1.5 * 1024 * 1024) { showToast('⚠ File is over 1.5 MB. Use Files → share link instead.'); return; }
+  var r = new FileReader();
+  r.onload = function() { finish([{ name: f.name, size: Math.max(1, Math.round(f.size / 1024)) + ' KB', data: r.result }]); };
+  r.onerror = function() { showToast('⚠ Could not read that file'); };
+  r.readAsDataURL(f);
+};
+
+// Files
+function fileKind(f) { var n = (f.name || '').toLowerCase(); if (/\.pdf$/.test(n)) return 'pdf'; if (/\.(png|jpe?g|gif|webp|svg)$/.test(n)) return 'img'; return 'file'; }
+function pushFile() {
+  var label = document.getElementById('file-label').value.trim(), desc = document.getElementById('file-desc').value.trim();
+  var pick = document.getElementById('file-pick').files[0], url = document.getElementById('file-url').value.trim();
+  if (!label) { showToast('⚠ Give the file a title'); return; }
+  if (!pick && !url) { showToast('⚠ Choose a file or paste a link'); return; }
+  var link = '';
+  if (!pick) { link = httpsUrl(url); if (!link) { showToast('⚠ Link must start with https://'); return; } }
+  function done(entry) {
+    var files = lsGet('wm_files', []); files.push(entry);
+    if (!lsSet('wm_files', files)) { showToast('⚠ Not saved: browser storage is full. Use a share link for big files.'); return; }
+    ['file-label', 'file-desc', 'file-url'].forEach(function(i) { document.getElementById(i).value = ''; });
+    document.getElementById('file-pick').value = ''; renderFiles(); showToast('✅ Pushed to members');
+  }
+  var base = { id: 'f' + Date.now(), date: (function(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);})(new Date()), label: label, desc: desc };
+  if (pick) {
+    if (pick.size > 1.5 * 1024 * 1024) { showToast('⚠ File is over 1.5 MB. Paste a share link instead.'); return; }
+    var r = new FileReader();
+    r.onload = function() { base.name = pick.name; base.type = fileKind(pick); base.size = Math.max(1, Math.round(pick.size / 1024)) + ' KB'; base.data = r.result; done(base); };
+    r.readAsDataURL(pick);
+  } else { base.name = label; base.type = 'file'; base.url = link; done(base); }
+}
+function removeFile(i) {
+  var files = lsGet('wm_files', []); if (!files[i]) return;
+  if (!confirm('Remove "' + (files[i].label || files[i].name) + '" from members?')) return;
+  files.splice(i, 1); lsSet('wm_files', files); renderFiles(); showToast('Removed');
+}
+function renderFiles() {
+  var el = document.getElementById('files-list'); if (!el) return;
+  var files = lsGet('wm_files', []);
+  if (!files.length) { el.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:14px 0">Nothing pushed yet.</div>'; return; }
+  el.innerHTML = files.map(function(f, i) {
+    return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)"><div style="flex:1;min-width:0"><div style="font-weight:600">' + esc(f.label || f.name) + '</div><div style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">' + esc(f.date) + (f.size ? ' · ' + esc(f.size) : '') + (f.url ? ' · link' : '') + '</div></div>' +
+      '<button class="btn btn-ghost btn-sm" onclick="removeFile(' + i + ')" style="color:var(--red);border-color:var(--red)">Remove</button></div>';
+  }).join('');
+}
+
+// Inbox
+function renderInbox() {
+  var pend = MEMBERS.map(function(m, i) { return { m: m, i: i }; }).filter(function(x) { return x.m.status === 'pending'; });
+  var sr = document.getElementById('seat-requests'); if (!sr) return;
+  sr.innerHTML = pend.length ? pend.map(function(x) {
+    return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)"><div style="flex:1;min-width:0"><div style="font-weight:600">' + esc(x.m.name) + '</div><div style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">' + esc(x.m.email || '') + (x.m.discord ? ' · ' + esc(x.m.discord) : '') + '</div></div>' +
+      '<button class="btn btn-primary btn-sm" onclick="approveMember(' + x.i + ')">Approve</button><button class="btn btn-ghost btn-sm" onclick="removeMember(' + x.i + ')" style="color:var(--red);border-color:var(--red)">Decline</button></div>';
+  }).join('') : '<div style="color:var(--muted);font-size:13px;padding:14px 0">No pending seat requests.</div>';
+  var reqs = lsGet('wm_requests', []), mr = document.getElementById('member-requests');
+  mr.innerHTML = reqs.length ? reqs.map(function(r, i) {
+    return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);' + (r.done ? 'opacity:.5' : '') + '"><div style="flex:1;min-width:0"><div style="font-weight:600">' + esc(r.name) + ' <span class="badge ' + (r.type === 'cancel' ? 'badge-amber' : 'badge-blue') + '">' + esc(r.type) + '</span></div><div style="font-size:12px;color:var(--muted)">' + esc(r.detail) + '</div><div style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">' + esc(r.email) + ' · ' + esc(r.time) + '</div></div>' +
+      (r.done ? '' : '<button class="btn btn-ghost btn-sm" onclick="doneRequest(' + i + ')">Mark done</button>') + '</div>';
+  }).join('') : '<div style="color:var(--muted);font-size:13px;padding:14px 0">No requests.</div>';
+  var open = pend.length + reqs.filter(function(r) { return !r.done; }).length, b = document.getElementById('inbox-badge');
+  b.textContent = open; b.style.display = open ? '' : 'none';
+}
+function doneRequest(i) { var r = lsGet('wm_requests', []); if (r[i]) { r[i].done = true; lsSet('wm_requests', r); } renderInbox(); renderRoster(); }
+
+// Settings
+function loadSettings() { var c = lsGet('wm_settings', {}); document.getElementById('set-discord').value = c.discord || ''; document.getElementById('set-billing').value = c.billing || ''; }
+function saveSettings() {
+  var d = document.getElementById('set-discord').value.trim(), b = document.getElementById('set-billing').value.trim();
+  var du = d ? httpsUrl(d) : '', bu = b ? httpsUrl(b) : '';
+  if (d && !du) { showToast('⚠ Discord link must start with https://'); return; }
+  if (b && !bu) { showToast('⚠ Billing link must start with https://'); return; }
+  lsSet('wm_settings', { discord: du, billing: bu }); showToast('✅ Links saved');
+}
+
+window.addEventListener('storage', function(e) { if (e.key === 'wm_members' || e.key === 'wm_requests') { reloadMembers(); renderRoster(); updateStats(); updateMemberCountBadge(); renderInbox(); } });
+
+var CLOUD = !!(window.WMCloud && WMCloud.enabled);
+if (CLOUD) {
+  openAddModal = function() { showToast('Members join by creating an account on the site. Approve them in Inbox.'); };
+  var CLOUD_MAX = 25 * 1024 * 1024;
+  pushFile = function() {
+    var label = document.getElementById('file-label').value.trim(), desc = document.getElementById('file-desc').value.trim();
+    var pick = document.getElementById('file-pick').files[0], url = document.getElementById('file-url').value.trim();
+    if (!label) { showToast('⚠ Give the file a title'); return; }
+    if (!pick && !url) { showToast('⚠ Choose a file or paste a link'); return; }
+    var link = '';
+    if (!pick) { link = httpsUrl(url); if (!link) { showToast('⚠ Link must start with https://'); return; } }
+    var d = new Date(), date = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+    var base = { id: 'f' + Date.now(), date: date, label: label, desc: desc };
+    function add(entry) {
+      var files = lsGet('wm_files', []); files.push(entry); lsSet('wm_files', files);
+      ['file-label', 'file-desc', 'file-url'].forEach(function(i) { document.getElementById(i).value = ''; });
+      document.getElementById('file-pick').value = ''; renderFiles(); showToast('✅ Pushed to members');
+    }
+    if (pick) {
+      if (pick.size > CLOUD_MAX) { showToast('⚠ File is over 25 MB. Paste a share link instead.'); return; }
+      showToast('Uploading…');
+      WMCloud.upload(pick).then(function(r) {
+        if (!r.ok) { showToast('⚠ Upload failed: ' + r.error); return; }
+        base.name = pick.name; base.type = fileKind(pick); base.size = Math.max(1, Math.round(pick.size / 1024)) + ' KB'; base.path = r.path; add(base);
+      });
+    } else { base.name = label; base.type = 'file'; base.url = link; add(base); }
+  };
+  sendBroadcast = function() {
+    var msg = document.getElementById('broadcast-msg').value.trim();
+    if (!msg) { showToast('⚠ Write a message first'); return; }
+    var f = document.getElementById('file-input').files[0];
+    function finish(att) {
+      var entry = { id: 'b' + Date.now(), type: selectedType, audience: selectedAudience, msg: msg, time: new Date().toLocaleString(), attachments: att };
+      sentHistory.unshift(entry); lsSet('wm_sent_history', sentHistory.slice(0, 50));
+      clearBroadcast(); renderSentHistory(); showToast('✅ Message sent to ' + selectedAudience.replace('all', 'all members'));
+    }
+    if (!f) return finish([]);
+    if (f.size > CLOUD_MAX) { showToast('⚠ File is over 25 MB. Use Files → share link instead.'); return; }
+    showToast('Uploading…');
+    WMCloud.upload(f).then(function(r) {
+      if (!r.ok) { showToast('⚠ Upload failed: ' + r.error); return; }
+      finish([{ name: f.name, size: Math.max(1, Math.round(f.size / 1024)) + ' KB', path: r.path }]);
+    });
+  };
+}
+
+function refreshAdmin() {
+  reloadMembers();
+  var seats = parseInt(localStorage.getItem('wm_seats'), 10); if (seats) TOTAL_SEATS = seats;
+  var st = localStorage.getItem('mario_status'); if (st !== null) isOnline = (st !== 'offline');
+  sentHistory = lsGet('wm_sent_history', []);
+  updateOnlineUI(); renderRoster(); updateStats(); updateMemberCountBadge(); renderLoyalty(); renderSeatMeter(); renderSentHistory(); renderFiles(); renderInbox();
+  try { document.getElementById('seat-count-display').textContent = TOTAL_SEATS; } catch (e) {}
+}
+if(!window.WMAuth){document.documentElement.style.visibility='visible';document.body.innerHTML='<p style="padding:40px;font:16px Inter,sans-serif;color:#E6E9E2">auth.js is missing. Upload it to the same folder as this page.</p>';}else WMAuth.guard('admin', function(u) {
+  document.getElementById('sb-name').textContent = u.name;
+  document.getElementById('sb-avatar').textContent = (u.name || 'A').trim()[0].toUpperCase();
+  try { DAY_SLOTS = lsGet('wm_dayslots', DAY_SLOTS); DAYS_THIS = lsGet('wm_days_this', DAYS_THIS); DAYS_NEXT = lsGet('wm_days_next', DAYS_NEXT); } catch (e) {}
+  refreshAdmin(); loadSettings();
+  try { renderDayMeters(); syncDayBtns('day-grid', DAYS_THIS); syncDayBtns('next-day-grid', DAYS_NEXT); } catch (e) {}
+}, refreshAdmin);
+</script>
+</body>
+</html>

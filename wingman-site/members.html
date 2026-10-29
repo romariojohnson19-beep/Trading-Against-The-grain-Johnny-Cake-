@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wingman — Member Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root {
+  --bg: #0E1210;
+  --panel: #151B18;
+  --panel2: #1B221E;
+  --line: #26302B;
+  --fg: #E6E9E2;
+  --muted: #8D978F;
+  --accent: #B9D77A;
+  --accent-dim: rgba(185,215,122,.08);
+  --accent-border: rgba(185,215,122,.18);
+  --warm: #E8946F;
+  --warm-dim: rgba(232,148,111,.08);
+  --warm-border: rgba(232,148,111,.2);
+  --red: #E5675F;
+  --sidebar: 240px;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 110% 50% at 50% -5%, rgba(30,44,35,.7) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 0% 100%, rgba(22,32,26,.45) 0%, transparent 60%);
+  background-attachment: fixed;
+  color: var(--fg);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100svh;
+}
+.sg { font-family: 'Space Grotesk', system-ui, sans-serif; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+.label { font-family: 'JetBrains Mono', monospace; font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* ── Layout ── */
+.shell { display: flex; min-height: 100svh; }
+
+/* ── Sidebar ── */
+.sidebar {
+  width: var(--sidebar);
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column;
+  position: fixed; top: 0; left: 0; bottom: 0;
+  z-index: 50;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  transition: transform .25s cubic-bezier(.22,1,.36,1);
+}
+.sb-top {
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: .7rem;
+}
+.sb-mark {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--accent); display: flex; align-items: center; justify-content: center;
+  flex: none;
+}
+.sb-mark svg { width: 14px; height: 14px; }
+.sb-brand { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: .78rem; letter-spacing: -.01em; line-height: 1.25; }
+.sb-brand span { display: block; color: var(--muted); font-size: .65rem; font-weight: 500; letter-spacing: 0; }
+
+.sb-nav { flex: 1; padding: .8rem 0; overflow-y: auto; }
+.sb-section { padding: .4rem 1rem .2rem; }
+.sb-section-label { font-family: 'JetBrains Mono', monospace; font-size: .52rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: .35rem; }
+.sb-item {
+  display: flex; align-items: center; gap: .65rem;
+  padding: .55rem .8rem; border-radius: 8px; cursor: pointer;
+  font-size: .88rem; color: var(--muted); font-weight: 500;
+  text-decoration: none; margin-bottom: 2px;
+  transition: background .15s, color .15s;
+  -webkit-tap-highlight-color: transparent;
+  border: none; background: none; width: 100%; text-align: left;
+}
+.sb-item:hover { background: var(--line); color: var(--fg); }
+.sb-item.active { background: var(--accent-dim); color: var(--accent); }
+.sb-item svg { width: 16px; height: 16px; flex: none; }
+.sb-badge { margin-left: auto; background: var(--red); color: #fff; font-family: 'JetBrains Mono', monospace; font-size: .52rem; font-weight: 600; border-radius: 100px; padding: 1px 7px; min-width: 18px; text-align: center; }
+
+.sb-online {
+  margin: .5rem .8rem;
+  border-radius: 10px; padding: .6rem .9rem;
+  font-size: .82rem; font-weight: 600;
+  display: flex; align-items: center; gap: .45rem;
+  transition: all .2s;
+}
+.sb-online.live {
+  background: rgba(229,103,95,.08);
+  border: 1px solid rgba(229,103,95,.2);
+  color: var(--red);
+}
+.sb-online.offline {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+.sb-online-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.sb-online.live .sb-online-dot { background: var(--red); animation: blink 1.5s ease-in-out infinite; }
+.sb-online.offline .sb-online-dot { background: var(--muted); }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+
+.sb-user {
+  padding: .8rem 1rem;
+  border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: .7rem;
+}
+.sb-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--accent-dim); border: 1px solid var(--accent-border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-size: .55rem; color: var(--accent);
+  flex: none;
+}
+.sb-user-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .88rem; line-height: 1.2; }
+.sb-user-tier { font-family: 'JetBrains Mono', monospace; font-size: .56rem; color: var(--accent); }
+
+/* ── Main ── */
+.main { margin-left: var(--sidebar); flex: 1; display: flex; flex-direction: column; min-height: 100svh; }
+.topbar {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(11,13,17,.88);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+  padding: .75rem 1.6rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: -.02em; }
+.topbar-right { display: flex; align-items: center; gap: .8rem; }
+.notif-btn {
+  width: 34px; height: 34px; border-radius: 8px;
+  background: var(--panel); border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative;
+}
+.notif-btn svg { width: 15px; height: 15px; color: var(--muted); }
+.notif-dot { position: absolute; top: 7px; right: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--red); border: 1.5px solid var(--bg); }
+
+.content { padding: 1.6rem 1.6rem; flex: 1; max-width: 880px; }
+
+/* ── Cards ── */
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.card-header { padding: .9rem 1.3rem; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .95rem; }
+.card-body { padding: 1.3rem; }
+
+/* ── Live banner ── */
+.live-banner {
+  border-radius: 16px; padding: 1.3rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  margin-bottom: 1.3rem; transition: background .3s, border-color .3s;
+}
+.live-banner.online {
+  background: linear-gradient(135deg, rgba(229,103,95,.12), rgba(232,148,111,.05));
+  border: 1px solid rgba(229,103,95,.22);
+}
+.live-banner.offline {
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+.lb-pulse { width: 10px; height: 10px; border-radius: 50%; background: var(--red); animation: blink 1.5s ease-in-out infinite; flex: none; }
+.lb-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--red); }
+.lb-sub { font-size: .82rem; color: var(--muted); margin-top: .1rem; }
+.lb-btn { background: rgba(229,103,95,.16); color: #F2A9A3; border: 1px solid rgba(229,103,95,.35); font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: .88rem; border-radius: 10px; padding: .65rem 1.3rem; cursor: pointer; text-decoration: none; transition: opacity .15s; }
+.lb-btn:hover { opacity: .88; }
+
+/* ── Alert banner (Mario online/offline) ── */
+.alert-banner {
+  border-radius: 12px; padding: .85rem 1.1rem;
+  display: flex; align-items: center; gap: .7rem;
+  margin-bottom: 1.1rem; font-size: .88rem; font-weight: 600;
+  animation: slideIn .35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes slideIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+.alert-banner.online { background: rgba(185,215,122,.1); border: 1px solid var(--accent-border); color: var(--accent); }
+.alert-banner.offline { background: var(--panel); border: 1px solid var(--line); color: var(--muted); }
+.alert-banner-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.alert-banner.online .alert-banner-dot { background: var(--accent); }
+.alert-banner.offline .alert-banner-dot { background: var(--muted); }
+
+/* ── Stats ── */
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.3rem; }
+.stat-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.2rem; }
+.stat-num { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 2rem; letter-spacing: -.04em; line-height: 1; }
+.stat-num.accent { color: var(--accent); }
+.stat-num.warm { color: var(--warm); }
+.stat-num.pts { color: var(--accent); }
+.stat-label { font-family: 'JetBrains Mono', monospace; font-size: .56rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: .35rem; }
+
+/* ── Loyalty / points card ── */
+.loyalty-card {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-border);
+  border-radius: 16px; padding: 1.3rem;
+  margin-bottom: 1.3rem;
+}
+.lc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.1rem; flex-wrap: wrap; }
+.lc-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; }
+.lc-sub { font-size: .82rem; color: var(--muted); margin-top: .15rem; }
+.lc-pts-box { text-align: right; }
+.lc-pts-val { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.6rem; letter-spacing: -.03em; color: var(--accent); line-height: 1; }
+.lc-pts-label { font-family: 'JetBrains Mono', monospace; font-size: .54rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+/* Track */
+.lc-steps { display: flex; align-items: center; }
+.lc-step { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 0; }
+.lc-wk { font-family: 'JetBrains Mono', monospace; font-size: .48rem; color: var(--muted); margin-bottom: .25rem; }
+.lc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); flex: none; }
+.lc-dot.done { background: var(--accent); }
+.lc-dot.here { background: var(--accent); box-shadow: 0 0 0 4px rgba(185,215,122,.18); }
+.lc-dot.locked { background: var(--warm); box-shadow: 0 0 0 3px rgba(232,148,111,.15); }
+.lc-pr { font-family: 'JetBrains Mono', monospace; font-size: .46rem; color: var(--muted); margin-top: .25rem; white-space: nowrap; }
+.lc-pr.accent { color: var(--accent); font-weight: 600; }
+.lc-pr.warm { color: var(--warm); font-weight: 600; }
+.lc-line { flex: 1; height: 1px; background: var(--line); }
+.lc-line.done { background: var(--accent); }
+
+.lc-note { font-size: .8rem; color: var(--muted); margin-top: .8rem; }
+.lc-note b { color: var(--fg); }
+.lc-note .pts-note { color: var(--warm); font-weight: 600; }
+
+/* Points redemption chips */
+.pts-redeem { margin-top: 1rem; display: flex; gap: .5rem; flex-wrap: wrap; }
+.pts-item {
+  display: flex; align-items: center; gap: .5rem;
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 10px; padding: .55rem .9rem;
+  font-size: .83rem; cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.pts-item:hover { border-color: var(--accent); background: var(--accent-dim); }
+.pts-item-cost { font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: var(--accent); font-weight: 600; }
+.pts-item.disabled { opacity: .4; pointer-events: none; }
+
+/* ── Sessions ── */
+.session-list { display: flex; flex-direction: column; }
+.session-item { display: flex; align-items: center; gap: 1rem; padding: .85rem 1.3rem; border-bottom: 1px solid var(--line); }
+.session-item:last-child { border-bottom: none; }
+.si-date { font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: .06em; color: var(--muted); flex: none; width: 3.8rem; }
+.si-body { flex: 1; }
+.si-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .9rem; }
+.si-time { font-size: .8rem; color: var(--muted); margin-top: .05rem; }
+.si-badge { font-family: 'JetBrains Mono', monospace; font-size: .54rem; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; flex: none; }
+.si-badge.live { background: rgba(229,103,95,.1); color: var(--red); border: 1px solid rgba(229,103,95,.2); }
+.si-badge.upcoming { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); }
+.si-badge.done { background: var(--line); color: var(--muted); border: 1px solid var(--line); }
+
+/* ── Messages ── */
+.msg-list { display: flex; flex-direction: column; }
+.msg-item { display: flex; gap: .9rem; align-items: flex-start; padding: 1rem 1.3rem; border-bottom: 1px solid var(--line); cursor: pointer; transition: background .12s; }
+.msg-item:last-child { border-bottom: none; }
+.msg-item:hover { background: var(--panel2); }
+.msg-item.unread { background: rgba(185,215,122,.025); }
+.msg-av { width: 35px; height: 35px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: .65rem; color: #101A08; font-weight: 700; flex: none; }
+.msg-body { flex: 1; min-width: 0; }
+.msg-row { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; margin-bottom: .12rem; }
+.msg-from { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .9rem; }
+.msg-time { font-family: 'JetBrains Mono', monospace; font-size: .57rem; color: var(--muted); flex: none; }
+.msg-subject { font-size: .88rem; margin-bottom: .12rem; }
+.msg-item.unread .msg-subject { font-weight: 600; }
+.msg-preview { font-size: .82rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg-attach-note { display: flex; align-items: center; gap: .3rem; font-family: 'JetBrains Mono', monospace; font-size: .54rem; color: var(--muted); margin-top: .3rem; }
+.msg-attach-note svg { width: 11px; height: 11px; }
+.unread-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-top: .35rem; flex: none; }
+
+/* Message detail */
+.md-header { padding: 1.1rem 1.3rem; border-bottom: 1px solid var(--line); }
+.md-subject { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em; margin-bottom: .5rem; }
+.md-meta { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+.md-av { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: .5rem; color: #101A08; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+.md-sender { display: flex; align-items: center; gap: .45rem; font-size: .88rem; font-weight: 500; }
+.md-date { font-family: 'JetBrains Mono', monospace; font-size: .58rem; color: var(--muted); }
+.md-body-content { padding: 1.3rem; font-size: .93rem; line-height: 1.75; color: var(--muted); }
+.md-body-content p { margin-bottom: .8rem; }
+.md-body-content p:last-child { margin-bottom: 0; }
+.md-body-content b { color: var(--fg); }
+.md-attachments-area { padding: .9rem 1.3rem; border-top: 1px solid var(--line); }
+.attach-grid { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: .55rem; }
+.attach-pill { display: flex; align-items: center; gap: .5rem; background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: .5rem .85rem; font-size: .83rem; cursor: pointer; text-decoration: none; color: var(--fg); transition: border-color .15s; }
+.attach-pill:hover { border-color: var(--accent); }
+.attach-pill svg { width: 14px; height: 14px; color: var(--accent); flex: none; }
+.attach-pill-size { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: .56rem; }
+
+/* ── My Plan ── */
+.plan-table { width: 100%; border-collapse: collapse; }
+.plan-table th { padding: .6rem 1.3rem; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: .54rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--line); }
+.plan-table td { padding: .75rem 1.3rem; border-bottom: 1px solid var(--line); font-size: .88rem; }
+.plan-table tr:last-child td { border-bottom: none; }
+.plan-table tr.you td { background: rgba(185,215,122,.04); }
+.plan-table tr.pts-row td { background: rgba(232,148,111,.04); }
+.pts-earn-badge { font-family: 'JetBrains Mono', monospace; font-size: .54rem; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 100px; background: var(--warm-dim); color: var(--warm); border: 1px solid var(--warm-border); }
+
+/* ── Buttons ── */
+.btn { display: inline-flex; align-items: center; gap: .45rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .88rem; border-radius: 9px; padding: .6rem 1.1rem; border: none; cursor: pointer; text-decoration: none; transition: opacity .15s; -webkit-tap-highlight-color: transparent; }
+.btn-accent { background: var(--accent); color: #101A08; }
+.btn-ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+.btn-ghost:hover { border-color: var(--muted); }
+.btn-accent:hover { opacity: .88; }
+.btn-sm { font-size: .8rem; padding: .42rem .82rem; }
+.btn-danger { background: rgba(229,103,95,.1); color: var(--red); border: 1px solid rgba(229,103,95,.2); }
+.btn-danger:hover { background: rgba(229,103,95,.18); }
+
+/* ── Sec header ── */
+.sec-header { margin-bottom: 1.1rem; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+.sec-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.2rem; letter-spacing: -.02em; }
+
+/* ── Tabs ── */
+.tabs { display: flex; border-bottom: 1px solid var(--line); margin-bottom: 1.3rem; }
+.tab { font-family: 'Space Grotesk', sans-serif; font-size: .88rem; font-weight: 600; padding: .6rem 1rem; border-bottom: 2px solid transparent; cursor: pointer; color: var(--muted); background: none; border-top: none; border-left: none; border-right: none; transition: color .15s; -webkit-tap-highlight-color: transparent; }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab:hover:not(.active) { color: var(--fg); }
+
+/* ── Toast ── */
+.toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--fg); color: var(--bg); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .88rem; border-radius: 100px; padding: .65rem 1.4rem; z-index: 200; pointer-events: none; transition: transform .3s cubic-bezier(.22,1,.36,1), opacity .3s; opacity: 0; white-space: nowrap; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* ── Calendar ── */
+.m-cal-dow { text-align:center; font-family:'JetBrains Mono',monospace; font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding:.25rem 0; }
+.m-cal-day { min-height:76px; border-radius:8px; padding:.35rem .4rem; cursor:default; position:relative; overflow:hidden; transition:background .12s; border:1px solid transparent; }
+.m-cal-day.has-events { cursor:pointer; }
+.m-cal-day.has-events:hover { background:var(--panel2); border-color:var(--line); }
+.m-cal-day.today { background:rgba(185,215,122,.05); border-color:rgba(185,215,122,.18) !important; }
+.m-cal-day.today .m-cal-dn { color:var(--accent); font-weight:700; }
+.m-cal-day.other-month { opacity:.4; }
+.m-cal-day.is-weekend .m-cal-dn { color:rgba(107,114,128,.45); }
+.m-cal-dn { font-family:'Space Grotesk',sans-serif; font-size:.72rem; font-weight:600; line-height:1; margin-bottom:.28rem; }
+.m-cal-chip { display:block; font-family:'JetBrains Mono',monospace; font-size:.53rem; font-weight:700; letter-spacing:.01em; border-radius:4px; padding:2px 5px; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.m-cal-more { font-family:'JetBrains Mono',monospace; font-size:.5rem; color:var(--muted); margin-top:2px; text-align:left; padding-left:1px; }
+.m-legend-item { display:flex; align-items:center; gap:.35rem; font-size:.72rem; color:var(--muted); }
+.m-legend-dot { width:7px; height:7px; border-radius:50%; flex:none; }
+/* Event detail rows */
+.m-evt-row { display:flex; gap:.8rem; padding:.75rem 0; border-bottom:1px solid var(--line); align-items:flex-start; }
+.m-evt-row:last-child { border-bottom:none; }
+.m-evt-bar { width:3px; min-height:50px; border-radius:2px; flex:none; margin-top:.15rem; }
+.m-evt-body { flex:1; min-width:0; }
+.m-evt-label { font-family:'JetBrains Mono',monospace; font-size:.58rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; margin-bottom:.2rem; }
+.m-evt-title { font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:.95rem; margin-bottom:.15rem; color:var(--fg); }
+.m-evt-time { font-size:.82rem; color:var(--muted); }
+.m-evt-inst { font-family:'JetBrains Mono',monospace; font-size:.68rem; color:var(--muted); margin-top:.3rem; letter-spacing:.02em; }
+.m-evt-notes { font-size:.78rem; color:var(--muted); margin-top:.3rem; font-style:italic; }
+
+/* ── Mobile ── */
+.sb-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 49; backdrop-filter: blur(2px); }
+.menu-btn { display: none; width: 34px; height: 34px; border-radius: 8px; background: var(--panel); border: 1px solid var(--line); align-items: center; justify-content: center; cursor: pointer; }
+.menu-btn svg { width: 16px; height: 16px; color: var(--fg); }
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .sb-overlay.open { display: block; }
+  .main { margin-left: 0; }
+  .menu-btn { display: flex; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .stats-row .stat-card:last-child { grid-column: span 2; }
+  .content { padding: 1.2rem 1rem; }
+}
+</style>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" crossorigin="anonymous" onerror="window.WMSUPA_FAIL=1"></script>
+<script src="cloud.js"></script>
+<script src="auth.js"></script>
+<script>try{if(!WMAuth.user())document.documentElement.style.visibility='hidden';}catch(e){}</script>
+</head>
+<body>
+<div class="shell">
+  <div class="sb-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-top">
+      <div class="sb-mark">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M7 1L12 4V10L7 13L2 10V4L7 1Z" fill="#101A08"/></svg>
+      </div>
+      <div class="sb-brand">Wingman <span>Member Portal</span></div>
+    </div>
+
+    <!-- Mario's online status -->
+    <div class="sb-online live" id="mario-status-bar">
+      <div class="sb-online-dot"></div>
+      <span id="mario-status-label">Mario is online</span>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-section">
+        <div class="sb-section-label">Menu</div>
+        <button class="sb-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+          <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>
+          Dashboard
+        </button>
+        <button class="sb-item" onclick="showPage('schedule')" id="nav-schedule">
+          <svg viewBox="0 0 16 16" fill="none"><rect x="1.5" y="2.5" width="13" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><line x1="5" y1="1" x2="5" y2="4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="11" y1="1" x2="11" y2="4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="1.5" y1="6.5" x2="14.5" y2="6.5" stroke="currentColor" stroke-width="1.4"/></svg>
+          Schedule
+        </button>
+        <button class="sb-item" onclick="showPage('messages')" id="nav-messages">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M2 3.5A1.5 1.5 0 013.5 2h9A1.5 1.5 0 0114 3.5v7A1.5 1.5 0 0112.5 12H9l-3 2.5V12H3.5A1.5 1.5 0 012 10.5v-7z" stroke="currentColor" stroke-width="1.4"/></svg>
+          Messages
+          <span class="sb-badge" id="msg-badge">2</span>
+        </button>
+        <button class="sb-item" onclick="showPage('plan')" id="nav-plan">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5l1.8 3.6 4 .6L11 8.5l.7 3.9L8 10.5l-3.7 1.9.7-3.9L2.2 5.7l4-.6L8 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          My Plan
+        </button>
+        <button class="sb-item" onclick="showPage('downloads')" id="nav-downloads">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 2v8m0 0L5 7m3 3l3-3M2 12.5v.5a1.5 1.5 0 001.5 1.5h9A1.5 1.5 0 0014 13v-.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Downloads
+        </button>
+      </div>
+    </nav>
+
+    <div class="sb-user">
+      <div class="sb-avatar" id="sb-avatar">–</div>
+      <div style="min-width:0;flex:1">
+        <div class="sb-user-name" id="sb-name">Member</div>
+        <div class="sb-user-tier" id="sb-tier"></div>
+      </div>
+      <a class="btn btn-ghost btn-sm" id="sb-admin" href="admin.html" style="display:none;padding:.35rem .6rem;font-size:.7rem;flex:none;text-decoration:none">Admin</a>
+      <button class="btn btn-ghost btn-sm" onclick="doSignOut()" title="Sign out" style="padding:.35rem .6rem;font-size:.7rem;flex:none">Sign out</button>
+    </div>
+  </aside>
+
+  <!-- ══ MAIN ══ -->
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:.8rem;">
+        <button class="menu-btn" onclick="openSidebar()">
+          <svg viewBox="0 0 16 16" fill="none"><line x1="2" y1="4" x2="14" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="2" y1="12" x2="14" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <div class="topbar-title" id="page-title">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <div class="notif-btn" onclick="showPage('messages')">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5A4.5 4.5 0 003.5 6v2.5L2 10h12l-1.5-1.5V6A4.5 4.5 0 008 1.5z" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 12.5a1.5 1.5 0 003 0" stroke="currentColor" stroke-width="1.4"/></svg>
+          <div class="notif-dot" id="notif-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ══════════════
+           DASHBOARD
+      ══════════════ -->
+      <div id="page-dashboard">
+
+        <div id="pending-note" class="card" style="display:none;margin-bottom:1rem;border-color:rgba(232,148,111,.3);background:rgba(232,148,111,.05)">
+          <div class="card-body" style="font-size:.9rem;line-height:1.55"><b style="color:var(--warm)">Seat requested.</b> Mario confirms seats himself. Once yours is approved the Discord room link unlocks here.<div style="margin-top:.7rem"><a id="pay-btn" class="btn btn-accent btn-sm" href="#" style="display:none">Pay for your seat →</a></div></div>
+        </div>
+
+        <!-- Single status banner — controlled by checkMarioStatus() -->
+        <div class="live-banner" id="live-session-banner">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div class="lb-pulse" id="lb-pulse"></div>
+            <div>
+              <div class="lb-title" id="lb-title">Mario is trading live now</div>
+              <div class="lb-sub" id="lb-sub">Join on Discord to participate</div>
+            </div>
+          </div>
+          <a class="lb-btn" id="lb-join-btn" href="#" data-discord>Join on Discord →</a>
+        </div>
+
+        <!-- This week -->
+        <div class="sec-header">
+          <div class="sec-title">This Week</div>
+          <button class="btn btn-ghost btn-sm" onclick="showPage('schedule')">Full schedule →</button>
+        </div>
+        <div class="card">
+          <div class="session-list" id="week-list"></div>
+        </div>
+
+
+        <!-- Latest from Mario -->
+        <div class="sec-header" style="margin-top:1.5rem;">
+          <div class="sec-title">Latest from Mario</div>
+          <button class="btn btn-ghost btn-sm" onclick="showPage('messages')">All messages →</button>
+        </div>
+        <div class="card" id="latest-card"></div>
+
+
+      </div>
+
+      <!-- ══════════════
+           SCHEDULE / CALENDAR
+      ══════════════ -->
+      <div id="page-schedule" style="display:none">
+
+        <!-- Next session callout -->
+        <div id="m-next-sess" class="card" style="display:none;margin-bottom:1rem;border-color:rgba(185,215,122,.22);background:rgba(185,215,122,.04)">
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;justify-content:space-between">
+            <div>
+              <div style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:.1em;color:var(--accent);text-transform:uppercase;margin-bottom:.3rem">Next Session</div>
+              <div id="m-next-title" style="font-weight:700;font-size:1rem;color:var(--fg)"></div>
+              <div id="m-next-sub" style="font-size:.8rem;color:var(--muted);margin-top:.2rem"></div>
+            </div>
+            <a href="#" data-discord class="btn btn-accent btn-sm" style="font-size:.78rem;white-space:nowrap">Join on Discord →</a>
+          </div>
+        </div>
+
+        <!-- Calendar card -->
+        <div class="card" style="padding:0;overflow:hidden">
+          <!-- Calendar nav -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem .8rem;border-bottom:1px solid var(--line)">
+            <button onclick="mCalPrev()" style="background:none;border:1px solid var(--line);color:var(--fg);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--line)'">‹</button>
+            <div id="m-cal-label" style="font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;letter-spacing:-.01em"></div>
+            <button onclick="mCalNext()" style="background:none;border:1px solid var(--line);color:var(--fg);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:border-color .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--line)'">›</button>
+          </div>
+          <!-- Day labels -->
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);padding:.5rem 1rem .2rem;gap:2px">
+            <div class="m-cal-dow">M</div><div class="m-cal-dow">T</div><div class="m-cal-dow">W</div>
+            <div class="m-cal-dow">T</div><div class="m-cal-dow">F</div>
+            <div class="m-cal-dow" style="color:rgba(107,114,128,.5)">S</div>
+            <div class="m-cal-dow" style="color:rgba(107,114,128,.5)">S</div>
+          </div>
+          <!-- Grid -->
+          <div id="m-cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:.2rem 1rem 1rem"></div>
+        </div>
+
+        <!-- Event detail panel -->
+        <div id="m-cal-detail" style="display:none;margin-top:1rem" class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+            <div id="m-detail-date" style="font-weight:700;font-size:1rem"></div>
+            <button onclick="document.getElementById('m-cal-detail').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.2rem;line-height:1">×</button>
+          </div>
+          <div id="m-detail-events"></div>
+          <div style="margin-top:1rem;padding-top:.9rem;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted)">
+            All sessions on Discord Stage · <a href="#" data-discord style="color:var(--accent);text-decoration:none">Join Discord →</a>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem;padding:.7rem .9rem;background:var(--panel2);border-radius:10px;border:1px solid var(--line)">
+          <div style="font-size:.7rem;color:var(--muted);font-family:var(--font-mono);letter-spacing:.06em;text-transform:uppercase;align-self:center;margin-right:.2rem">Key</div>
+          <div class="m-legend-item"><span class="m-legend-dot" style="background:#FBBF24"></span>London</div>
+          <div class="m-legend-item"><span class="m-legend-dot" style="background:#60A5FA"></span>Pre-Market</div>
+          <div class="m-legend-item"><span class="m-legend-dot" style="background:#B9D77A"></span>NY Open</div>
+          <div class="m-legend-item"><span class="m-legend-dot" style="background:#E8946F"></span>Recap</div>
+          <div class="m-legend-item"><span class="m-legend-dot" style="background:#C084FC"></span>Custom</div>
+        </div>
+      </div>
+
+      <!-- ══════════════
+           MESSAGES
+      ══════════════ -->
+      <div id="page-messages" style="display:none">
+        <div id="view-inbox">
+          <div class="card">
+            <div class="msg-list" id="msg-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-detail" style="display:none">
+          <div style="margin-bottom:.9rem;">
+            <button class="btn btn-ghost btn-sm" onclick="closeMessage()">← Back</button>
+          </div>
+          <div class="card">
+            <div class="md-header">
+              <div class="md-subject" id="md-subject">—</div>
+              <div class="md-meta">
+                <div class="md-sender"><div class="md-av">M</div>Mario Johnson</div>
+                <div class="md-date" id="md-date">—</div>
+              </div>
+            </div>
+            <div class="md-body-content" id="md-body"></div>
+            <div class="md-attachments-area" id="md-attachments" style="display:none">
+              <div class="label">Attachments</div>
+              <div class="attach-grid" id="md-attach-grid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════
+           MY PLAN
+      ══════════════ -->
+      <div id="page-plan" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;">
+          <div style="background:var(--accent-dim);border:1px solid var(--accent-border);border-radius:14px;padding:1.2rem;">
+            <div class="label" style="margin-bottom:.4rem;">Current week</div>
+            <div id="plan-week" style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-.04em;color:var(--accent);line-height:1;">Week 1</div>
+            <div id="plan-renew" style="color:var(--muted);font-size:.84rem;margin-top:.35rem;"></div>
+          </div>
+          <div style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1.2rem;">
+            <div class="label" style="margin-bottom:.4rem;">Points balance</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:2.2rem;letter-spacing:-.04em;color:var(--warm);line-height:1;"><span id="plan-pts">0</span> pts</div>
+            <div style="color:var(--muted);font-size:.84rem;margin-top:.35rem;">Earn 20 pts/wk from week 4+</div>
+          </div>
+        </div>
+
+        <!-- Loyalty table -->
+        <div class="card" style="margin-bottom:1.2rem;">
+          <div class="card-header">
+            <div class="card-title">Loyalty Schedule</div>
+            <div class="label">30% max discount · then points</div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="plan-table">
+              <thead>
+                <tr>
+                  <th>Week</th><th>Price</th><th>Off</th><th>Points</th><th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="plan-rows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Points store -->
+        <div class="card" style="margin-bottom:1.2rem;">
+          <div class="card-header">
+            <div class="card-title">Points Store</div>
+            <div class="label" id="store-label">0 pts available</div>
+          </div>
+          <div class="card-body" id="store-list" style="display:flex;flex-direction:column;gap:.85rem;"></div>
+        </div>
+
+        <!-- Manage -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">Manage</div></div>
+          <div class="card-body" style="display:flex;flex-direction:column;gap:.85rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
+              <div>
+                <div style="font-weight:600;font-size:.93rem;">Billing</div>
+                <div id="bill-line" style="color:var(--muted);font-size:.83rem;"></div>
+              </div>
+              <a class="btn btn-ghost btn-sm" href="#" data-billing>Manage →</a>
+            </div>
+            <div style="height:1px;background:var(--line);"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
+              <div>
+                <div style="font-weight:600;font-size:.93rem;">Discord</div>
+                <div style="color:var(--muted);font-size:.83rem;">Sessions run on Discord Stage</div>
+              </div>
+              <a class="btn btn-ghost btn-sm" href="#" data-discord>Open Discord →</a>
+            </div>
+            <div style="height:1px;background:var(--line);"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
+              <div>
+                <div style="font-weight:600;font-size:.93rem;color:var(--red);">Cancel</div>
+                <div style="color:var(--muted);font-size:.83rem;">Sends a cancellation request to Mario. Your tier is saved for 30 days.</div>
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="requestCancel()">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════
+           DOWNLOADS
+      ══════════════ -->
+      <div id="page-downloads" style="display:none">
+        <div class="sec-header">
+          <div class="sec-title">Downloads</div>
+          <div style="font-size:.82rem;color:var(--muted)">Files &amp; resources from Mario</div>
+        </div>
+        <div class="card" id="downloads-list">
+          <div style="padding:2.5rem;text-align:center;color:var(--muted);font-size:.9rem;">Loading…</div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Message data ──
+var MESSAGES = [
+  {
+    subject: "This week's game plan + key levels PDF",
+    date: "Today, 8:42 AM",
+    body: "<p>Here's the plan going into this week.</p><p>NQ has a clean setup building at the <b>19,800 level</b>. I'm watching for grain confirmation before touching anything. Plan is attached — print it or keep it on a second screen during the session.</p><p>See you live at 9:30 AM CT on Discord Stage. Get in a few minutes early.</p><p>— Mario</p>",
+    attachments: [{ name: "game-plan-oct-28.pdf", size: "142 KB" }]
+  },
+  {
+    subject: "Welcome to Wingman — read this first",
+    date: "Sun Oct 25, 6:15 PM",
+    body: "<p>Welcome to the room.</p><p>Everything you need is here. Sessions run on <b>Discord Stage</b> — the invite and setup guide are attached. Get in the server before Tuesday so you're not rushing at market open.</p><p>Sessions are Tue–Thu at 9:30 AM CT. Monday I drop the game plan. Friday we recap. That's the week.</p><p>One rule: <b>stay off the keyboard while I'm in a trade.</b> Questions are for between setups. Everything you're wondering gets answered by watching.</p><p>— Mario</p>",
+    attachments: [
+      { name: "wingman-welcome.pdf", size: "88 KB" },
+      { name: "discord-setup.png", size: "210 KB" }
+    ]
+  },
+  {
+    subject: "Friday recap — what happened this week",
+    date: "Fri Oct 18, 4:22 PM",
+    body: "<p>Good week. Hit two clean setups Tuesday and Thursday, passed on Wednesday — grain wasn't right.</p><p>Key takeaway: <b>patience at the grain level is the whole game.</b> Everything else is just waiting.</p><p>Watching 19,600 next week. See you Monday.</p><p>— Mario</p>",
+    attachments: []
+  }
+];
+
+var readState = [false, false, true];
+
+// ── Navigation ──
+function showPage(name) {
+  ['dashboard','schedule','messages','plan','downloads'].forEach(function(p) {
+    document.getElementById('page-' + p).style.display = p === name ? 'block' : 'none';
+    var nav = document.getElementById('nav-' + p);
+    if (nav) nav.classList.toggle('active', p === name);
+  });
+  document.getElementById('page-title').textContent = { dashboard:'Dashboard', schedule:'Schedule', messages:'Messages', plan:'My Plan', downloads:'Downloads' }[name] || name;
+  if (name === 'messages') {
+    document.getElementById('view-inbox').style.display = 'block';
+    document.getElementById('view-detail').style.display = 'none';
+  }
+  closeSidebar();
+  window.scrollTo(0, 0);
+}
+
+// ── Tabs ──
+function switchTab(btn, tabId) {
+  btn.closest('.tabs').querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  ['tab-week','tab-next'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = id === tabId ? 'block' : 'none';
+  });
+}
+
+// ── Messages ──
+function openMessage(idx) {
+  var msg = MESSAGES[idx];
+  if (!msg) return;
+  document.getElementById('md-subject').textContent = msg.subject;
+  document.getElementById('md-date').textContent = msg.date;
+  document.getElementById('md-body').innerHTML = msg.body;
+
+  var attEl = document.getElementById('md-attachments');
+  var grid = document.getElementById('md-attach-grid');
+  if (msg.attachments && msg.attachments.length) {
+    grid.innerHTML = msg.attachments.map(function(a) {
+      return '<a class="attach-pill" href="#">' +
+        '<svg viewBox="0 0 14 14" fill="none"><path d="M2 11V3a2 2 0 014 0v7a1 1 0 01-2 0V3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>' +
+        a.name + '<span class="attach-pill-size">' + a.size + '</span></a>';
+    }).join('');
+    attEl.style.display = 'block';
+  } else { attEl.style.display = 'none'; }
+
+  // Mark read
+  if (!readState[idx]) {
+    readState[idx] = true;
+    var item = document.getElementById('msg-' + idx);
+    if (item) item.classList.remove('unread');
+    var dot = document.getElementById('dot-' + idx);
+    if (dot) dot.style.display = 'none';
+    updateBadge();
+  }
+
+  document.getElementById('view-inbox').style.display = 'none';
+  document.getElementById('view-detail').style.display = 'block';
+}
+
+function closeMessage() {
+  document.getElementById('view-inbox').style.display = 'block';
+  document.getElementById('view-detail').style.display = 'none';
+}
+
+function updateBadge() {
+  var count = readState.filter(function(r) { return !r; }).length;
+  var badge = document.getElementById('msg-badge');
+  badge.textContent = count;
+  badge.style.display = count > 0 ? '' : 'none';
+  document.getElementById('notif-dot').style.display = count > 0 ? 'block' : 'none';
+}
+
+// ══════════════════════════════════════════
+//  CALENDAR ENGINE
+// ══════════════════════════════════════════
+var SESSION_META = {
+  london:    { color:'#FBBF24', text:'rgba(0,0,0,.88)', label:'London' },
+  premarket: { color:'#60A5FA', text:'rgba(0,0,0,.88)', label:'Pre-Market' },
+  nyopen:    { color:'#B9D77A', text:'rgba(0,0,0,.88)', label:'NY Open' },
+  recap:     { color:'#E8946F', text:'rgba(0,0,0,.88)', label:'Recap' },
+  custom:    { color:'#C084FC', text:'rgba(0,0,0,.88)', label:'Custom' }
+};
+
+var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+var DAY_SHORT   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+function loadEvents() {
+  try { return JSON.parse(localStorage.getItem('wm_events') || '[]'); } catch(e) { return []; }
+}
+
+// Seed sample events so calendar looks great on first load
+(function seedEvents() {
+  if (localStorage.getItem('wm_events') || (window.WMCloud && WMCloud.enabled)) return;
+  var seed = [
+    { id:'e1',  date:'2026-10-26', sessType:'london',    sessTypeLabel:'London',     instruments:['GC','MGC'],           start:'06:00', end:'08:00', notes:'Gold setup — watch key structure' },
+    { id:'e2',  date:'2026-10-26', sessType:'premarket', sessTypeLabel:'Pre-Market', instruments:['NQ','ES'],             start:'08:30', end:'09:30', notes:'Game plan + levels drop' },
+    { id:'e3',  date:'2026-10-27', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','MNQ','ES'],       start:'09:30', end:'11:30', notes:'' },
+    { id:'e4',  date:'2026-10-28', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','ES','GC'],        start:'09:30', end:'11:30', notes:'' },
+    { id:'e5',  date:'2026-10-29', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','ES'],             start:'09:30', end:'11:30', notes:'' },
+    { id:'e6',  date:'2026-10-30', sessType:'recap',     sessTypeLabel:'Recap',      instruments:['NQ','ES','GC'],        start:'16:00', end:'17:00', notes:'Week in review' },
+    { id:'e7',  date:'2026-11-03', sessType:'premarket', sessTypeLabel:'Pre-Market', instruments:['NQ','ES'],             start:'08:30', end:'09:30', notes:'Nov game plan' },
+    { id:'e8',  date:'2026-11-04', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','MNQ','ES','MES'], start:'09:30', end:'11:30', notes:'' },
+    { id:'e9',  date:'2026-11-05', sessType:'london',    sessTypeLabel:'London',     instruments:['GC','MGC'],            start:'06:00', end:'08:00', notes:'' },
+    { id:'e10', date:'2026-11-05', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','ES','GC'],        start:'09:30', end:'11:30', notes:'' },
+    { id:'e11', date:'2026-11-06', sessType:'nyopen',    sessTypeLabel:'NY Open',    instruments:['NQ','ES'],             start:'09:30', end:'11:30', notes:'' },
+    { id:'e12', date:'2026-11-07', sessType:'recap',     sessTypeLabel:'Recap',      instruments:['NQ','ES','GC'],        start:'16:00', end:'17:00', notes:'Week in review' }
+  ];
+  try { localStorage.setItem('wm_events', JSON.stringify(seed)); } catch(e) {}
+})();
+
+// Calendar state
+var M_CAL_YEAR, M_CAL_MONTH;
+
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+function fmtTime12(t) {
+  if (!t) return '';
+  var p = t.split(':'); var h = parseInt(p[0]); var m = p[1];
+  var ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
+  return h + (m !== '00' ? ':' + m : '') + ' ' + ap;
+}
+
+function mCalInit() {
+  var now = new Date();
+  M_CAL_YEAR  = now.getFullYear();
+  M_CAL_MONTH = now.getMonth();
+  mCalRender();
+  mShowNextSession();
+}
+
+function mCalPrev() {
+  M_CAL_MONTH--;
+  if (M_CAL_MONTH < 0) { M_CAL_MONTH = 11; M_CAL_YEAR--; }
+  mCalRender();
+  document.getElementById('m-cal-detail').style.display = 'none';
+}
+
+function mCalNext() {
+  M_CAL_MONTH++;
+  if (M_CAL_MONTH > 11) { M_CAL_MONTH = 0; M_CAL_YEAR++; }
+  mCalRender();
+  document.getElementById('m-cal-detail').style.display = 'none';
+}
+
+function mCalRender() {
+  var lbl = document.getElementById('m-cal-label');
+  if (lbl) lbl.textContent = MONTH_NAMES[M_CAL_MONTH] + ' ' + M_CAL_YEAR;
+
+  var events = loadEvents();
+  var evtMap = {};
+  events.forEach(function(e) { if (!evtMap[e.date]) evtMap[e.date] = []; evtMap[e.date].push(e); });
+
+  var today = new Date(); today.setHours(0,0,0,0);
+  var firstDay = new Date(M_CAL_YEAR, M_CAL_MONTH, 1);
+  var lastDay  = new Date(M_CAL_YEAR, M_CAL_MONTH + 1, 0);
+  var startDow = (firstDay.getDay() + 6) % 7; // Mon=0
+  var totalCells = Math.ceil((startDow + lastDay.getDate()) / 7) * 7;
+
+  var grid = document.getElementById('m-cal-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  for (var i = 0; i < totalCells; i++) {
+    var cellDate = new Date(M_CAL_YEAR, M_CAL_MONTH, 1 - startDow + i);
+    var isThisMonth = cellDate.getMonth() === M_CAL_MONTH;
+    var isToday     = cellDate.getTime() === today.getTime();
+    var isWeekend   = cellDate.getDay() === 0 || cellDate.getDay() === 6;
+    var dateStr = cellDate.getFullYear() + '-' + pad2(cellDate.getMonth()+1) + '-' + pad2(cellDate.getDate());
+    var dayEvts = evtMap[dateStr] || [];
+
+    var cls = 'm-cal-day';
+    if (!isThisMonth) cls += ' other-month';
+    if (isToday)      cls += ' today';
+    if (isWeekend)    cls += ' is-weekend';
+    if (dayEvts.length && isThisMonth) cls += ' has-events';
+
+    var inner = '<div class="m-cal-dn">' + cellDate.getDate() + '</div>';
+    var shown = Math.min(dayEvts.length, 2);
+    for (var j = 0; j < shown; j++) {
+      var ev  = dayEvts[j];
+      var mt  = SESSION_META[ev.sessType] || SESSION_META.custom;
+      inner  += '<span class="m-cal-chip" style="background:' + mt.color + ';color:' + mt.text + '">' + mt.label + '</span>';
+    }
+    if (dayEvts.length > 2) inner += '<div class="m-cal-more">+' + (dayEvts.length - 2) + ' more</div>';
+
+    var cell = document.createElement('div');
+    cell.className = cls;
+    cell.innerHTML = inner;
+    if (dayEvts.length && isThisMonth) {
+      (function(ds) { cell.onclick = function() { mShowDay(ds); }; })(dateStr);
+    }
+    grid.appendChild(cell);
+  }
+}
+
+function mShowDay(dateStr) {
+  var events = loadEvents().filter(function(e) { return e.date === dateStr; });
+  var detail = document.getElementById('m-cal-detail');
+  var dateLbl = document.getElementById('m-detail-date');
+  var evtCont = document.getElementById('m-detail-events');
+  if (!detail) return;
+
+  if (!events.length) { detail.style.display = 'none'; return; }
+
+  var d = new Date(dateStr + 'T12:00:00');
+  dateLbl.textContent = DAY_SHORT[d.getDay()] + ', ' + MONTH_NAMES[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+
+  evtCont.innerHTML = events.map(function(ev) {
+    var mt   = SESSION_META[ev.sessType] || SESSION_META.custom;
+    var inst = (ev.instruments && ev.instruments.length) ? ev.instruments.join(' · ') : '';
+    var time = fmtTime12(ev.start) + (ev.end ? ' – ' + fmtTime12(ev.end) : '') + ' ET';
+    return '<div class="m-evt-row">' +
+      '<div class="m-evt-bar" style="background:' + mt.color + '"></div>' +
+      '<div class="m-evt-body">' +
+        '<div class="m-evt-label" style="color:' + mt.color + '">' + mt.label + '</div>' +
+        '<div class="m-evt-title">' + ev.sessTypeLabel + '</div>' +
+        '<div class="m-evt-time">' + time + '</div>' +
+        (inst ? '<div class="m-evt-inst">Instruments: ' + inst + '</div>' : '') +
+        (ev.notes ? '<div class="m-evt-notes">' + ev.notes + '</div>' : '') +
+      '</div></div>';
+  }).join('');
+
+  detail.style.display = 'block';
+  setTimeout(function() { detail.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 50);
+}
+
+function mShowNextSession() {
+  var now = new Date();
+  var upcoming = loadEvents().filter(function(e) {
+    var d = new Date(e.date + 'T' + (e.start || '00:00') + ':00');
+    return d > now;
+  }).sort(function(a, b) {
+    return new Date(a.date + 'T' + (a.start||'00:00')).getTime() -
+           new Date(b.date + 'T' + (b.start||'00:00')).getTime();
+  });
+
+  var el = document.getElementById('m-next-sess');
+  if (!el) return;
+  if (!upcoming.length) { el.style.display = 'none'; return; }
+
+  var ev = upcoming[0];
+  var d  = new Date(ev.date + 'T12:00:00');
+  var inst = (ev.instruments && ev.instruments.length) ? ev.instruments.join(' · ') : '';
+  document.getElementById('m-next-title').textContent =
+    ev.sessTypeLabel + ' · ' + DAY_SHORT[d.getDay()] + ' ' + MONTH_NAMES[d.getMonth()].slice(0,3) + ' ' + d.getDate() + ' · ' + fmtTime12(ev.start) + ' ET';
+  document.getElementById('m-next-sub').textContent = inst ? 'Instruments: ' + inst : '';
+  el.style.display = 'block';
+}
+
+// Refresh calendar when admin pushes wm_events
+window.addEventListener('storage', function(e) {
+  if (e.key === 'wm_events') { mCalRender(); mShowNextSession(); }
+});
+
+// ── Mario online/offline status ──
+// Admin sets localStorage 'mario_status' = 'live' | 'offline'
+function checkMarioStatus() {
+  var status;
+  try { status = localStorage.getItem('mario_status') || 'live'; } catch(e) { status = 'live'; }
+  var bar = document.getElementById('mario-status-bar');
+  var label = document.getElementById('mario-status-label');
+  var banner = document.getElementById('live-session-banner');
+  var pulse = document.getElementById('lb-pulse');
+  var title = document.getElementById('lb-title');
+  var sub = document.getElementById('lb-sub');
+  var joinBtn = document.getElementById('lb-join-btn');
+
+  if (status === 'live') {
+    if (bar) { bar.className = 'sb-online live'; }
+    if (label) { label.textContent = 'Mario is online'; }
+    if (banner) { banner.className = 'live-banner online'; }
+    if (pulse) { pulse.style.display = 'block'; }
+    if (title) { title.style.color = 'var(--red)'; title.textContent = 'Mario is trading live now'; }
+    if (sub) { sub.textContent = 'Join on Discord to participate'; }
+    if (joinBtn) { joinBtn.style.display = 'inline-flex'; }
+  } else {
+    if (bar) { bar.className = 'sb-online offline'; }
+    if (label) { label.textContent = 'Mario is offline'; }
+    if (banner) { banner.className = 'live-banner offline'; }
+    if (pulse) { pulse.style.display = 'none'; }
+    if (title) { title.style.color = 'var(--muted)'; title.textContent = 'Mario is currently offline'; }
+    if (sub) { sub.textContent = 'Check back for the next session — usually Tue & Thu 9:30 AM ET'; }
+    if (joinBtn) { joinBtn.style.display = 'none'; }
+  }
+}
+
+// ── Toast ──
+var _tt;
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(_tt); _tt = setTimeout(function() { t.classList.remove('show'); }, 2200);
+}
+
+// ── Sidebar mobile ──
+function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('open'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('open'); }
+
+// ── Downloads / Files ──
+function loadFiles() {
+  try { return JSON.parse(localStorage.getItem('wm_files') || '[]'); } catch(e) { return []; }
+}
+
+function dlFileIcon(type) {
+  if (type === 'pdf') return '<svg viewBox="0 0 16 16" fill="none" style="width:16px;height:16px"><rect x="2" y="1" width="10" height="14" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>';
+  if (type === 'img') return '<svg viewBox="0 0 16 16" fill="none" style="width:16px;height:16px"><rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" stroke-width="1.3"/><circle cx="5.5" cy="6.5" r="1" fill="currentColor"/><path d="M2 12l3.5-3.5 2.5 2.5 2-2 3.5 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  return '<svg viewBox="0 0 16 16" fill="none" style="width:16px;height:16px"><path d="M3 1h7l4 4v10H3V1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M10 1v4h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+}
+
+function fmtFileDate(ds) {
+  var d = new Date(ds + 'T12:00:00');
+  return MONTH_NAMES[d.getMonth()].slice(0,3) + ' ' + d.getDate() + ', ' + d.getFullYear();
+}
+
+function renderDownloads() {
+  var files = loadFiles();
+  var cont = document.getElementById('downloads-list');
+  if (!cont) return;
+  if (!files.length) {
+    cont.innerHTML = '<div style="padding:2.5rem;text-align:center;color:var(--muted);font-size:.9rem;">No files yet — Mario will drop resources here</div>';
+    return;
+  }
+  cont.innerHTML = files.slice().reverse().map(function(f, i, arr) {
+    var last = i === arr.length - 1;
+    return '<div style="display:flex;align-items:center;gap:1rem;padding:1rem 1.3rem;' + (last ? '' : 'border-bottom:1px solid var(--line);') + '">' +
+      '<div style="width:38px;height:38px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--accent);flex:none;">' + dlFileIcon(f.type) + '</div>' +
+      '<div style="flex:1;min-width:0;">' +
+        '<div style="font-family:\'Space Grotesk\',sans-serif;font-weight:600;font-size:.93rem;margin-bottom:.1rem;">' + f.label + '</div>' +
+        '<div style="font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + f.desc + '</div>' +
+        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:.54rem;color:var(--muted);margin-top:.3rem;letter-spacing:.06em;">' + fmtFileDate(f.date) + ' · ' + f.size + '</div>' +
+      '</div>' +
+      '<a class="btn btn-ghost btn-sm" href="#" onclick="showToast(\'Saving ' + f.name + '…\');return false;" style="white-space:nowrap;flex:none;gap:.4rem;">' +
+        '<svg viewBox="0 0 14 14" fill="none" style="width:12px;height:12px"><path d="M7 1v8m0 0L4 6m3 3l3-3M1 11v1a1.5 1.5 0 001.5 1.5h9A1.5 1.5 0 0013 12v-1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+        'Save' +
+      '</a>' +
+    '</div>';
+  }).join('');
+}
+
+window.addEventListener('storage', function(e) {
+  if (e.key === 'wm_files') renderDownloads();
+});
+
+// ── Patch showPage to init calendar on first nav ──
+var _origShowPage = showPage;
+showPage = function(name) {
+  _origShowPage(name);
+  if (name === 'schedule' && !M_CAL_YEAR) { mCalInit(); }
+  if (name === 'downloads') { renderDownloads(); }
+};
+
+// ── Init ──
+updateBadge();
+checkMarioStatus();
+// Poll status every 10s (admin changes localStorage)
+setInterval(checkMarioStatus, 10000);
+// Also listen for storage changes from admin panel (same browser)
+window.addEventListener('storage', checkMarioStatus);
+// Pre-init calendar in background so first open is instant
+mCalInit();
+</script>
+
+<script>
+// ══════════ ACCOUNT-AWARE LAYER (overrides earlier static demo data) ══════════
+var ME = null, ROSTER_ME = null;
+function lsGet(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e) { return d; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e) { return false; } }
+function esc(t) { return WMAuth.esc(t); }
+var CLOUD = !!(window.WMCloud && WMCloud.enabled), _links = (window.WM_CONFIG && WM_CONFIG.links) || {};
+function settings() { var s = lsGet('wm_settings', {}); return { discord: s.discord || _links.discord || '', billing: s.billing || _links.billingPortal || '' }; }
+function doSignOut() { WMAuth.signOut(); location.reload(); }
+
+function refreshMe() {
+  ME = WMAuth.user();
+  ROSTER_ME = WMAuth.rosterEntry();
+  var _adm = document.getElementById('sb-admin'); if (_adm) _adm.style.display = (ME && ME.role === 'admin') ? '' : 'none';
+}
+function rateFor(w) { return w <= 1 ? 200 : w === 2 ? 180 : w === 3 ? 160 : 140; }
+function nextMonday() {
+  var d = new Date(); d.setHours(12,0,0,0);
+  var add = (8 - d.getDay()) % 7 || 7;
+  d.setDate(d.getDate() + add);
+  return MONTH_NAMES[d.getMonth()] + ' ' + d.getDate();
+}
+
+function renderIdentity() {
+  if (!ME) return;
+  var parts = ME.name.trim().split(/\s+/);
+  var ini = (parts[0][0] + (parts.length > 1 ? parts[parts.length-1][0] : '')).toUpperCase();
+  document.getElementById('sb-avatar').textContent = ini;
+  document.getElementById('sb-name').textContent = ME.name;
+  var st = ROSTER_ME ? ROSTER_ME.status : (ME.role === 'admin' ? 'admin' : 'pending');
+  var tier = st === 'pending' ? 'Seat requested' : st === 'admin' ? 'Host preview' : st === 'paused' ? 'Paused' : 'Week ' + (ROSTER_ME.week || 1) + ' · ' + (st === 'trial' ? 'Day pass' : 'Active member');
+  document.getElementById('sb-tier').textContent = tier;
+  var pend = document.getElementById('pending-note');
+  if (pend) pend.style.display = st === 'pending' ? 'block' : 'none';
+  var pay = document.getElementById('pay-btn'), wl = _links.weekly;
+  if (pay) { if (st === 'pending' && wl) { pay.href = wl + (wl.indexOf('?') < 0 ? '?' : '&') + 'client_reference_id=' + encodeURIComponent(ME.id); pay.style.display = 'inline-flex'; } else pay.style.display = 'none'; }
+}
+
+// Discord + billing links (set by Mario in admin → Settings)
+document.addEventListener('click', function(e) {
+  var a = e.target.closest ? e.target.closest('[data-discord],[data-billing]') : null;
+  if (!a) return;
+  e.preventDefault();
+  var cfg = settings();
+  if (a.hasAttribute('data-discord')) {
+    var st = ROSTER_ME ? ROSTER_ME.status : null;
+    if (st === 'pending') { showToast('Your seat is pending. Mario will unlock the room link.'); return; }
+    if (!cfg.discord) { showToast('Mario has not posted the Discord invite yet.'); return; }
+    window.open(cfg.discord, '_blank', 'noopener');
+  } else {
+    if (!cfg.billing) { showToast('Billing portal link is not set up yet. Message Mario.'); return; }
+    window.open(cfg.billing, '_blank', 'noopener');
+  }
+});
+
+// ── This week (from wm_events) ──
+function dstr(d) { return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate()); }
+function renderWeek() {
+  var el = document.getElementById('week-list'); if (!el) return;
+  var now = new Date(), start = new Date(now); start.setHours(0,0,0,0); start.setDate(start.getDate() - start.getDay());
+  var end = new Date(start); end.setDate(end.getDate() + 6);
+  var evs = loadEvents().filter(function(ev) { return ev.date >= dstr(start) && ev.date <= dstr(end); })
+    .sort(function(a,b) { return (a.date + a.start).localeCompare(b.date + b.start); });
+  if (!evs.length) { el.innerHTML = '<div style="padding:1.6rem;text-align:center;color:var(--muted);font-size:.9rem">No sessions posted for this week yet.</div>'; return; }
+  var today = dstr(now), hm = pad2(now.getHours()) + ':' + pad2(now.getMinutes());
+  el.innerHTML = evs.map(function(ev) {
+    var d = new Date(ev.date + 'T12:00:00');
+    var title = ev.sessType === 'premarket' ? 'Game Plan' : ev.sessType === 'recap' ? 'Week Recap' : 'Live Chart Session';
+    var badge = 'upcoming', label = 'Upcoming';
+    if (ev.date < today || (ev.date === today && hm >= ev.end)) { badge = 'done'; label = 'Done'; }
+    else if (ev.date === today && hm >= ev.start) { badge = 'live'; label = 'Live'; }
+    else if (ev.date === today) { label = 'Today'; }
+    var inst = (ev.instruments || []).join(' · ');
+    return '<div class="session-item"><div class="si-date">' + DAY_SHORT[d.getDay()].toUpperCase() + '</div>' +
+      '<div class="si-body"><div class="si-title">' + esc(title) + '</div><div class="si-time">' + fmtTime12(ev.start) + ' ET' + (inst ? ' · ' + esc(inst) : '') + (ev.notes ? ' · ' + esc(ev.notes) : '') + '</div></div>' +
+      '<div class="si-badge ' + badge + '">' + label + '</div></div>';
+  }).join('');
+}
+window.addEventListener('storage', function(e) { if (e.key === 'wm_events') renderWeek(); });
+
+// ── Messages (welcome + admin broadcasts) ──
+function fmtStamp(t) { return t || ''; }
+function buildMessages() {
+  var list = [];
+  var hist = lsGet('wm_sent_history', []);
+  var st = ROSTER_ME ? ROSTER_ME.status : 'pending', wk = ROSTER_ME ? (ROSTER_ME.week || 1) : 1;
+  hist.forEach(function(h, i) {
+    var a = h.audience || 'all';
+    var ok = a === 'all' || (a === 'weekly' && st === 'active') || (a === 'daypass' && st === 'trial') || (a === 'week4plus' && wk >= 4);
+    if (!ok) return;
+    var tag = { update:'Update', alert:'Alert', trade:'Trade call', session:'Session' }[h.type] || 'Message';
+    list.push({ id: h.id || ('h' + h.time), subject: tag, date: h.time, body: '<p>' + esc(h.msg).replace(/\n/g, '</p><p>') + '</p><p>Mario</p>', attachments: h.attachments || [] });
+  });
+  list.push({ id: 'welcome', subject: 'Welcome to Wingman', date: ME ? new Date(ME.created).toLocaleDateString() : '',
+    body: '<p>Welcome to the room.</p><p>Live chart sessions run <b>Monday through Thursday</b> on Discord Stage. The pre-week game plan lands Sunday into Monday, and Friday we recap.</p><p>One rule: stay off the keyboard while I\'m in a trade. Questions are for between setups.</p><p>Mario</p>', attachments: [] });
+  return list;
+}
+function readSet() { return lsGet('wm_read_' + (ME ? ME.id : 'x'), []); }
+function renderMessages() {
+  MESSAGES = buildMessages();
+  var rs = readSet();
+  readState = MESSAGES.map(function(m) { return rs.indexOf(m.id) >= 0; });
+  var box = document.getElementById('msg-list');
+  box.innerHTML = MESSAGES.map(function(m, i) {
+    var prev = m.body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 90);
+    return '<div class="msg-item' + (readState[i] ? '' : ' unread') + '" id="msg-' + i + '" onclick="openMessage(' + i + ')">' +
+      '<div class="msg-av">M</div><div class="msg-body"><div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">' + esc(fmtStamp(m.date)) + '</span></div>' +
+      '<div class="msg-subject">' + esc(m.subject) + '</div><div class="msg-preview">' + esc(prev) + '</div>' +
+      (m.attachments && m.attachments.length ? '<div class="msg-attach-note">' + m.attachments.map(function(a) { return esc(a.name); }).join(' · ') + '</div>' : '') +
+      '</div>' + (readState[i] ? '' : '<div class="unread-dot" id="dot-' + i + '"></div>') + '</div>';
+  }).join('');
+  var lc = document.getElementById('latest-card'), m0 = MESSAGES[0];
+  lc.style.cursor = 'pointer'; lc.onclick = function() { openMessage(0); showPage('messages'); };
+  lc.innerHTML = '<div class="msg-item' + (readState[0] ? '' : ' unread') + '"><div class="msg-av">M</div><div class="msg-body"><div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">' + esc(fmtStamp(m0.date)) + '</span></div>' +
+    '<div class="msg-subject">' + esc(m0.subject) + '</div><div class="msg-preview">' + esc(m0.body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 110)) + '</div></div>' + (readState[0] ? '' : '<div class="unread-dot"></div>') + '</div>';
+  updateBadge();
+}
+openMessage = function(idx) {
+  var msg = MESSAGES[idx]; if (!msg) return;
+  document.getElementById('md-subject').textContent = msg.subject;
+  document.getElementById('md-date').textContent = msg.date;
+  document.getElementById('md-body').innerHTML = msg.body;
+  var attEl = document.getElementById('md-attachments'), grid = document.getElementById('md-attach-grid');
+  if (msg.attachments && msg.attachments.length) {
+    grid.innerHTML = msg.attachments.map(function(a, j) {
+      return '<a class="attach-pill" href="#" onclick="return saveAttachment(' + idx + ',' + j + ')">' + esc(a.name) + '<span class="attach-pill-size">' + esc(a.size || '') + '</span></a>';
+    }).join('');
+    attEl.style.display = 'block';
+  } else attEl.style.display = 'none';
+  if (!readState[idx]) {
+    readState[idx] = true;
+    var rs = readSet(); if (rs.indexOf(msg.id) < 0) rs.push(msg.id); lsSet('wm_read_' + ME.id, rs);
+    var item = document.getElementById('msg-' + idx); if (item) item.classList.remove('unread');
+    var dot = document.getElementById('dot-' + idx); if (dot) dot.style.display = 'none';
+    updateBadge();
+  }
+  document.getElementById('view-inbox').style.display = 'none';
+  document.getElementById('view-detail').style.display = 'block';
+};
+function saveAttachment(i, j) { return saveBlob(MESSAGES[i].attachments[j]); }
+function saveBlob(f) {
+  if (f.data) {
+    var a = document.createElement('a'); a.href = f.data; a.download = f.name; document.body.appendChild(a); a.click(); a.remove();
+  } else if (f.url) { window.open(f.url, '_blank', 'noopener'); }
+  else showToast('This file has no content attached.');
+  return false;
+}
+window.addEventListener('storage', function(e) { if (e.key === 'wm_sent_history' || e.key === 'wm_members') { refreshMe(); renderIdentity(); renderMessages(); renderPlan(); } });
+
+// ── Downloads ──
+renderDownloads = function() {
+  var files = loadFiles(), cont = document.getElementById('downloads-list'); if (!cont) return;
+  if (!files.length) { cont.innerHTML = '<div style="padding:2.5rem;text-align:center;color:var(--muted);font-size:.9rem;">No files yet. Resources from Mario show up here.</div>'; return; }
+  cont.innerHTML = files.slice().reverse().map(function(f, i, arr) {
+    var last = i === arr.length - 1, idx = files.indexOf(f);
+    return '<div style="display:flex;align-items:center;gap:1rem;padding:1rem 1.3rem;' + (last ? '' : 'border-bottom:1px solid var(--line);') + '">' +
+      '<div style="width:38px;height:38px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--accent);flex:none;">' + dlFileIcon(f.type) + '</div>' +
+      '<div style="flex:1;min-width:0;"><div style="font-family:\'Space Grotesk\',sans-serif;font-weight:600;font-size:.93rem;margin-bottom:.1rem;">' + esc(f.label || f.name) + '</div>' +
+      (f.desc ? '<div style="font-size:.8rem;color:var(--muted);">' + esc(f.desc) + '</div>' : '') +
+      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:.54rem;color:var(--muted);margin-top:.3rem;letter-spacing:.06em;">' + fmtFileDate(f.date) + (f.size ? ' · ' + esc(f.size) : '') + '</div></div>' +
+      '<button class="btn btn-ghost btn-sm" onclick="saveBlob(loadFiles()[' + idx + '])" style="white-space:nowrap;flex:none;">' + (f.url && !f.data ? 'Open' : 'Save') + '</button></div>';
+  }).join('');
+};
+
+// ── My Plan ──
+var STORE = [
+  { id: 'ebook', name: '📖 Johnny Cake Method Ebook', desc: "Full strategy breakdown, Mario's system in writing", cost: 20 },
+  { id: 'indicator', name: '📈 NQ Levels Indicator', desc: 'TradingView indicator, key grain levels auto-plotted', cost: 80 },
+  { id: 'freeweek', name: '🆓 Free Week Renewal', desc: "Skip one week's payment. Seat held, tier protected", cost: 100 }
+];
+function myPoints() { return ROSTER_ME ? (ROSTER_ME.points || 0) : 0; }
+function renderPlan() {
+  if (!document.getElementById('plan-week')) return;
+  var wk = ROSTER_ME ? (ROSTER_ME.week || 1) : 1, st = ROSTER_ME ? ROSTER_ME.status : 'pending';
+  document.getElementById('plan-week').textContent = st === 'pending' ? 'Pending' : 'Week ' + wk;
+  document.getElementById('plan-renew').textContent = st === 'pending' ? 'Awaiting seat confirmation' : 'Renews Monday, ' + nextMonday();
+  document.getElementById('plan-pts').textContent = myPoints();
+  document.getElementById('bill-line').textContent = st === 'pending' ? 'No active seat yet' : 'Renews ' + nextMonday() + ' · $' + rateFor(wk) + ' (Week ' + Math.min(wk, 4) + ' rate)';
+  var rows = [[1,'$200','—','—'],[2,'$180','10%','—'],[3,'$160','20%','—'],[4,'$140','30% cap','+20 pts/wk']];
+  document.getElementById('plan-rows').innerHTML = rows.map(function(r) {
+    var n = r[0], cur = st !== 'pending' && (n === 4 ? wk >= 4 : wk === n), done = st !== 'pending' && wk > n && n < 4;
+    var label = 'Week ' + n + (n === 4 ? '+' : '') + (cur ? ' ← You' : '');
+    var status = cur ? '<span style="color:var(--accent)">● Active</span>' : done ? '<span style="color:var(--accent);font-size:.78rem">✓ Done</span>' : '<span style="color:var(--muted)">Upcoming</span>';
+    return '<tr' + (cur ? ' class="you"' : n === 4 ? ' class="pts-row"' : '') + '><td' + (cur ? ' style="color:var(--accent);font-weight:600"' : '') + '>' + label + '</td><td' + (cur ? ' style="color:var(--accent);font-weight:600"' : '') + '>' + r[1] + '</td><td>' + r[2] + '</td><td>' + (n === 4 ? '<span class="pts-earn-badge">' + r[3] + '</span>' : '—') + '</td><td>' + status + '</td></tr>';
+  }).join('');
+  document.getElementById('store-label').textContent = myPoints() + ' pts available';
+  document.getElementById('store-list').innerHTML = STORE.map(function(it, i) {
+    var can = myPoints() >= it.cost && st !== 'pending';
+    return (i ? '<div style="height:1px;background:var(--line);"></div>' : '') +
+      '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;"><div><div style="font-weight:600;font-size:.95rem;">' + it.name + '</div><div style="color:var(--muted);font-size:.82rem;">' + it.desc + '</div></div>' +
+      '<div style="display:flex;align-items:center;gap:.7rem;"><span style="font-family:\'JetBrains Mono\',monospace;font-size:.78rem;color:var(--warm);font-weight:600;">' + it.cost + ' pts</span>' +
+      '<button class="btn btn-ghost btn-sm" ' + (can ? 'onclick="redeem(\'' + it.id + '\')"' : 'disabled style="opacity:.4;cursor:default;"') + '>Redeem</button></div></div>';
+  }).join('');
+}
+function postRequest(type, detail) {
+  var reqs = lsGet('wm_requests', []);
+  reqs.unshift({ id: 'r' + Date.now(), type: type, detail: detail, name: ME.name, email: ME.email, discord: ME.discord || '', time: new Date().toLocaleString(), done: false });
+  return lsSet('wm_requests', reqs.slice(0, 200));
+}
+function redeem(id) {
+  var it = STORE.filter(function(x) { return x.id === id; })[0];
+  if (!it || !ROSTER_ME || myPoints() < it.cost) return;
+  if (!confirm('Redeem ' + it.cost + ' pts for: ' + it.name.replace(/^\S+\s/, '') + '?')) return;
+  var roster = lsGet('wm_members', []);
+  for (var i = 0; i < roster.length; i++) if (roster[i].userId === ME.id) { roster[i].points = (roster[i].points || 0) - it.cost; }
+  lsSet('wm_members', roster);
+  postRequest('redeem', it.name.replace(/^\S+\s/, '') + ' (' + it.cost + ' pts)');
+  refreshMe(); renderPlan(); showToast('Redeemed. Mario will send it over.');
+}
+function requestCancel() {
+  if (!ROSTER_ME) { showToast('You have no active seat to cancel.'); return; }
+  if (!confirm('Send a cancellation request to Mario?')) return;
+  postRequest('cancel', 'Cancellation requested');
+  showToast('Cancellation request sent.');
+}
+
+// ── Boot ──
+if(!window.WMAuth){document.documentElement.style.visibility='visible';document.body.innerHTML='<p style="padding:40px;font:16px Inter,sans-serif;color:#E6E9E2">auth.js is missing. Upload it to the same folder as this page.</p>';}else // Cloud-mode behaviour (Supabase). Demo mode keeps the browser-only versions above.
+var _saveBlobLocal = saveBlob;
+saveBlob = function(f) { if (CLOUD && f.path) { WMCloud.openFile(f.path); return false; } return _saveBlobLocal(f); };
+if (CLOUD) {
+  redeem = function(id) {
+    var it = STORE.filter(function(x) { return x.id === id; })[0];
+    if (!it || myPoints() < it.cost) return;
+    if (!confirm('Redeem ' + it.cost + ' pts for: ' + it.name.replace(/^\S+\s/, '') + '?')) return;
+    WMCloud.rpc('redeem_item', { item: id }).then(function(r) {
+      if (r.error) { showToast('Could not redeem: ' + r.error.message); return; }
+      WMCloud.pull().then(function() { refreshMe(); renderPlan(); showToast('Redeemed. Mario will send it over.'); });
+    });
+  };
+  requestCancel = function() {
+    if (!ROSTER_ME) { showToast('You have no active seat to cancel.'); return; }
+    if (!confirm('Send a cancellation request to Mario?')) return;
+    WMCloud.rpc('request_cancel').then(function(r) { showToast(r.error ? 'Could not send: ' + r.error.message : 'Cancellation request sent.'); });
+  };
+}
+
+function refreshAll() {
+  refreshMe(); renderIdentity(); renderWeek(); renderMessages(); renderPlan(); renderDownloads(); checkMarioStatus();
+  try { mCalRender(); mShowNextSession(); } catch (e) {}
+}
+if (!window.WMAuth) {
+  document.documentElement.style.visibility = 'visible';
+  document.body.innerHTML = '<p style="padding:40px;font:16px Inter,sans-serif;color:#E6E9E2">auth.js is missing. Upload it to the same folder as this page.</p>';
+} else WMAuth.guard('member', function() {
+  refreshAll();
+  setInterval(renderWeek, 60000);
+}, refreshAll);
+</script>
+</body>
+</html>
