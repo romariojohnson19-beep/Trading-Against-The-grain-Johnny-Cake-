@@ -31,7 +31,7 @@
   var rawSet = Storage.prototype.setItem, rawRemove = Storage.prototype.removeItem;
   var suppress = false, profile = null, known = { events: {}, files: {}, history: {}, roster: {}, requests: {} };
   var ADMIN_KEYS = ['wm_days_this', 'wm_days_next', 'wm_next_week', 'wm_dayslots', 'wm_schedule', 'wm_latest_msg'];
-  var SYNCED = ['wm_events', 'wm_files', 'wm_sent_history', 'wm_settings', 'mario_status', 'wm_seats', 'wm_members', 'wm_requests', 'wm_profile'].concat(ADMIN_KEYS);
+  var SYNCED = ['wm_events', 'wm_files', 'wm_sent_history', 'wm_settings', 'mario_status', 'wm_seats', 'wm_members', 'wm_requests', 'wm_profile', 'wm_promos'].concat(ADMIN_KEYS);
 
   function jget(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function put(k, v) { suppress = true; try { rawSet.call(localStorage, k, JSON.stringify(v)); } catch (e) {} suppress = false; }
@@ -142,6 +142,7 @@
       if (map.billing !== undefined) s.billing = map.billing || '';
       put('wm_settings', s);
       if (admin) ADMIN_KEYS.forEach(function (k) { if (map['ls:' + k] !== undefined && map['ls:' + k] !== null) put(k, map['ls:' + k]); });
+      if (admin && Array.isArray(map.promos)) put('wm_promos', map.promos);
       if (map.status !== undefined && map.status !== null) putRaw('mario_status', map.status);
       if (map.seats !== undefined && map.seats !== null) putRaw('wm_seats', map.seats);
     }));
@@ -211,6 +212,10 @@
       return sb.from('settings').upsert([{ key: 'discord', value: s.discord || '', visibility: 'members' }, { key: 'billing', value: s.billing || '', visibility: 'members' }])
         .then(function (r) { if (r.error) throw new Error('settings'); });
     },
+    wm_promos: function (v) {
+      var arr = JSON.parse(v); if (!Array.isArray(arr)) return Promise.resolve();
+      return sb.from('settings').upsert([{ key: 'promos', value: arr, visibility: 'public' }]).then(function (r) { if (r.error) throw new Error('promos'); });
+    },
     mario_status: function (v) {
       return sb.from('settings').upsert([{ key: 'status', value: v === 'offline' ? 'offline' : 'live', visibility: 'public' }]).then(function (r) { if (r.error) throw new Error('status'); });
     },
@@ -259,6 +264,11 @@
   };
 
   /* ── helpers used by pages ── */
+  Cloud.getPromos = function () {
+    return sb.from('settings').select('value').eq('key', 'promos').maybeSingle().then(function (r) {
+      return (r && !r.error && r.data && Array.isArray(r.data.value)) ? r.data.value : null;
+    }, function () { return null; });
+  };
   Cloud.rpc = function (name, args) { return sb.rpc(name, args || {}); };
   Cloud.submitLead = function (o) {
     return sb.from('requests').insert({ type: o.type, name: (o.name || '').slice(0, 100), email: (o.email || '').slice(0, 200), detail: (o.detail || '').slice(0, 500) })

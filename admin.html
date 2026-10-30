@@ -264,6 +264,9 @@ select.field{width:100%;background:var(--panel2);border:1px solid var(--line);bo
       <span class="nav-icon">📥</span> Inbox
       <span class="nav-badge" id="inbox-badge" style="display:none">0</span>
     </div>
+    <div class="nav-item" onclick="showPage('promos')">
+      <span class="nav-icon">🏷️</span> Promotions
+    </div>
     <div class="nav-item" onclick="showPage('settings')">
       <span class="nav-icon">⚙️</span> Settings
     </div>
@@ -639,6 +642,23 @@ select.field{width:100%;background:var(--panel2);border:1px solid var(--line);bo
       <div class="card">
         <div class="card-title">Member requests</div>
         <div id="member-requests"></div>
+      </div>
+    </div>
+
+    <!-- ══ PROMOTIONS ══ -->
+    <div class="page" id="page-promos">
+      <div class="card" style="max-width:760px">
+        <div class="card-title">Promotions shown on the site</div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:14px">Active promos appear as a strip on the Pricing page. The <b>featured</b> one (or the first active) is the occasional pop-up visitors see, at most once a day each. The code must also exist in Stripe to work at checkout.</p>
+        <div id="promo-list"></div>
+        <div class="actions-row" style="margin-top:14px">
+          <button class="btn btn-ghost" onclick="addPromo()">+ Add promotion</button>
+          <button class="btn btn-primary" onclick="savePromos()">Save promotions</button>
+        </div>
+      </div>
+      <div class="card" style="max-width:760px">
+        <div class="card-title">Pop-up preview</div>
+        <div id="promo-preview" style="background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px;font-size:14px"></div>
       </div>
     </div>
 
@@ -1156,9 +1176,9 @@ function showPage(name) {
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
   document.getElementById('page-'+name).classList.add('active');
-  var titles = {roster:'Roster',sessions:'Sessions',seats:'Seat Control',broadcast:'Broadcast',loyalty:'Loyalty',files:'Files',inbox:'Inbox',settings:'Settings'};
+  var titles = {roster:'Roster',sessions:'Sessions',seats:'Seat Control',broadcast:'Broadcast',loyalty:'Loyalty',files:'Files',inbox:'Inbox',settings:'Settings',promos:'Promotions'};
   document.getElementById('page-title').textContent = titles[name]||name;
-  var icons = {roster:'👥',sessions:'📅',seats:'🪑',broadcast:'📣',loyalty:'⭐',files:'📁',inbox:'📥',settings:'⚙️'};
+  var icons = {roster:'👥',sessions:'📅',seats:'🪑',broadcast:'📣',loyalty:'⭐',files:'📁',inbox:'📥',settings:'⚙️',promos:'🏷️'};
   document.querySelectorAll('.nav-item').forEach(function(n){
     if (n.textContent.trim().indexOf(icons[name]) >= 0) n.classList.add('active');
   });
@@ -1332,6 +1352,51 @@ function renderInbox() {
 function doneRequest(i) { var r = lsGet('wm_requests', []); if (r[i]) { r[i].done = true; lsSet('wm_requests', r); } renderInbox(); renderRoster(); }
 
 // Settings
+
+// ── PROMOTIONS ──
+var PROMO_DEFAULTS = [
+  {id:'p1',code:'CAKE20',title:'$20 off any product',detail:'Use code CAKE20 at checkout.',applies:'all',active:true,featured:true,ends:''},
+  {id:'p2',code:'WINGMAN',title:'20% off Wingman',detail:'Use code WINGMAN at checkout on a Wingman seat.',applies:'wingman',active:true,featured:false,ends:''}
+];
+var PROMOS = null, PROMO_DIRTY = false;
+function loadPromos() { var v = lsGet('wm_promos', null); PROMOS = Array.isArray(v) ? v : JSON.parse(JSON.stringify(PROMO_DEFAULTS)); }
+function renderPromos() {
+  if (PROMOS === null) loadPromos();
+  var host = document.getElementById('promo-list'); if (!host) return;
+  if (!PROMOS.length) { host.innerHTML = '<p style="color:var(--muted);font-size:13px">No promotions. Nothing will show on the site.</p>'; renderPromoPreview(); return; }
+  host.innerHTML = PROMOS.map(function(p, i) {
+    return '<div style="border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px">'
+    + '<div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-bottom:8px">'
+    + '<div><label class="input-label">Code</label><input class="field" maxlength="24" value="'+esc(p.code)+'" oninput="setPromo('+i+',\'code\',this.value.toUpperCase())"></div>'
+    + '<div><label class="input-label">Headline</label><input class="field" maxlength="80" value="'+esc(p.title)+'" oninput="setPromo('+i+',\'title\',this.value)"></div></div>'
+    + '<div style="margin-bottom:8px"><label class="input-label">Details</label><input class="field" maxlength="200" value="'+esc(p.detail)+'" oninput="setPromo('+i+',\'detail\',this.value)"></div>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">'
+    + '<div><label class="input-label">Applies to</label><select class="field" onchange="setPromo('+i+',\'applies\',this.value)">'
+    + ['all:Any product','wingman:Wingman only','book:Book only'].map(function(o){var a=o.split(':');return '<option value="'+a[0]+'"'+(p.applies===a[0]?' selected':'')+'>'+a[1]+'</option>';}).join('')+'</select></div>'
+    + '<div><label class="input-label">Ends (optional)</label><input class="field" type="date" value="'+esc(p.ends)+'" onchange="setPromo('+i+',\'ends\',this.value)"></div></div>'
+    + '<div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:13px">'
+    + '<label><input type="checkbox"'+(p.active?' checked':'')+' onchange="setPromo('+i+',\'active\',this.checked)"> Active</label>'
+    + '<label><input type="radio" name="promo-feat"'+(p.featured?' checked':'')+' onchange="featurePromo('+i+')"> Featured (pop-up)</label>'
+    + '<button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="removePromo('+i+')">Remove</button></div></div>';
+  }).join('');
+  renderPromoPreview();
+}
+function setPromo(i, k, v) { PROMO_DIRTY = true; PROMOS[i][k] = v; renderPromoPreview(); }
+function featurePromo(i) { PROMO_DIRTY = true; PROMOS.forEach(function(p, j){ p.featured = (j === i); }); renderPromoPreview(); }
+function addPromo() { PROMO_DIRTY = true; PROMOS.push({id:'p'+Date.now(),code:'',title:'',detail:'',applies:'all',active:true,featured:false,ends:''}); renderPromos(); }
+function removePromo(i) { PROMO_DIRTY = true; PROMOS.splice(i, 1); renderPromos(); }
+function renderPromoPreview() {
+  var el = document.getElementById('promo-preview'); if (!el) return;
+  var live = PROMOS.filter(function(p){ return p.active && /^[A-Za-z0-9_-]{2,24}$/.test(p.code) && (!p.ends || new Date(p.ends+'T23:59:59') >= new Date()); });
+  var p = live.filter(function(x){return x.featured;})[0] || live[0];
+  el.innerHTML = p ? '<div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Current promotion</div><div style="font-size:20px;font-weight:700;margin:4px 0">'+esc(p.title||('Use code '+p.code))+'</div><div style="color:var(--muted)">'+esc(p.detail)+'</div><div style="margin-top:8px;font-family:monospace;color:var(--accent)">'+esc(p.code)+'</div>' : '<span style="color:var(--muted)">No active promotion. No pop-up will appear.</span>';
+}
+function savePromos() {
+  var bad = PROMOS.filter(function(p){ return !/^[A-Za-z0-9_-]{2,24}$/.test(p.code); });
+  if (bad.length) { showToast('⚠ Each code needs 2–24 letters/numbers (no spaces)'); return; }
+  var seen = {}; for (var i = 0; i < PROMOS.length; i++) { if (seen[PROMOS[i].code]) { showToast('⚠ Duplicate code ' + PROMOS[i].code); return; } seen[PROMOS[i].code] = 1; }
+  lsSet('wm_promos', PROMOS); PROMO_DIRTY = false; showToast('✅ Promotions saved');
+}
 function loadSettings() { var c = lsGet('wm_settings', {}); document.getElementById('set-discord').value = c.discord || ''; document.getElementById('set-billing').value = c.billing || ''; }
 function saveSettings() {
   var d = document.getElementById('set-discord').value.trim(), b = document.getElementById('set-billing').value.trim();
@@ -1401,9 +1466,9 @@ if(!window.WMAuth){document.documentElement.style.visibility='visible';document.
   document.getElementById('sb-name').textContent = u.name;
   document.getElementById('sb-avatar').textContent = (u.name || 'A').trim()[0].toUpperCase();
   try { DAY_SLOTS = lsGet('wm_dayslots', DAY_SLOTS); DAYS_THIS = lsGet('wm_days_this', DAYS_THIS); DAYS_NEXT = lsGet('wm_days_next', DAYS_NEXT); } catch (e) {}
-  refreshAdmin(); loadSettings();
+  refreshAdmin(); loadSettings(); loadPromos(); renderPromos();
   try { renderDayMeters(); syncDayBtns('day-grid', DAYS_THIS); syncDayBtns('next-day-grid', DAYS_NEXT); } catch (e) {}
-}, refreshAdmin);
+}, function(){ refreshAdmin(); var pg=document.getElementById('page-promos'); if (pg && !PROMO_DIRTY) { loadPromos(); renderPromos(); } });
 </script>
 </body>
 </html>
