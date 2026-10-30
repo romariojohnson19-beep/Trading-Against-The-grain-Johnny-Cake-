@@ -95,7 +95,7 @@ nav {
 .brand-mark svg { width: 14px; height: 14px; }
 .nav-cta {
   font-weight: 600; font-size: .85rem;
-  background: var(--accent); color: #101A08;
+  background: var(--accent); color: var(--on-accent,#101A08);
   border: none; border-radius: 8px; padding: .5rem 1.1rem;
   text-decoration: none; cursor: pointer;
   min-height: 38px; display: flex; align-items: center;
@@ -192,7 +192,7 @@ nav {
 
 .hero-cta {
   display: inline-flex; align-items: center; gap: .6rem;
-  background: var(--accent); color: #101A08;
+  background: var(--accent); color: var(--on-accent,#101A08);
   font-weight: 700; font-size: 1.05rem;
   border: none; border-radius: 12px;
   padding: 1rem 2rem; text-decoration: none; cursor: pointer;
@@ -561,7 +561,7 @@ nav {
   font-size: .58rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
   padding: 4px 14px; border-radius: 100px; white-space: nowrap;
 }
-.offer-badge.lime { background: var(--accent); color: #101A08; }
+.offer-badge.lime { background: var(--accent); color: var(--on-accent,#101A08); }
 .offer-badge.warm { background: var(--warm); color: #1a0800; }
 .offer-badge.muted { background: #2a2f38; color: var(--muted); }
 .offer-name {
@@ -583,7 +583,7 @@ nav {
   transition: opacity .15s, transform .15s;
   -webkit-tap-highlight-color: transparent;
 }
-.offer-btn.lime { background: var(--accent); color: #101A08; }
+.offer-btn.lime { background: var(--accent); color: var(--on-accent,#101A08); }
 .offer-btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
 .offer-btn.ghost:hover { border-color: var(--muted); }
 .offer-btn.lime:hover { opacity: .88; transform: translateY(-1px); }
@@ -666,7 +666,7 @@ details[open] .faq-plus { transform: rotate(45deg); }
 .final p { color: var(--muted); font-size: 1rem; max-width: 34ch; line-height: 1.6; }
 .final-btn {
   display: inline-flex; align-items: center; gap: .6rem;
-  background: var(--accent); color: #101A08;
+  background: var(--accent); color: var(--on-accent,#101A08);
   font-weight: 700; font-size: 1.05rem;
   border: none; border-radius: 12px; padding: 1rem 2.2rem;
   text-decoration: none; cursor: pointer; min-height: 54px;
@@ -708,6 +708,9 @@ nav, section, .proof, footer, .banner { position: relative; z-index: 1; }
   [data-r] { opacity: 1; transform: none; }
 }
 </style>
+<link rel="stylesheet" href="results.css">
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
 </head>
 <body>
 
@@ -781,6 +784,30 @@ nav, section, .proof, footer, .banner { position: relative; z-index: 1; }
     </div>
   </div>
 </div>
+
+<!-- ══ RESULTS (hidden until a result is logged in Admin → Results) ══ -->
+<section class="results" id="results" hidden>
+  <div class="wrap">
+    <div class="wr" id="wingman-results">
+      <div class="label section-label" data-r>Results</div>
+      <h2 class="section-h" data-r style="max-width:16ch">Every attempt.<br><em>Pass or fail.</em></h2>
+      <p class="section-p" style="max-width:56ch" data-r>Every challenge I attempt on my own accounts is logged here, passes and fails, with the date. Weekly and monthly counts reset automatically.</p>
+      <div class="wr-stats" id="wr-stats" aria-live="polite"></div>
+      <div class="wr-filters" role="group" aria-label="Filter screenshots">
+        <button class="wr-chip" data-f="all" aria-pressed="true" type="button">All</button>
+        <button class="wr-chip" data-f="pass" aria-pressed="false" type="button">Passes</button>
+        <button class="wr-chip" data-f="fail" aria-pressed="false" type="button">Fails</button>
+      </div>
+      <div class="wr-gallery" id="wr-gallery"></div>
+      <p class="wr-foot" id="wr-foot"></p>
+    </div>
+  </div>
+</section>
+<dialog class="wr wr-lightbox" id="wr-lightbox" aria-label="Screenshot">
+  <img id="wr-lb-img" alt="">
+  <p id="wr-lb-cap"></p>
+  <button class="wr-btn ghost" id="wr-lb-close" type="button">Close</button>
+</dialog>
 
 <!-- ══ WHAT IS WINGMAN ══ -->
 <section class="what" id="wingman">
@@ -1159,6 +1186,8 @@ nav, section, .proof, footer, .banner { position: relative; z-index: 1; }
 <script src="cloud.js"></script>
 <script src="auth.js" onerror="window.WMAUTH_MISSING=1"></script>
 <script src="promo.js"></script>
+<script src="results.js"></script>
+<script src="results-panel.js"></script>
 <script>
 var CFG = window.WM_CONFIG || {}, LINKS = CFG.links || {};
 var CHECKOUT_URL = LINKS.ebook || "https://buy.stripe.com/28EdR95TD3xz4os4ccgnK04";

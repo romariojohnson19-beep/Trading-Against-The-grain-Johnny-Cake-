@@ -70,7 +70,7 @@ body{background-color:var(--bg);background-image:radial-gradient(ellipse 110% 50
 .sb-role{font-size:11px;color:var(--accent);font-family:var(--font-mono)}
 
 /* ── MAIN ── */
-.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.main{flex:1;min-width:0;overflow-y:auto;display:flex;flex-direction:column}
 .topbar{padding:16px 28px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--panel);position:sticky;top:0;z-index:10}
 .page-title{font-family:var(--font-display);font-size:20px;font-weight:700;letter-spacing:-.3px}
 .topbar-right{display:flex;align-items:center;gap:12px}
@@ -209,7 +209,13 @@ select.field{width:100%;background:var(--panel2);border:1px solid var(--line);bo
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" crossorigin="anonymous" onerror="window.WMSUPA_FAIL=1"></script>
 <script src="cloud.js"></script>
 <script src="auth.js"></script>
+<script src="results.js"></script>
+<script src="results-editor.js"></script>
 <script>try{var _u=WMAuth.user();if(!_u||_u.role!=='admin')document.documentElement.style.visibility='hidden';}catch(e){}</script>
+<link rel="stylesheet" href="results.css">
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
+<style>html[data-theme="light"]{--accent:#BD5A33;--lime:#4F7A14;--green:#2F7D4F;--red:#C2372F}</style>
 </head>
 <body>
 
@@ -263,6 +269,9 @@ select.field{width:100%;background:var(--panel2);border:1px solid var(--line);bo
     <div class="nav-item" onclick="showPage('inbox')">
       <span class="nav-icon">📥</span> Inbox
       <span class="nav-badge" id="inbox-badge" style="display:none">0</span>
+    </div>
+    <div class="nav-item" onclick="showPage('results')">
+      <span class="nav-icon">🏆</span> Results
     </div>
     <div class="nav-item" onclick="showPage('promos')">
       <span class="nav-icon">🏷️</span> Promotions
@@ -642,6 +651,35 @@ select.field{width:100%;background:var(--panel2);border:1px solid var(--line);bo
       <div class="card">
         <div class="card-title">Member requests</div>
         <div id="member-requests"></div>
+      </div>
+    </div>
+
+    <!-- ══ RESULTS ══ -->
+    <div class="page" id="page-results">
+      <div class="card wr" id="wingman-results-admin" style="max-width:640px">
+        <div class="card-title">Log an evaluation result</div>
+        <div class="wr-banner" id="wra-mode"></div>
+        <div class="wr-admin-stats" id="wra-stats"></div>
+        <form class="wr-form" id="wra-form">
+          <div class="wr-seg" role="radiogroup" aria-label="Result">
+            <label><input type="radio" name="result" value="pass" checked><span>Passed</span></label>
+            <label><input type="radio" name="result" value="fail"><span>Failed</span></label>
+          </div>
+          <label>Firm
+            <input name="firm" list="wra-firms" placeholder="e.g. Tradeify" autocomplete="off">
+            <datalist id="wra-firms"><option value="Tradeify"><option value="TakeProfit Trader"></datalist>
+          </label>
+          <label>Date <input type="date" name="occurred_on" required></label>
+          <label>Note (optional) <input name="note" maxlength="120" placeholder="e.g. 50K account, 6 days"></label>
+          <label>Screenshot (optional) <input type="file" name="shot" accept="image/*"></label>
+          <p class="wr-sub">After you pick a screenshot an editor opens so you can hide account numbers and crop before anything is uploaded. Use <b>Hide</b>, not Blur, for account numbers and emails. Log fails as well as passes: the public panel states that every attempt is logged.</p>
+          <img class="wr-preview" id="wra-preview" alt="Edited screenshot preview" hidden>
+          <button class="wr-btn ghost" type="button" id="wra-reedit" hidden>Edit screenshot again</button>
+          <button class="wr-btn" type="submit" id="wra-save">Save result</button>
+          <div class="wr-msg" id="wra-msg" role="status" aria-live="polite"></div>
+        </form>
+        <div class="card-title" style="margin-top:22px">Logged results</div>
+        <div class="wr-rows" id="wra-rows"></div>
       </div>
     </div>
 
@@ -1176,9 +1214,9 @@ function showPage(name) {
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
   document.getElementById('page-'+name).classList.add('active');
-  var titles = {roster:'Roster',sessions:'Sessions',seats:'Seat Control',broadcast:'Broadcast',loyalty:'Loyalty',files:'Files',inbox:'Inbox',settings:'Settings',promos:'Promotions'};
+  var titles = {roster:'Roster',sessions:'Sessions',seats:'Seat Control',broadcast:'Broadcast',loyalty:'Loyalty',files:'Files',inbox:'Inbox',settings:'Settings',promos:'Promotions',results:'Results'};
   document.getElementById('page-title').textContent = titles[name]||name;
-  var icons = {roster:'👥',sessions:'📅',seats:'🪑',broadcast:'📣',loyalty:'⭐',files:'📁',inbox:'📥',settings:'⚙️',promos:'🏷️'};
+  var icons = {roster:'👥',sessions:'📅',seats:'🪑',broadcast:'📣',loyalty:'⭐',files:'📁',inbox:'📥',settings:'⚙️',promos:'🏷️',results:'🏆'};
   document.querySelectorAll('.nav-item').forEach(function(n){
     if (n.textContent.trim().indexOf(icons[name]) >= 0) n.classList.add('active');
   });
@@ -1470,5 +1508,6 @@ if(!window.WMAuth){document.documentElement.style.visibility='visible';document.
   try { renderDayMeters(); syncDayBtns('day-grid', DAYS_THIS); syncDayBtns('next-day-grid', DAYS_NEXT); } catch (e) {}
 }, function(){ refreshAdmin(); var pg=document.getElementById('page-promos'); if (pg && !PROMO_DIRTY) { loadPromos(); renderPromos(); } });
 </script>
+<script src="results-admin.js"></script>
 </body>
 </html>

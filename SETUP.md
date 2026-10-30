@@ -42,3 +42,9 @@ Run sessions on Discord Stage, record with OBS, upload the recording as a file i
 - Messages and files are visible to all paying members; the "audience" filter (Week 4+, Day Pass) hides messages in the portal but is not a database-level wall.
 - Day Pass buyers do not get an account. Mario confirms their slot from the payment email.
 - Support email in `config.js` is `mariovsng@gmail.com`. Your handle is MarioVsNQ, so check that spelling.
+
+## Challenge results (new)
+1. Supabase → SQL Editor → paste `supabase/results.sql` → Run. (No Clerk, nothing to replace: it uses the same admin check as the rest of the site.)
+2. Sign in as admin → **Results** tab → log a pass or fail. Add a screenshot if you want; the editor opens so you can **Hide** account numbers and crop before it uploads.
+3. The public **Results** section on the landing page stays hidden until the first result exists.
+4. The intro sentence says every attempt is logged, passes and fails. Keep that literally true, or edit it in `index.html`.

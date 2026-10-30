@@ -1,0 +1,29 @@
+html { --brand: #B9D77A; }
+/* Light theme. Applied when <html data-theme="light"> (system setting by default, or the toggle). */
+html[data-theme="light"] {
+  --brand: #4F7A14;
+  --bg: #F6F5EF; --panel: #FFFFFF; --panel2: #EFEDE3; --line: #DEDACB;
+  --fg: #161B17; --muted: #586259;
+  --accent: #4F7A14; --accent-dim: rgba(79,122,20,.09); --accent-border: rgba(79,122,20,.28);
+  --warm: #BD5A33; --warm-dim: rgba(189,90,51,.09); --warm-border: rgba(189,90,51,.3);
+  --red: #C2372F; --on-accent: #FFFFFF; color-scheme: light;
+}
+html[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="light"] body { background-image: none; }
+html[data-theme="light"] nav,
+html[data-theme="light"] .pnav,
+html[data-theme="light"] .topbar { background: rgba(246,245,239,.86); }
+html[data-theme="light"] .final { background: linear-gradient(180deg, #EFEDE3 0%, #E6E3D5 100%); }
+html[data-theme="light"] body::before { display: none; }
+html[data-theme="light"] .brand-mark svg path { fill: #fff; }
+html[data-theme="light"] .tier.main { box-shadow: 0 0 0 1px var(--accent), 0 10px 40px rgba(79,122,20,.12); }
+html[data-theme="light"] .wm-promo { box-shadow: 0 18px 50px rgba(30,40,30,.18); }
+html[data-theme="light"] .code-pill { background: var(--panel); }
+html[data-theme="light"] .sidebar, html[data-theme="light"] #sidebar { background: var(--panel); }
+
+/* toggle button (injected by theme.js) */
+.wm-theme { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; min-width: 38px; border-radius: 10px; background: transparent; border: 1px solid var(--line); color: var(--muted); cursor: pointer; padding: 0; flex: none; }
+.wm-theme:hover { color: var(--fg); border-color: var(--muted); }
+.wm-theme svg { width: 18px; height: 18px; }
+.wm-theme.floating { position: fixed; left: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); z-index: 1400; background: var(--panel); }
+html[data-theme="light"] .hero::before { opacity: .09; }

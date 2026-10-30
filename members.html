@@ -127,7 +127,7 @@ body {
 .sb-user-tier { font-family: 'JetBrains Mono', monospace; font-size: .56rem; color: var(--accent); }
 
 /* ── Main ── */
-.main { margin-left: var(--sidebar); flex: 1; display: flex; flex-direction: column; min-height: 100svh; }
+.main { min-width: 0; max-width: 100%; margin-left: var(--sidebar); flex: 1; display: flex; flex-direction: column; min-height: 100svh; }
 .topbar {
   position: sticky; top: 0; z-index: 40;
   background: rgba(11,13,17,.88);
@@ -262,7 +262,7 @@ body {
 .msg-item:last-child { border-bottom: none; }
 .msg-item:hover { background: var(--panel2); }
 .msg-item.unread { background: rgba(185,215,122,.025); }
-.msg-av { width: 35px; height: 35px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: .65rem; color: #101A08; font-weight: 700; flex: none; }
+.msg-av { width: 35px; height: 35px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: .65rem; color: var(--on-accent,#101A08); font-weight: 700; flex: none; }
 .msg-body { flex: 1; min-width: 0; }
 .msg-row { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; margin-bottom: .12rem; }
 .msg-from { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .9rem; }
@@ -278,7 +278,7 @@ body {
 .md-header { padding: 1.1rem 1.3rem; border-bottom: 1px solid var(--line); }
 .md-subject { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.15rem; letter-spacing: -.02em; margin-bottom: .5rem; }
 .md-meta { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
-.md-av { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: .5rem; color: #101A08; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+.md-av { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: .5rem; color: var(--on-accent,#101A08); font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
 .md-sender { display: flex; align-items: center; gap: .45rem; font-size: .88rem; font-weight: 500; }
 .md-date { font-family: 'JetBrains Mono', monospace; font-size: .58rem; color: var(--muted); }
 .md-body-content { padding: 1.3rem; font-size: .93rem; line-height: 1.75; color: var(--muted); }
@@ -303,7 +303,7 @@ body {
 
 /* ── Buttons ── */
 .btn { display: inline-flex; align-items: center; gap: .45rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: .88rem; border-radius: 9px; padding: .6rem 1.1rem; border: none; cursor: pointer; text-decoration: none; transition: opacity .15s; -webkit-tap-highlight-color: transparent; }
-.btn-accent { background: var(--accent); color: #101A08; }
+.btn-accent { background: var(--accent); color: var(--on-accent,#101A08); }
 .btn-ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
 .btn-ghost:hover { border-color: var(--muted); }
 .btn-accent:hover { opacity: .88; }
@@ -370,6 +370,8 @@ body {
 <script src="cloud.js"></script>
 <script src="auth.js"></script>
 <script>try{if(!WMAuth.user())document.documentElement.style.visibility='hidden';}catch(e){}</script>
+<link rel="stylesheet" href="theme.css">
+<script src="theme.js"></script>
 </head>
 <body>
 <div class="shell">

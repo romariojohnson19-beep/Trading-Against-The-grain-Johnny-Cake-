@@ -100,22 +100,22 @@
       var s = document.createElement('style');
       s.textContent =
         '.wma-back{position:fixed;inset:0;z-index:2000;background:rgba(6,9,7,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}' +
-        '.wma-card{width:100%;max-width:400px;background:#151B18;border:1px solid #26302B;border-radius:20px;padding:28px 26px;box-shadow:0 30px 90px rgba(0,0,0,.6);font-family:Inter,system-ui,sans-serif;color:#E6E9E2;position:relative}' +
-        '.wma-x{position:absolute;top:14px;right:16px;background:none;border:none;color:#8D978F;font-size:22px;cursor:pointer;line-height:1}' +
-        '.wma-x:hover{color:#E6E9E2}' +
+        '.wma-card{width:100%;max-width:400px;background:var(--panel,#151B18);border:1px solid var(--line,#26302B);border-radius:20px;padding:28px 26px;box-shadow:0 30px 90px rgba(0,0,0,.6);font-family:Inter,system-ui,sans-serif;color:var(--fg,#E6E9E2);position:relative}' +
+        '.wma-x{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted,#8D978F);font-size:22px;cursor:pointer;line-height:1}' +
+        '.wma-x:hover{color:var(--fg,#E6E9E2)}' +
         '.wma-h{font-family:"Bricolage Grotesque","Space Grotesk",sans-serif;font-weight:800;font-size:1.55rem;letter-spacing:-.03em;margin:0 0 4px}' +
-        '.wma-sub{color:#9AA39C;font-size:.88rem;margin:0 0 18px;line-height:1.5}' +
-        '.wma-tabs{display:flex;gap:4px;background:#0E1210;border:1px solid #26302B;border-radius:10px;padding:3px;margin-bottom:18px}' +
-        '.wma-tab{flex:1;background:none;border:none;color:#9AA39C;font:600 .84rem Inter,sans-serif;padding:8px;border-radius:8px;cursor:pointer}' +
-        '.wma-tab.on{background:#26302B;color:#E6E9E2}' +
+        '.wma-sub{color:var(--muted,#9AA39C);font-size:.88rem;margin:0 0 18px;line-height:1.5}' +
+        '.wma-tabs{display:flex;gap:4px;background:var(--bg,#0E1210);border:1px solid var(--line,#26302B);border-radius:10px;padding:3px;margin-bottom:18px}' +
+        '.wma-tab{flex:1;background:none;border:none;color:var(--muted,#9AA39C);font:600 .84rem Inter,sans-serif;padding:8px;border-radius:8px;cursor:pointer}' +
+        '.wma-tab.on{background:var(--line,#26302B);color:var(--fg,#E6E9E2)}' +
         '.wma-f{display:block;margin-bottom:12px}' +
-        '.wma-f span{display:block;font:500 .64rem "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:#8D978F;margin-bottom:5px}' +
-        '.wma-f input{width:100%;background:#0E1210;border:1px solid #26302B;border-radius:10px;color:#E6E9E2;font:400 .95rem Inter,sans-serif;padding:11px 13px;outline:none;transition:border-color .15s}' +
-        '.wma-f input:focus{border-color:#B9D77A}' +
+        '.wma-f span{display:block;font:500 .64rem "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted,#8D978F);margin-bottom:5px}' +
+        '.wma-f input{width:100%;background:var(--bg,#0E1210);border:1px solid var(--line,#26302B);border-radius:10px;color:var(--fg,#E6E9E2);font:400 .95rem Inter,sans-serif;padding:11px 13px;outline:none;transition:border-color .15s}' +
+        '.wma-f input:focus{border-color:var(--brand,#B9D77A)}' +
         '.wma-err{min-height:1.1em;color:#FF6B6B;font-size:.82rem;margin:2px 0 10px}' +
-        '.wma-go{width:100%;background:#B9D77A;color:#101A08;border:none;border-radius:11px;font:700 .98rem Inter,sans-serif;padding:13px;cursor:pointer;min-height:48px;transition:opacity .15s}' +
+        '.wma-go{width:100%;background:var(--brand,#B9D77A);color:var(--on-accent,#101A08);border:none;border-radius:11px;font:700 .98rem Inter,sans-serif;padding:13px;cursor:pointer;min-height:48px;transition:opacity .15s}' +
         '.wma-go:hover{opacity:.9}.wma-go:disabled{opacity:.5;cursor:default}' +
-        '.wma-fine{color:#8D978F;font-size:.76rem;margin-top:12px;line-height:1.5;text-align:center}';
+        '.wma-fine{color:var(--muted,#8D978F);font-size:.76rem;margin-top:12px;line-height:1.5;text-align:center}';
       document.head.appendChild(s);
     },
 
@@ -153,7 +153,7 @@
           '<label class="wma-f"><span>Password</span><input name="password" type="password" autocomplete="' + (signup ? 'new-password' : 'current-password') + '" maxlength="128"></label>' +
           '<div class="wma-err" role="alert"></div>' +
           '<button class="wma-go" type="submit">' + (mode === 'admin-setup' ? 'Create admin account' : signup ? 'Create account' : 'Sign in') + '</button></form>' +
-          (!signup && cloud() ? '<p class="wma-fine"><a href="#" data-forgot style="color:#B9D77A">Forgot password?</a></p>' : '') +
+          (!signup && cloud() ? '<p class="wma-fine"><a href="#" data-forgot style="color:var(--brand,#B9D77A)">Forgot password?</a></p>' : '') +
           (signup && !admin && !cloud() ? '<p class="wma-fine">Passwords are hashed and stored only in this browser until the full member backend goes live.</p>' : '') +
           '</div>';
         var x = root.querySelector('[data-x]'); if (x) x.onclick = function () { root.remove(); };
@@ -167,7 +167,7 @@
           else p = Auth.signIn(f.email.value, f.password.value, admin ? 'admin' : null);
           p.then(function (r) {
             if (!r.ok) { err.textContent = r.error; btn.disabled = false; return; }
-            if (r.confirm) { err.style.color = '#B9D77A'; err.textContent = 'Check your email to confirm your account, then sign in.'; btn.disabled = false; return; }
+            if (r.confirm) { err.style.color = 'var(--brand,#B9D77A)'; err.textContent = 'Check your email to confirm your account, then sign in.'; btn.disabled = false; return; }
             root.remove();
             if (opts.onDone) opts.onDone(r.user);
             else if (opts.redirect) location.href = (r.user.role === 'admin' ? 'admin.html' : opts.redirect);
@@ -186,7 +186,7 @@
             ? '<label class="wma-f"><span>New password</span><input name="password" type="password" autocomplete="new-password" maxlength="128"></label><label class="wma-f"><span>Confirm password</span><input name="confirm" type="password" autocomplete="new-password" maxlength="128"></label>'
             : '<label class="wma-f"><span>Email</span><input name="email" type="email" autocomplete="email" maxlength="120"></label>') +
           '<div class="wma-err" role="alert"></div><button class="wma-go" type="submit">' + (isReset ? 'Save password' : 'Send reset link') + '</button></form>' +
-          (isReset ? '' : '<p class="wma-fine"><a href="#" data-back style="color:#B9D77A">Back to sign in</a></p>') + '</div>';
+          (isReset ? '' : '<p class="wma-fine"><a href="#" data-back style="color:var(--brand,#B9D77A)">Back to sign in</a></p>') + '</div>';
         var x = root.querySelector('[data-x]'); if (x) x.onclick = function () { root.remove(); };
         var back = root.querySelector('[data-back]'); if (back) back.onclick = function (e) { e.preventDefault(); mode = 'signin'; render(); };
         var form = root.querySelector('form'), err = root.querySelector('.wma-err'), btn = root.querySelector('.wma-go');
@@ -199,7 +199,7 @@
             window.WMCloud.requestReset(f.email.value.trim()).then(function (r) {
               btn.disabled = false;
               if (!r.ok) { err.textContent = r.error; return; }
-              err.style.color = '#B9D77A'; err.textContent = 'If that email has an account, a reset link is on its way. Check your inbox.';
+              err.style.color = 'var(--brand,#B9D77A)'; err.textContent = 'If that email has an account, a reset link is on its way. Check your inbox.';
             });
             return;
           }
