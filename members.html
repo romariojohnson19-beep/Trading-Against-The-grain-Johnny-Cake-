@@ -175,7 +175,7 @@ body {
 .lb-btn { background: rgba(229,103,95,.16); color: #F2A9A3; border: 1px solid rgba(229,103,95,.35); font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: .88rem; border-radius: 10px; padding: .65rem 1.3rem; cursor: pointer; text-decoration: none; transition: opacity .15s; }
 .lb-btn:hover { opacity: .88; }
 
-/* ── Alert banner (Mario online/offline) ── */
+/* ── Alert banner (room online/offline) ── */
 .alert-banner {
   border-radius: 12px; padding: .85rem 1.1rem;
   display: flex; align-items: center; gap: .7rem;
@@ -370,7 +370,7 @@ body {
 <script src="cloud.js"></script>
 <script src="auth.js"></script>
 <script>try{if(!WMAuth.user())document.documentElement.style.visibility='hidden';}catch(e){}</script>
-<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="johnny.css"><link rel="stylesheet" href="theme.css"><link rel="stylesheet" href="lessons.css">
 <script src="theme.js"></script>
 </head>
 <body>
@@ -380,16 +380,14 @@ body {
   <!-- ══ SIDEBAR ══ -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-top">
-      <div class="sb-mark">
-        <svg viewBox="0 0 14 14" fill="none"><path d="M7 1L12 4V10L7 13L2 10V4L7 1Z" fill="#101A08"/></svg>
-      </div>
+      <img class="brand-jc sb-jc" src="media/johnny-avatar.png" alt="" width="34" height="34">
       <div class="sb-brand">Wingman <span>Member Portal</span></div>
     </div>
 
-    <!-- Mario's online status -->
+    <!-- Room online status -->
     <div class="sb-online live" id="mario-status-bar">
       <div class="sb-online-dot"></div>
-      <span id="mario-status-label">Mario is online</span>
+      <span id="mario-status-label">The room is live</span>
     </div>
 
     <nav class="sb-nav">
@@ -398,6 +396,10 @@ body {
         <button class="sb-item active" onclick="showPage('dashboard')" id="nav-dashboard">
           <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.4"/></svg>
           Dashboard
+        </button>
+        <button class="sb-item" onclick="showPage('lessons')" id="nav-lessons">
+          <svg viewBox="0 0 16 16" fill="none"><rect x="1.5" y="2.5" width="13" height="11" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 5.7v4.6L10.6 8 6.5 5.7z" fill="currentColor"/></svg>
+          Lessons
         </button>
         <button class="sb-item" onclick="showPage('schedule')" id="nav-schedule">
           <svg viewBox="0 0 16 16" fill="none"><rect x="1.5" y="2.5" width="13" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><line x1="5" y1="1" x2="5" y2="4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="11" y1="1" x2="11" y2="4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="1.5" y1="6.5" x2="14.5" y2="6.5" stroke="currentColor" stroke-width="1.4"/></svg>
@@ -454,8 +456,13 @@ body {
       ══════════════ -->
       <div id="page-dashboard">
 
+        <div class="johnny-note full jc-welcome" data-jc>
+          <img class="" src="media/jc-desk-coffee.webp" alt="Johnny Crow at his desk" width="150" height="124" loading="lazy" data-jc-frames="media/jc-desk-coffee.webp,media/jc-desk-type.webp,media/jc-desk-notes.webp" data-jc-every="3200">
+          <p class="bubble"><span id="jc-hello">Welcome back.</span> Check This Week for the schedule, and keep questions for between setups.<span class="who">Johnny Crow</span></p>
+        </div>
+
         <div id="pending-note" class="card" style="display:none;margin-bottom:1rem;border-color:rgba(232,148,111,.3);background:rgba(232,148,111,.05)">
-          <div class="card-body" style="font-size:.9rem;line-height:1.55"><b style="color:var(--warm)">Seat requested.</b> Mario confirms seats himself. Once yours is approved the Discord room link unlocks here.<div style="margin-top:.7rem"><a id="pay-btn" class="btn btn-accent btn-sm" href="#" style="display:none">Pay for your seat →</a></div></div>
+          <div class="card-body" style="font-size:.9rem;line-height:1.55"><b style="color:var(--warm)">Seat requested.</b> Seats are confirmed by hand. Once yours is approved the Discord room link unlocks here.<div style="margin-top:.7rem"><a id="pay-btn" class="btn btn-accent btn-sm" href="#" style="display:none">Pay for your seat →</a></div></div>
         </div>
 
         <!-- Single status banner — controlled by checkMarioStatus() -->
@@ -463,7 +470,7 @@ body {
           <div style="display:flex;align-items:center;gap:.75rem;">
             <div class="lb-pulse" id="lb-pulse"></div>
             <div>
-              <div class="lb-title" id="lb-title">Mario is trading live now</div>
+              <div class="lb-title" id="lb-title">Trading live now</div>
               <div class="lb-sub" id="lb-sub">Join on Discord to participate</div>
             </div>
           </div>
@@ -480,9 +487,9 @@ body {
         </div>
 
 
-        <!-- Latest from Mario -->
+        <!-- Latest from the room -->
         <div class="sec-header" style="margin-top:1.5rem;">
-          <div class="sec-title">Latest from Mario</div>
+          <div class="sec-title">Latest from the room</div>
           <button class="btn btn-ghost btn-sm" onclick="showPage('messages')">All messages →</button>
         </div>
         <div class="card" id="latest-card"></div>
@@ -568,7 +575,7 @@ body {
             <div class="md-header">
               <div class="md-subject" id="md-subject">—</div>
               <div class="md-meta">
-                <div class="md-sender"><div class="md-av">M</div>Mario Johnson</div>
+                <div class="md-sender"><div class="md-av"><img src="media/johnny-avatar.png" alt=""></div>Johnny Crow</div>
                 <div class="md-date" id="md-date">—</div>
               </div>
             </div>
@@ -619,7 +626,7 @@ body {
         <!-- Points store -->
         <div class="card" style="margin-bottom:1.2rem;">
           <div class="card-header">
-            <div class="card-title">Points Store</div>
+            <div class="card-title"><img class="jc-mini" src="media/johnny-avatar.png" alt="" width="24" height="24">Johnny's Points Store</div>
             <div class="label" id="store-label">0 pts available</div>
           </div>
           <div class="card-body" id="store-list" style="display:flex;flex-direction:column;gap:.85rem;"></div>
@@ -648,7 +655,7 @@ body {
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;">
               <div>
                 <div style="font-weight:600;font-size:.93rem;color:var(--red);">Cancel</div>
-                <div style="color:var(--muted);font-size:.83rem;">Sends a cancellation request to Mario. Your tier is saved for 30 days.</div>
+                <div style="color:var(--muted);font-size:.83rem;">Sends a cancellation request. Your tier is saved for 30 days.</div>
               </div>
               <button class="btn btn-danger btn-sm" onclick="requestCancel()">Cancel</button>
             </div>
@@ -657,12 +664,23 @@ body {
       </div>
 
       <!-- ══════════════
+           LESSONS
+      ══════════════ -->
+      <div id="page-lessons" style="display:none">
+        <div class="sec-header">
+          <div class="sec-title">Lessons</div>
+          <div style="font-size:.82rem;color:var(--muted)">Short videos with Johnny and Dæv</div>
+        </div>
+        <div id="lessons-root"></div>
+      </div>
+
+      <!-- ══════════════
            DOWNLOADS
       ══════════════ -->
       <div id="page-downloads" style="display:none">
         <div class="sec-header">
           <div class="sec-title">Downloads</div>
-          <div style="font-size:.82rem;color:var(--muted)">Files &amp; resources from Mario</div>
+          <div style="font-size:.82rem;color:var(--muted)">Files &amp; resources from the room</div>
         </div>
         <div class="card" id="downloads-list">
           <div style="padding:2.5rem;text-align:center;color:var(--muted);font-size:.9rem;">Loading…</div>
@@ -681,13 +699,13 @@ var MESSAGES = [
   {
     subject: "This week's game plan + key levels PDF",
     date: "Today, 8:42 AM",
-    body: "<p>Here's the plan going into this week.</p><p>NQ has a clean setup building at the <b>19,800 level</b>. I'm watching for grain confirmation before touching anything. Plan is attached — print it or keep it on a second screen during the session.</p><p>See you live at 9:30 AM CT on Discord Stage. Get in a few minutes early.</p><p>— Mario</p>",
+    body: "<p>Here's the plan going into this week.</p><p>NQ has a clean setup building at the <b>19,800 level</b>. I'm watching for grain confirmation before touching anything. Plan is attached — print it or keep it on a second screen during the session.</p><p>See you live at 9:30 AM CT on Discord Stage. Get in a few minutes early.</p><p>— Johnny</p>",
     attachments: [{ name: "game-plan-oct-28.pdf", size: "142 KB" }]
   },
   {
     subject: "Welcome to Wingman — read this first",
     date: "Sun Oct 25, 6:15 PM",
-    body: "<p>Welcome to the room.</p><p>Everything you need is here. Sessions run on <b>Discord Stage</b> — the invite and setup guide are attached. Get in the server before Tuesday so you're not rushing at market open.</p><p>Sessions are Tue–Thu at 9:30 AM CT. Monday I drop the game plan. Friday we recap. That's the week.</p><p>One rule: <b>stay off the keyboard while I'm in a trade.</b> Questions are for between setups. Everything you're wondering gets answered by watching.</p><p>— Mario</p>",
+    body: "<p>Welcome to the room.</p><p>Everything you need is here. Sessions run on <b>Discord Stage</b> — the invite and setup guide are attached. Get in the server before Tuesday so you're not rushing at market open.</p><p>Sessions are Tue–Thu at 9:30 AM CT. Monday I drop the game plan. Friday we recap. That's the week.</p><p>One rule: <b>stay off the keyboard while I'm in a trade.</b> Questions are for between setups. Everything you're wondering gets answered by watching.</p><p>— Johnny</p>",
     attachments: [
       { name: "wingman-welcome.pdf", size: "88 KB" },
       { name: "discord-setup.png", size: "210 KB" }
@@ -696,7 +714,7 @@ var MESSAGES = [
   {
     subject: "Friday recap — what happened this week",
     date: "Fri Oct 18, 4:22 PM",
-    body: "<p>Good week. Hit two clean setups Tuesday and Thursday, passed on Wednesday — grain wasn't right.</p><p>Key takeaway: <b>patience at the grain level is the whole game.</b> Everything else is just waiting.</p><p>Watching 19,600 next week. See you Monday.</p><p>— Mario</p>",
+    body: "<p>Good week. Hit two clean setups Tuesday and Thursday, passed on Wednesday — grain wasn't right.</p><p>Key takeaway: <b>patience at the grain level is the whole game.</b> Everything else is just waiting.</p><p>Watching 19,600 next week. See you Monday.</p><p>— Johnny</p>",
     attachments: []
   }
 ];
@@ -705,16 +723,18 @@ var readState = [false, false, true];
 
 // ── Navigation ──
 function showPage(name) {
-  ['dashboard','schedule','messages','plan','downloads'].forEach(function(p) {
+  ['dashboard','lessons','schedule','messages','plan','downloads'].forEach(function(p) {
     document.getElementById('page-' + p).style.display = p === name ? 'block' : 'none';
     var nav = document.getElementById('nav-' + p);
     if (nav) nav.classList.toggle('active', p === name);
   });
-  document.getElementById('page-title').textContent = { dashboard:'Dashboard', schedule:'Schedule', messages:'Messages', plan:'My Plan', downloads:'Downloads' }[name] || name;
+  document.getElementById('page-title').textContent = { dashboard:'Dashboard', lessons:'Lessons', schedule:'Schedule', messages:'Messages', plan:'My Plan', downloads:'Downloads' }[name] || name;
   if (name === 'messages') {
     document.getElementById('view-inbox').style.display = 'block';
     document.getElementById('view-detail').style.display = 'none';
   }
+  if (name === 'lessons' && window.WMLessons) WMLessons.show();
+  if (name !== 'lessons' && window.WMLessons) WMLessons.pause();
   closeSidebar();
   window.scrollTo(0, 0);
 }
@@ -957,7 +977,7 @@ window.addEventListener('storage', function(e) {
   if (e.key === 'wm_events') { mCalRender(); mShowNextSession(); }
 });
 
-// ── Mario online/offline status ──
+// ── Room online/offline status ──
 // Admin sets localStorage 'mario_status' = 'live' | 'offline'
 function checkMarioStatus() {
   var status;
@@ -972,18 +992,18 @@ function checkMarioStatus() {
 
   if (status === 'live') {
     if (bar) { bar.className = 'sb-online live'; }
-    if (label) { label.textContent = 'Mario is online'; }
+    if (label) { label.textContent = 'The room is live'; }
     if (banner) { banner.className = 'live-banner online'; }
     if (pulse) { pulse.style.display = 'block'; }
-    if (title) { title.style.color = 'var(--red)'; title.textContent = 'Mario is trading live now'; }
+    if (title) { title.style.color = 'var(--red)'; title.textContent = 'Trading live now'; }
     if (sub) { sub.textContent = 'Join on Discord to participate'; }
     if (joinBtn) { joinBtn.style.display = 'inline-flex'; }
   } else {
     if (bar) { bar.className = 'sb-online offline'; }
-    if (label) { label.textContent = 'Mario is offline'; }
+    if (label) { label.textContent = 'The room is offline'; }
     if (banner) { banner.className = 'live-banner offline'; }
     if (pulse) { pulse.style.display = 'none'; }
-    if (title) { title.style.color = 'var(--muted)'; title.textContent = 'Mario is currently offline'; }
+    if (title) { title.style.color = 'var(--muted)'; title.textContent = 'The room is offline right now'; }
     if (sub) { sub.textContent = 'Check back for the next session — usually Tue & Thu 9:30 AM ET'; }
     if (joinBtn) { joinBtn.style.display = 'none'; }
   }
@@ -1022,7 +1042,7 @@ function renderDownloads() {
   var cont = document.getElementById('downloads-list');
   if (!cont) return;
   if (!files.length) {
-    cont.innerHTML = '<div style="padding:2.5rem;text-align:center;color:var(--muted);font-size:.9rem;">No files yet — Mario will drop resources here</div>';
+    cont.innerHTML = '<div class="jc-empty"><img class="" src="media/jc-sofa-laptop.webp" alt="" width="110" height="124" loading="lazy"><span>No files yet. Resources show up here.</span></div>';
     return;
   }
   cont.innerHTML = files.slice().reverse().map(function(f, i, arr) {
@@ -1097,13 +1117,14 @@ function renderIdentity() {
   var st = ROSTER_ME ? ROSTER_ME.status : (ME.role === 'admin' ? 'admin' : 'pending');
   var tier = st === 'pending' ? 'Seat requested' : st === 'admin' ? 'Host preview' : st === 'paused' ? 'Paused' : 'Week ' + (ROSTER_ME.week || 1) + ' · ' + (st === 'trial' ? 'Day pass' : 'Active member');
   document.getElementById('sb-tier').textContent = tier;
+  var jh = document.getElementById('jc-hello'); if (jh) jh.textContent = 'Welcome back, ' + parts[0] + '.';
   var pend = document.getElementById('pending-note');
   if (pend) pend.style.display = st === 'pending' ? 'block' : 'none';
   var pay = document.getElementById('pay-btn'), wl = _links.weekly;
   if (pay) { if (st === 'pending' && wl) { pay.href = wl + (wl.indexOf('?') < 0 ? '?' : '&') + 'client_reference_id=' + encodeURIComponent(ME.id); pay.style.display = 'inline-flex'; } else pay.style.display = 'none'; }
 }
 
-// Discord + billing links (set by Mario in admin → Settings)
+// Discord + billing links (set in admin → Settings)
 document.addEventListener('click', function(e) {
   var a = e.target.closest ? e.target.closest('[data-discord],[data-billing]') : null;
   if (!a) return;
@@ -1111,11 +1132,11 @@ document.addEventListener('click', function(e) {
   var cfg = settings();
   if (a.hasAttribute('data-discord')) {
     var st = ROSTER_ME ? ROSTER_ME.status : null;
-    if (st === 'pending') { showToast('Your seat is pending. Mario will unlock the room link.'); return; }
-    if (!cfg.discord) { showToast('Mario has not posted the Discord invite yet.'); return; }
+    if (st === 'pending') { showToast('Your seat is pending. The room link unlocks once it is confirmed.'); return; }
+    if (!cfg.discord) { showToast('The Discord invite is not posted yet.'); return; }
     window.open(cfg.discord, '_blank', 'noopener');
   } else {
-    if (!cfg.billing) { showToast('Billing portal link is not set up yet. Message Mario.'); return; }
+    if (!cfg.billing) { showToast('Billing portal link is not set up yet. Message us.'); return; }
     window.open(cfg.billing, '_blank', 'noopener');
   }
 });
@@ -1128,7 +1149,7 @@ function renderWeek() {
   var end = new Date(start); end.setDate(end.getDate() + 6);
   var evs = loadEvents().filter(function(ev) { return ev.date >= dstr(start) && ev.date <= dstr(end); })
     .sort(function(a,b) { return (a.date + a.start).localeCompare(b.date + b.start); });
-  if (!evs.length) { el.innerHTML = '<div style="padding:1.6rem;text-align:center;color:var(--muted);font-size:.9rem">No sessions posted for this week yet.</div>'; return; }
+  if (!evs.length) { el.innerHTML = '<div class="jc-empty"><img class="" src="media/jc-sofa-gamepad.webp" alt="" width="120" height="124" loading="lazy"><span>No sessions posted for this week yet.</span></div>'; return; }
   var today = dstr(now), hm = pad2(now.getHours()) + ':' + pad2(now.getMinutes());
   el.innerHTML = evs.map(function(ev) {
     var d = new Date(ev.date + 'T12:00:00');
@@ -1156,10 +1177,10 @@ function buildMessages() {
     var ok = a === 'all' || (a === 'weekly' && st === 'active') || (a === 'daypass' && st === 'trial') || (a === 'week4plus' && wk >= 4);
     if (!ok) return;
     var tag = { update:'Update', alert:'Alert', trade:'Trade call', session:'Session' }[h.type] || 'Message';
-    list.push({ id: h.id || ('h' + h.time), subject: tag, date: h.time, body: '<p>' + esc(h.msg).replace(/\n/g, '</p><p>') + '</p><p>Mario</p>', attachments: h.attachments || [] });
+    list.push({ id: h.id || ('h' + h.time), subject: tag, date: h.time, body: '<p>' + esc(h.msg).replace(/\n/g, '</p><p>') + '</p><p>— Johnny</p>', attachments: h.attachments || [] });
   });
   list.push({ id: 'welcome', subject: 'Welcome to Wingman', date: ME ? new Date(ME.created).toLocaleDateString() : '',
-    body: '<p>Welcome to the room.</p><p>Live chart sessions run <b>Monday through Thursday</b> on Discord Stage. The pre-week game plan lands Sunday into Monday, and Friday we recap.</p><p>One rule: stay off the keyboard while I\'m in a trade. Questions are for between setups.</p><p>Mario</p>', attachments: [] });
+    body: '<p>Welcome to the room.</p><p>Live chart sessions run <b>Monday through Thursday</b> on Discord Stage. The pre-week game plan lands Sunday into Monday, and Friday we recap.</p><p>One rule: stay off the keyboard while I\'m in a trade. Questions are for between setups.</p><p>— Johnny</p>', attachments: [] });
   return list;
 }
 function readSet() { return lsGet('wm_read_' + (ME ? ME.id : 'x'), []); }
@@ -1171,14 +1192,14 @@ function renderMessages() {
   box.innerHTML = MESSAGES.map(function(m, i) {
     var prev = m.body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 90);
     return '<div class="msg-item' + (readState[i] ? '' : ' unread') + '" id="msg-' + i + '" onclick="openMessage(' + i + ')">' +
-      '<div class="msg-av">M</div><div class="msg-body"><div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">' + esc(fmtStamp(m.date)) + '</span></div>' +
+      '<div class="msg-av"><img src="media/johnny-avatar.png" alt=""></div><div class="msg-body"><div class="msg-row"><span class="msg-from">Johnny Crow</span><span class="msg-time">' + esc(fmtStamp(m.date)) + '</span></div>' +
       '<div class="msg-subject">' + esc(m.subject) + '</div><div class="msg-preview">' + esc(prev) + '</div>' +
       (m.attachments && m.attachments.length ? '<div class="msg-attach-note">' + m.attachments.map(function(a) { return esc(a.name); }).join(' · ') + '</div>' : '') +
       '</div>' + (readState[i] ? '' : '<div class="unread-dot" id="dot-' + i + '"></div>') + '</div>';
   }).join('');
   var lc = document.getElementById('latest-card'), m0 = MESSAGES[0];
   lc.style.cursor = 'pointer'; lc.onclick = function() { openMessage(0); showPage('messages'); };
-  lc.innerHTML = '<div class="msg-item' + (readState[0] ? '' : ' unread') + '"><div class="msg-av">M</div><div class="msg-body"><div class="msg-row"><span class="msg-from">Mario</span><span class="msg-time">' + esc(fmtStamp(m0.date)) + '</span></div>' +
+  lc.innerHTML = '<div class="msg-item' + (readState[0] ? '' : ' unread') + '"><div class="msg-av"><img src="media/johnny-avatar.png" alt=""></div><div class="msg-body"><div class="msg-row"><span class="msg-from">Johnny Crow</span><span class="msg-time">' + esc(fmtStamp(m0.date)) + '</span></div>' +
     '<div class="msg-subject">' + esc(m0.subject) + '</div><div class="msg-preview">' + esc(m0.body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 110)) + '</div></div>' + (readState[0] ? '' : '<div class="unread-dot"></div>') + '</div>';
   updateBadge();
 }
@@ -1217,7 +1238,7 @@ window.addEventListener('storage', function(e) { if (e.key === 'wm_sent_history'
 // ── Downloads ──
 renderDownloads = function() {
   var files = loadFiles(), cont = document.getElementById('downloads-list'); if (!cont) return;
-  if (!files.length) { cont.innerHTML = '<div style="padding:2.5rem;text-align:center;color:var(--muted);font-size:.9rem;">No files yet. Resources from Mario show up here.</div>'; return; }
+  if (!files.length) { cont.innerHTML = '<div class="jc-empty"><img class="" src="media/jc-sofa-laptop.webp" alt="" width="110" height="124" loading="lazy"><span>No files yet. Resources show up here.</span></div>'; return; }
   cont.innerHTML = files.slice().reverse().map(function(f, i, arr) {
     var last = i === arr.length - 1, idx = files.indexOf(f);
     return '<div style="display:flex;align-items:center;gap:1rem;padding:1rem 1.3rem;' + (last ? '' : 'border-bottom:1px solid var(--line);') + '">' +
@@ -1231,7 +1252,7 @@ renderDownloads = function() {
 
 // ── My Plan ──
 var STORE = [
-  { id: 'ebook', name: '📖 Johnny Cake Method Ebook', desc: "Full strategy breakdown, Mario's system in writing", cost: 20 },
+  { id: 'ebook', name: '📖 Johnny Cake Method Ebook', desc: "Full strategy breakdown, the whole system in writing", cost: 20 },
   { id: 'indicator', name: '📈 NQ Levels Indicator', desc: 'TradingView indicator, key grain levels auto-plotted', cost: 80 },
   { id: 'freeweek', name: '🆓 Free Week Renewal', desc: "Skip one week's payment. Seat held, tier protected", cost: 100 }
 ];
@@ -1272,11 +1293,11 @@ function redeem(id) {
   for (var i = 0; i < roster.length; i++) if (roster[i].userId === ME.id) { roster[i].points = (roster[i].points || 0) - it.cost; }
   lsSet('wm_members', roster);
   postRequest('redeem', it.name.replace(/^\S+\s/, '') + ' (' + it.cost + ' pts)');
-  refreshMe(); renderPlan(); showToast('Redeemed. Mario will send it over.');
+  refreshMe(); renderPlan(); showToast('Redeemed. We will send it over.');
 }
 function requestCancel() {
   if (!ROSTER_ME) { showToast('You have no active seat to cancel.'); return; }
-  if (!confirm('Send a cancellation request to Mario?')) return;
+  if (!confirm('Send a cancellation request?')) return;
   postRequest('cancel', 'Cancellation requested');
   showToast('Cancellation request sent.');
 }
@@ -1292,12 +1313,12 @@ if (CLOUD) {
     if (!confirm('Redeem ' + it.cost + ' pts for: ' + it.name.replace(/^\S+\s/, '') + '?')) return;
     WMCloud.rpc('redeem_item', { item: id }).then(function(r) {
       if (r.error) { showToast('Could not redeem: ' + r.error.message); return; }
-      WMCloud.pull().then(function() { refreshMe(); renderPlan(); showToast('Redeemed. Mario will send it over.'); });
+      WMCloud.pull().then(function() { refreshMe(); renderPlan(); showToast('Redeemed. We will send it over.'); });
     });
   };
   requestCancel = function() {
     if (!ROSTER_ME) { showToast('You have no active seat to cancel.'); return; }
-    if (!confirm('Send a cancellation request to Mario?')) return;
+    if (!confirm('Send a cancellation request?')) return;
     WMCloud.rpc('request_cancel').then(function(r) { showToast(r.error ? 'Could not send: ' + r.error.message : 'Cancellation request sent.'); });
   };
 }
@@ -1314,5 +1335,8 @@ if (!window.WMAuth) {
   setInterval(renderWeek, 60000);
 }, refreshAll);
 </script>
+<script src="lessons-data.js"></script>
+<script src="lessons.js"></script>
+<script src="johnny.js"></script>
 </body>
 </html>
