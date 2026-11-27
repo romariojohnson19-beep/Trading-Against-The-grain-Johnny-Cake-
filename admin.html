@@ -213,7 +213,7 @@ select.field{width:100%;background:var(--panel2);border:1px solid var(--line);bo
 <script src="results-editor.js"></script>
 <script>try{var _u=WMAuth.user();if(!_u||_u.role!=='admin')document.documentElement.style.visibility='hidden';}catch(e){}</script>
 <link rel="stylesheet" href="results.css">
-<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="theme.css"><link rel="stylesheet" href="pro.css">
 <script src="theme.js"></script>
 <style>html[data-theme="light"]{--accent:#BD5A33;--lime:#4F7A14;--green:#2F7D4F;--red:#C2372F}</style>
 </head>
@@ -223,7 +223,7 @@ select.field{width:100%;background:var(--panel2);border:1px solid var(--line);bo
 <aside class="sb" id="sidebar">
   <div class="sb-brand">
     <div class="sb-logo">WINGMAN<span>.</span></div>
-    <div class="sb-tagline">@MarioVsNQ // ADMIN</div>
+    <div class="sb-tagline">@johnnycrowtrades // ADMIN</div>
   </div>
 
   <!-- ONLINE/OFFLINE MASTER TOGGLE -->
@@ -272,6 +272,12 @@ select.field{width:100%;background:var(--panel2);border:1px solid var(--line);bo
     </div>
     <div class="nav-item" onclick="showPage('results')">
       <span class="nav-icon">🏆</span> Results
+    </div>
+    <div class="nav-item" onclick="showPage('live')">
+      <span class="nav-icon">🔴</span> Live Room
+    </div>
+    <div class="nav-item" onclick="showPage('store')">
+      <span class="nav-icon">🛒</span> Storefront
     </div>
     <div class="nav-item" onclick="showPage('promos')">
       <span class="nav-icon">🏷️</span> Promotions
@@ -656,6 +662,24 @@ select.field{width:100%;background:var(--panel2);border:1px solid var(--line);bo
 
     <!-- ══ RESULTS ══ -->
     <div class="page" id="page-results">
+      <div class="card" id="sb-admin" style="max-width:640px;margin-bottom:16px">
+        <div class="card-title">Public scoreboard</div>
+        <p style="color:var(--muted);font-size:13px;margin:4px 0 12px">Shown near the top of the landing page. Set your numbers here. Turn on "Add logged results" to also count the results you log below for the same period.</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+          <div><label class="input-label">Passed</label><input id="sb-pass" class="field" type="number" min="0" inputmode="numeric"></div>
+          <div><label class="input-label">Failed</label><input id="sb-fail" class="field" type="number" min="0" inputmode="numeric"></div>
+          <div><label class="input-label">Testing now</label><input id="sb-testing" class="field" type="number" min="0" inputmode="numeric"></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:12px 0">
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px"><input type="radio" name="sb-mode" value="lifetime"> Lifetime</label>
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px"><input type="radio" name="sb-mode" value="week"> This week</label>
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px"><input type="checkbox" id="sb-addlog"> Add logged results</label>
+          <label style="display:flex;gap:6px;align-items:center;font-size:13px"><input type="checkbox" id="sb-show"> Show on the site</label>
+        </div>
+        <div id="sb-preview" style="font-size:13px;color:var(--muted);margin-bottom:10px"></div>
+        <button class="btn btn-primary" type="button" id="sb-save">Save scoreboard</button>
+        <span id="sb-msg" style="font-size:13px;margin-left:8px;color:var(--muted)"></span>
+      </div>
       <div class="card wr" id="wingman-results-admin" style="max-width:640px">
         <div class="card-title">Log an evaluation result</div>
         <div class="wr-banner" id="wra-mode"></div>
@@ -680,6 +704,54 @@ select.field{width:100%;background:var(--panel2);border:1px solid var(--line);bo
         </form>
         <div class="card-title" style="margin-top:22px">Logged results</div>
         <div class="wr-rows" id="wra-rows"></div>
+      </div>
+    </div>
+
+    <!-- ══ LIVE ROOM ══ -->
+    <div class="page" id="page-live">
+      <div class="card" style="max-width:820px">
+        <div class="card-title">Go live on the site</div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:12px">Start your stream on <b>YouTube Live</b> (set it to <b>Unlisted</b>), paste its link here, then press Go live. Members watch inside the portal and comment under this live only. Each time you go live is a fresh chat.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+          <div><label class="input-label">Session title</label><input id="live-title-in" class="field" maxlength="80" placeholder="NY Open, NQ"></div>
+          <div><label class="input-label">YouTube live link</label><input id="live-url-in" class="field" type="url" placeholder="https://youtube.com/live/…"></div>
+        </div>
+        <div class="actions-row"><button class="btn btn-primary" id="live-go" onclick="liveGo()">Go live</button><button class="btn btn-danger" id="live-end" onclick="liveEnd()">End live</button><span id="live-state" style="font-size:13px;color:var(--muted);margin-left:8px"></span></div>
+        <p style="color:var(--muted);font-size:12px;margin-top:10px">Unlisted means the link is not searchable, but anyone who gets it could open it. Use a fresh stream for each session.</p>
+      </div>
+      <div class="card" style="max-width:820px">
+        <div class="card-title">Live chat (this session)</div>
+        <div class="lc-wrap"><div id="admin-live-chat"></div></div>
+        <p style="color:var(--muted);font-size:12px;margin-top:8px">Your posts show as HOST. Pin a comment to keep it at the top, or delete one.</p>
+      </div>
+    </div>
+
+    <!-- ══ STOREFRONT ══ -->
+    <div class="page" id="page-store">
+      <div class="card" style="max-width:820px;margin-bottom:16px">
+        <div class="card-title">"Buy Johnny a cake" (member portal only)</div>
+        <p style="color:var(--muted);font-size:13px;margin:4px 0 10px">In Stripe, create a Payment Link and turn on <b>Let customers choose what to pay</b> (suggest $5, minimum $3). Under After payment, set the confirmation page to <b>https://www.smartmoneystore.com/members.html?cake=thanks</b>. Paste the link here. Leave it empty to hide the card.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="cake-url" class="field" style="flex:1;min-width:240px" type="url" placeholder="https://buy.stripe.com/…"><button class="btn btn-primary" type="button" id="cake-save">Save</button></div>
+        <div id="cake-msg" style="font-size:13px;color:var(--muted);margin-top:8px"></div>
+      </div>
+      <div class="card" style="max-width:820px">
+        <div class="card-title">Products on the store page</div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:14px">Shown on <b>store.html</b>. For each product, paste its Stripe Payment Link. Buyers are tied to their account when they pay while signed in. Paste the link's <b>plink_…</b> id too (Stripe → Payment Links → open it → the id is in the page address) so the payment is matched to the product automatically.</p>
+        <div id="store-list"></div>
+        <div class="actions-row" style="margin-top:14px"><button class="btn btn-ghost" onclick="addProduct()">+ Add product</button></div>
+      </div>
+      <div class="card" style="max-width:820px">
+        <div class="card-title">Give someone access</div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:10px">For payments made outside the store, gifts, or fixing a missed purchase. The member needs an account first.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end">
+          <div><label class="input-label">Member email</label><input id="grant-email" class="field" type="email" placeholder="member@email.com"></div>
+          <div><label class="input-label">Product</label><select id="grant-prod" class="field"></select></div>
+          <button class="btn btn-primary" onclick="grantAccess()">Grant</button>
+        </div>
+      </div>
+      <div class="card" style="max-width:820px">
+        <div class="card-title">Recent purchases</div>
+        <div id="store-purchases" style="font-size:13px"></div>
       </div>
     </div>
 
@@ -1214,12 +1286,14 @@ function showPage(name) {
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});
   document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
   document.getElementById('page-'+name).classList.add('active');
-  var titles = {roster:'Roster',sessions:'Sessions',seats:'Seat Control',broadcast:'Broadcast',loyalty:'Loyalty',files:'Files',inbox:'Inbox',settings:'Settings',promos:'Promotions',results:'Results'};
+  var titles = {roster:'Roster',sessions:'Sessions',seats:'Seat Control',broadcast:'Broadcast',loyalty:'Loyalty',files:'Files',inbox:'Inbox',settings:'Settings',promos:'Promotions',results:'Results',store:'Storefront',live:'Live Room'};
   document.getElementById('page-title').textContent = titles[name]||name;
-  var icons = {roster:'👥',sessions:'📅',seats:'🪑',broadcast:'📣',loyalty:'⭐',files:'📁',inbox:'📥',settings:'⚙️',promos:'🏷️',results:'🏆'};
+  var icons = {roster:'👥',sessions:'📅',seats:'🪑',broadcast:'📣',loyalty:'⭐',files:'📁',inbox:'📥',settings:'⚙️',promos:'🏷️',results:'🏆',store:'🛒',live:'🔴'};
   document.querySelectorAll('.nav-item').forEach(function(n){
     if (n.textContent.trim().indexOf(icons[name]) >= 0) n.classList.add('active');
   });
+  if (name === 'store' && window.renderStore) renderStore();
+  if (name === 'live' && window.renderAdminLive) renderAdminLive();
   closeSidebar();
 }
 
@@ -1508,6 +1582,123 @@ if(!window.WMAuth){document.documentElement.style.visibility='visible';document.
   try { renderDayMeters(); syncDayBtns('day-grid', DAYS_THIS); syncDayBtns('next-day-grid', DAYS_NEXT); } catch (e) {}
 }, function(){ refreshAdmin(); var pg=document.getElementById('page-promos'); if (pg && !PROMO_DIRTY) { loadPromos(); renderPromos(); } });
 </script>
+<script src="live.js"></script>
+<script>
+var _aLive = null, _aSid = '';
+function renderAdminLive() {
+  WMLive.getStream().then(function (s) {
+    _aSid = s.live ? s.id : '';
+    document.getElementById('live-state').textContent = s.live ? 'LIVE: ' + (s.title || '') : 'Not live';
+    if (s.title && !document.getElementById('live-title-in').value) document.getElementById('live-title-in').value = s.title;
+    if (s.url && !document.getElementById('live-url-in').value) document.getElementById('live-url-in').value = s.url;
+    if (!_aLive) _aLive = WMLive.mountChat(document.getElementById('admin-live-chat'), { admin: true, getSession: function () { return _aSid; } });
+    else _aLive.refresh();
+  });
+}
+function liveGo() {
+  var t = document.getElementById('live-title-in').value, u = document.getElementById('live-url-in').value;
+  if (!WMLive.ytEmbed(u) && !confirm('That does not look like a YouTube link, so members will only get an "Open stream" button. Go live anyway?')) return;
+  WMLive.goLive(t, u).then(function () { showToast('You are live on the site'); renderAdminLive(); }).catch(function (e) { showToast('Could not go live: ' + e.message); });
+}
+function liveEnd() { WMLive.endLive().then(function () { showToast('Live ended'); renderAdminLive(); }).catch(function (e) { showToast(e.message); }); }
+</script>
+<script src="store-data.js"></script>
+<script>
+var STORE = [], STORE_DEL = {};
+function renderStore() {
+  WMStore.listAll().then(function (rows) {
+    STORE = (rows || []).map(function (r) { return Object.assign({}, r); });
+    return Promise.all(STORE.map(function (p) { return WMStore.getDelivery(p.id).then(function (d) { STORE_DEL[p.id] = d; }); }));
+  }).then(function () { drawStore(); loadPurchases(); }).catch(function (e) { showToast('Could not load products: ' + e.message); });
+}
+function pf(i, k, label, ph, type) {
+  var p = STORE[i];
+  return '<div><label class="input-label">' + label + '</label><input class="field" ' + (type ? 'type="' + type + '" ' : '') + 'placeholder="' + (ph || '') + '" value="' + esc(p[k] == null ? '' : p[k]) + '" oninput="STORE[' + i + '].' + k + '=this.value"></div>';
+}
+function drawStore() {
+  var host = document.getElementById('store-list');
+  if (!STORE.length) host.innerHTML = '<p style="color:var(--muted);font-size:13px">No products yet. Add the book first.</p>';
+  else host.innerHTML = STORE.map(function (p, i) {
+    var d = STORE_DEL[p.id || ('new' + i)] || (STORE_DEL[p.id || ('new' + i)] = { url: '', note: '' });
+    var kinds = ['book:Book','indicator:Indicator','course:Course','room:Live room','other:Other'].map(function (o) { var a = o.split(':'); return '<option value="' + a[0] + '"' + (p.kind === a[0] ? ' selected' : '') + '>' + a[1] + '</option>'; }).join('');
+    return '<div style="border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px">'
+      + '<div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:8px">' + pf(i, 'title', 'Title', 'Trading the Grain') + '<div><label class="input-label">Type</label><select class="field" onchange="STORE[' + i + '].kind=this.value">' + kinds + '</select></div>' + pf(i, 'price_label', 'Price shown', '$29') + '</div>'
+      + '<div style="margin-bottom:8px"><label class="input-label">Description</label><textarea class="field" rows="2" maxlength="600" style="width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:9px 12px;color:var(--fg);font:inherit" oninput="STORE[' + i + '].blurb=this.value">' + esc(p.blurb || '') + '</textarea></div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">' + pf(i, 'buy_url', 'Stripe Payment Link', 'https://buy.stripe.com/…', 'url') + pf(i, 'payment_link', 'Payment link id (plink_…)', 'plink_…') + '</div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px">' + pf(i, 'badge', 'Badge (optional)', 'New') + pf(i, 'sort', 'Order (low first)', '10', 'number') + '<div style="display:flex;align-items:end;padding-bottom:9px"><label style="font-size:13px"><input type="checkbox"' + (p.active !== false ? ' checked' : '') + ' onchange="STORE[' + i + '].active=this.checked"> Visible on store</label></div></div>'
+      + '<div style="border-top:1px dashed var(--line);padding-top:8px;margin-top:4px"><div style="font-size:12px;color:var(--muted);margin-bottom:6px">What buyers get (private, only shown to owners)</div>'
+      + '<div style="margin-bottom:8px"><label class="input-label">Download or access link</label><input class="field" type="url" placeholder="https://… (file, TradingView script, private page)" value="' + esc(d.url) + '" oninput="STORE_DEL[\'' + (p.id || ('new' + i)) + '\'].url=this.value"></div>'
+      + '<div><label class="input-label">Instructions</label><textarea class="field" rows="2" maxlength="1500" style="width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:9px 12px;color:var(--fg);font:inherit" oninput="STORE_DEL[\'' + (p.id || ('new' + i)) + '\'].note=this.value">' + esc(d.note) + '</textarea></div></div>'
+      + '<div class="actions-row" style="margin-top:10px"><button class="btn btn-primary btn-sm" onclick="saveProduct(' + i + ')">Save</button><button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="deleteProduct(' + i + ')">Delete</button></div></div>';
+  }).join('');
+  var sel = document.getElementById('grant-prod'); if (sel) sel.innerHTML = STORE.filter(function (p) { return p.id; }).map(function (p) { return '<option value="' + esc(p.id) + '">' + esc(p.title) + '</option>'; }).join('');
+}
+function addProduct() { STORE.push({ id: '', kind: 'indicator', title: '', blurb: '', price_label: '', badge: '', buy_url: '', payment_link: '', sort: (STORE.length + 1) * 10, active: true }); drawStore(); }
+function saveProduct(i) {
+  var p = STORE[i], tmpKey = p.id || ('new' + i), d = STORE_DEL[tmpKey] || { url: '', note: '' };
+  WMStore.save(p).then(function (saved) {
+    STORE[i] = Object.assign({}, saved); STORE_DEL[saved.id] = d;
+    return WMStore.saveDelivery(saved.id, d.url, d.note);
+  }).then(function () { showToast('Saved'); drawStore(); }).catch(function (e) { showToast('Not saved: ' + e.message); });
+}
+function deleteProduct(i) {
+  var p = STORE[i];
+  if (!p.id) { STORE.splice(i, 1); drawStore(); return; }
+  if (!confirm('Delete "' + p.title + '"? Anyone who already bought it loses this library entry. Hide it instead to keep them.')) return;
+  WMStore.remove(p.id).then(function () { STORE.splice(i, 1); drawStore(); showToast('Deleted'); }).catch(function (e) { showToast('Not deleted: ' + e.message); });
+}
+function grantAccess() {
+  var em = document.getElementById('grant-email').value, pr = document.getElementById('grant-prod').value;
+  WMStore.grant(em, pr).then(function () { showToast('Access granted'); document.getElementById('grant-email').value = ''; loadPurchases(); }).catch(function (e) { showToast(e.message); });
+}
+function loadPurchases() {
+  var el = document.getElementById('store-purchases'); if (!el) return;
+  WMStore.purchases().then(function (rows) {
+    rows = rows || [];
+    el.innerHTML = rows.length ? rows.map(function (r) {
+      var who = (r.profiles && (r.profiles.name || r.profiles.email)) || 'Unknown', em = (r.profiles && r.profiles.email) || '';
+      return '<div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)"><div style="flex:1"><b>' + esc(who) + '</b> <span style="color:var(--muted)">' + esc(em) + '</span><div style="color:var(--muted);font-size:12px">' + esc((r.products && r.products.title) || r.product_id) + ' · ' + esc(r.source) + ' · ' + esc(String(r.created_at).slice(0, 10)) + '</div></div><button class="btn btn-ghost btn-sm" onclick="revokeAccess(\'' + r.id + '\')">Revoke</button></div>';
+    }).join('') : '<span style="color:var(--muted)">No purchases yet.</span>';
+  }).catch(function () { el.innerHTML = '<span style="color:var(--muted)">Could not load purchases.</span>'; });
+}
+function revokeAccess(id) { if (!confirm('Remove this person\'s access?')) return; WMStore.revoke(id).then(function () { showToast('Revoked'); loadPurchases(); }); }
+</script>
 <script src="results-admin.js"></script>
+<script src="counter.js"></script>
+<script src="cake.js"></script>
+<script>
+(function () {
+  var i = document.getElementById('cake-url'), m = document.getElementById('cake-msg');
+  WMCake.get().then(function (u) { i.value = u; m.textContent = u ? 'The card is showing on members’ dashboards.' : 'No link yet, so the card is hidden.'; });
+  document.getElementById('cake-save').onclick = function () {
+    m.textContent = 'Saving…';
+    WMCake.set(i.value).then(function (u) { m.textContent = u ? 'Saved. Members now see the card on their dashboard.' : 'Cleared. The card is hidden.'; }, function (e) { m.textContent = e.message; });
+  };
+})();
+</script>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); }, rows = [];
+  function form() { var m = document.querySelector('input[name="sb-mode"]:checked'); return { pass: $('sb-pass').value, fail: $('sb-fail').value, testing: $('sb-testing').value, mode: m ? m.value : 'lifetime', addLog: $('sb-addlog').checked, show: $('sb-show').checked }; }
+  function preview() {
+    var cfg = Object.assign({}, form()); ['pass', 'fail', 'testing'].forEach(function (k) { cfg[k] = parseInt(cfg[k], 10) || 0; });
+    var n = WMCounter.compute(cfg, rows);
+    $('sb-preview').textContent = 'The site will show (' + (cfg.mode === 'week' ? 'this week' : 'lifetime') + '): ' + n.total + ' taken · ' + n.pass + ' passed · ' + n.fail + ' failed' + (n.testing ? ' · ' + n.testing + ' testing now' : '') + (cfg.show ? '' : '  (hidden)');
+  }
+  WMCounter.load().then(function (d) {
+    rows = d.rows; var c = d.cfg;
+    $('sb-pass').value = c.pass; $('sb-fail').value = c.fail; $('sb-testing').value = c.testing;
+    document.querySelector('input[name="sb-mode"][value="' + c.mode + '"]').checked = true;
+    $('sb-addlog').checked = c.addLog; $('sb-show').checked = c.show; preview();
+  });
+  document.getElementById('sb-admin').addEventListener('input', preview);
+  document.getElementById('sb-admin').addEventListener('change', preview);
+  $('sb-save').onclick = function () {
+    $('sb-msg').textContent = 'Saving…';
+    WMCounter.set(form()).then(function () { $('sb-msg').textContent = 'Saved. The landing page shows it now.'; }, function (e) { $('sb-msg').textContent = e.message; });
+  };
+})();
+</script>
 </body>
 </html>

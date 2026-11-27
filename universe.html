@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Cake Market | Johnny Cake Method</title>
+<meta name="description" content="Meet Johnny Crow, Dæv and the bulls and bears of the Cake Market, and see what is coming next.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="pages.css"><link rel="stylesheet" href="johnny.css"><link rel="stylesheet" href="site.css"><script src="theme.js"></script>
+<style>
+.cast { display: grid; gap: 1.2rem; grid-template-columns: 1fr; margin-top: 2rem; }
+@media (min-width: 760px) { .cast { grid-template-columns: 1fr 1fr; } }
+.cast-card { background: var(--panel); border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: 20px; padding: 1.6rem; display: flex; gap: 1.3rem; align-items: flex-start; }
+.cast-card.dv { border-top-color: var(--red); }
+.cast-card img { width: 120px; height: auto; flex: none; }
+.cast-card h3 { margin: .2rem 0 .5rem; }
+.cast-card p { color: var(--muted); line-height: 1.6; }
+.cast-role { font: 500 .62rem 'JetBrains Mono', monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.cast-card.dv .cast-role { color: var(--red); }
+.cast-stats { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .8rem; }
+.cast-stats span { font: 500 .62rem 'JetBrains Mono', monospace; letter-spacing: .08em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 999px; padding: .3rem .6rem; color: var(--fg); }
+.soon { display: grid; gap: 1rem; grid-template-columns: 1fr; margin-top: 1.2rem; }
+@media (min-width: 760px) { .soon { grid-template-columns: repeat(2, 1fr); } }
+.bakers { margin-top: 1.2rem; background: var(--panel); border: 1px solid var(--line); border-top: 4px solid #4CAF7D; border-radius: 20px; padding: 1.6rem; display: grid; gap: 1.2rem; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .bakers { grid-template-columns: 1fr 1.3fr; align-items: center; } }
+.bakers-txt { min-width: 0; }
+.bakers-txt h3 { margin: .2rem 0 .5rem; }
+.bakers-txt p { color: var(--muted); line-height: 1.6; }
+.bakers-row { display: flex; gap: .4rem; align-items: flex-end; justify-content: center; flex-wrap: wrap; }
+.bakers-row img { height: 168px; width: auto; max-width: 48%; object-fit: contain; }
+@media (min-width: 900px) { .bakers-row { flex-wrap: nowrap; } .bakers-row img { max-width: 24%; height: auto; } }
+.soon-card { border: 1px dashed var(--line); border-radius: 16px; padding: 1.3rem; color: var(--muted); }
+.soon-card b { display: block; color: var(--fg); font-family: 'Bricolage Grotesque', serif; font-size: 1.15rem; margin-bottom: .3rem; }
+.lore { display: grid; gap: 1rem; grid-template-columns: 1fr; margin-top: 1.6rem; }
+@media (min-width: 760px) { .lore { grid-template-columns: repeat(3, 1fr); } }
+.lore-card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 1.3rem; }
+.lore-card b { display: block; font-family: 'Bricolage Grotesque', serif; font-size: 1.15rem; margin-bottom: .35rem; }
+.lore-card p { color: var(--muted); line-height: 1.55; }
+.road { list-style: none; padding: 0; margin: 2rem 0 0; display: flex; flex-direction: column; gap: 1rem; }
+.road li { display: grid; grid-template-columns: 1fr; gap: .4rem; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: 14px; padding: 1.2rem 1.3rem; }
+.road li.now { border-left-color: var(--accent); }
+.road li.next { border-left-color: var(--warm, #E8946F); }
+.road .ph { font: 500 .62rem 'JetBrains Mono', monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.road li.now .ph { color: var(--accent); }
+.road b { font-family: 'Bricolage Grotesque', serif; font-size: 1.2rem; }
+.road p { color: var(--muted); line-height: 1.55; }
+</style>
+</head><body data-no-promo>
+<!--NAV--><header class="snav"><div class="snav-bar">
+  <a class="sbrand" href="index.html"><img src="media/johnny-avatar.png" alt="" width="32" height="32"><span>Johnny Cake<span class="hide-s"> Method</span></span></a>
+  <nav class="snav-links" aria-label="Main"><a href="index.html#lessons">Lessons</a><a href="index.html#sim">Trade Sim</a><a href="index.html#live">Live room</a><a href="store.html">Store</a><a href="pricing.html">Pricing</a></nav>
+  <div class="snav-act"><a class="signin" href="#" data-auth="signin" data-nav="signin">Sign in</a><a class="btn sm" href="#" data-auth="signup" data-nav="join">Join free</a><button class="snav-menu" id="snav-menu" type="button" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+</div><div class="snav-sheet" id="snav-sheet"><a href="index.html#lessons">Lessons</a><a href="index.html#sim">Trade Sim</a><a href="index.html#live">Live room</a><a href="store.html">Store</a><a href="pricing.html">Pricing</a><a href="#" data-auth="signin" data-nav="signin">Sign in</a></div></header><!--/NAV-->
+<main>
+
+<section class="hero-p"><div class="wrap">
+  <div class="eyebrow">The universe</div>
+  <h1>Welcome to<br>the Cake Market.</h1>
+  <p class="lead">The bulls and bears bake all day. Every cake is a stash of orders left at a level they plan to come back to. Johnny and Dæv make their living off those cakes. One waits for his slice. The other doesn’t.</p>
+</div></section>
+
+<section class="section-p"><div class="wrap">
+  <h2>The crew</h2>
+  <div class="cast">
+    <article class="cast-card" data-jc>
+      <img class="jc-bob" src="media/jc-wave.webp" alt="Johnny Crow waving" width="120" height="158" loading="lazy">
+      <div>
+        <div class="cast-role">The crow · the confirmed entry</div>
+        <h3>Johnny Crow</h3>
+        <p>A Jamaican John Crow. He watches the bulls and bears bake, lets the cake come back to market, and only takes his slice once price proves it. Pays fair, eats late, rarely gets burned. Runs the live room.</p>
+        <div class="cast-stats"><span>Patient</span><span>Confirmation</span><span>Safer entries</span></div>
+      </div>
+    </article>
+    <article class="cast-card dv" data-jc>
+      <img class="jc-bob" src="media/dv-point.webp" alt="Dæv pointing" width="120" height="136" loading="lazy">
+      <div>
+        <div class="cast-role">The Devil’s Advocate · the hot entry</div>
+        <h3>Dæv</h3>
+        <p>Gets to the cake before its baker does. While the bulls and bears are still walking away, Dæv’s already in: hot, cheap, tight stop, no confirmation. Back-door deals are his whole thing. Wins big, gets burned, always has an excuse ready.</p>
+        <div class="cast-stats"><span>Hot entries</span><span>Cheap prices</span><span>Reckless</span></div>
+      </div>
+    </article>
+  </div>
+  <div class="bakers" data-jc>
+    <div class="bakers-txt">
+      <div class="cast-role" style="color:var(--fg)">The crowd · bulls and bears</div>
+      <h3>The bakers</h3>
+      <p>They aren’t clueless. Every cake they bake is something they mean to come back for. The trouble is they’re not the only ones who know where it’s cooling. Bulls bake green, bears bake red, and both of them hate seeing a crow nearby.</p>
+    </div>
+    <div class="bakers-row">
+      <img src="media/npc-bull-cake.webp" alt="A bull baker yelling, holding up a green cake" width="150" height="168" loading="lazy">
+      <img src="media/npc-bear-cake.webp" alt="A bear baker smiling, holding up a red berry cake" width="135" height="168" loading="lazy">
+      <img class="hide-sm" src="media/npc-bull-tablet.webp" alt="A bull baker glaring at a tablet" width="138" height="168" loading="lazy">
+      <img class="hide-sm" src="media/npc-bear-buns.webp" alt="A bear baker eating from a tray of buns" width="122" height="168" loading="lazy">
+    </div>
+  </div>
+  <div class="soon">
+    <div class="soon-card"><b>The hunters</b>The big money. You never see them, only where they’ve been.</div>
+    <div class="soon-card"><b>More faces</b>Somebody else has been eyeing the cakes. You’ll meet them.</div>
+  </div>
+</div></section>
+
+<section class="section-p"><div class="wrap">
+  <h2>The lore</h2>
+  <div class="lore">
+    <div class="lore-card"><b>Johnny cakes</b><p>The spot price launched from, with unfilled orders still sitting there. On your chart: a supply or demand zone.</p></div>
+    <div class="lore-card"><b>Hot and cold cakes</b><p>A fresh cake is hot. Every time price comes back, someone takes a bite. Go back too often and there’s nothing left.</p></div>
+    <div class="lore-card"><b>The golden window</b><p>A zone Johnny waits for price to return to. Dæv’s usually already there.</p></div>
+  </div>
+</div></section>
+
+<section class="section-p"><div class="wrap">
+  <h2>The roadmap</h2>
+  <p class="lead">What’s out, and what’s cooking. The order may change.</p>
+  <ol class="road">
+    <li class="now"><span class="ph">Now</span><b>The book and the live room</b><p>The Johnny Cake Method, Volume 2: every setup traded twice, once by each of them. Wingman live sessions Monday to Thursday.</p></li>
+    <li class="now"><span class="ph">Now · Done ✓</span><b>The indicators</b><p>The TradingView tools that draw the cakes for you: the Cake Game marks the bull and bear cakes, and FIBiT Lite finds the golden window. Built and available now.</p><p><a class="btn btn-lime" data-lead="indicators" href="#">Request access</a></p></li>
+    <li><span class="ph">Later</span><b>Dæv’s Hotcakes Method</b><p>The next book, from Dæv’s side of the chart. Hot entries, back-door deals, and every excuse he’s ever made.</p></li>
+    <li><span class="ph">Later</span><b>More of the Cake Market</b><p>New characters and community events. Details when they’re out of the oven.</p></li>
+  </ol>
+  <div class="band"><h3>Start with the books</h3><p style="color:var(--muted)">Volume 1 lays out the method. Volume 2 puts Johnny and Dæv on the same nine setups, so you see both ways in. Volume 2 comes only in the bundle.</p><a class="btn btn-lime" data-buy-bundle href="#">Both volumes · $59</a> <a class="btn btn-ghost" data-buy href="#">Vol. 1 · $47</a></div>
+  <p style="color:var(--muted);font-size:.8rem;max-width:70ch">Johnny Crow and Dæv are fictional characters used for education. Nothing here is financial advice or a promise of results. Trading involves substantial risk of loss. See the <a href="risk.html">risk disclosure</a>.</p>
+</div></section>
+</main>
+<!--FOOT--><footer class="sfoot"><div class="wrap">
+  <div class="sfoot-grid">
+    <div><a class="sbrand" href="index.html"><img src="media/johnny-avatar.png" alt="" width="32" height="32">Johnny Cake Method</a><p class="about">A home base for futures and forex traders, taught by Johnny Crow: lessons, the Trade Sim, books, TradingView tools and a live room, all under one login.</p></div>
+    <div><h4>Learn</h4><a href="index.html#lessons">Lessons</a><a href="index.html#sim">Trade Sim</a><a href="index.html#path">Mentoring</a><a href="index.html#live">Live room</a><a href="universe.html">Meet the crew</a></div>
+    <div><h4>Shop</h4><a href="store.html">Store</a><a href="pricing.html">Pricing</a><a href="members.html">Members</a></div>
+    <div><h4>Help</h4><a href="faq.html">FAQ</a><a href="risk.html">Risk disclosure</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+    <div><h4>Follow</h4><a href="https://www.tiktok.com/@johnnycrowtrades" target="_blank" rel="noopener">TikTok · @johnnycrowtrades</a></div>
+  </div>
+  <p class="sfoot-disc">The Johnny Cake Method, the indicators and the Wingman live room are for educational purposes only. We are not licensed financial advisors, brokers, or investment advisers. Nothing on this site is financial advice or a recommendation to buy or sell any security or futures contract. Trading futures and forex involves substantial risk of loss and is not suitable for everyone. Past performance does not guarantee future results. You are solely responsible for your own trading decisions.</p>
+  <div class="sfoot-row"><span>© 2026 Smart Money Store</span><span>smartmoneystore.com</span></div>
+</div></footer><!--/FOOT-->
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" onerror="window.WMSUPA_FAIL=true"></script>
+<script src="cloud.js"></script><script src="auth.js"></script><script src="site.js"></script><script src="promo.js"></script>
+<script src="johnny.js"></script>
+</body></html>

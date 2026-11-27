@@ -14,8 +14,8 @@ window.WM_LESSONS = [
     "real": "where your idea is wrong"
    }
   ],
-  "video": "videos/01-m1-move-your-stop.mp4",
-  "poster": "videos/01-m1-move-your-stop.jpg"
+  "video": "01-m1-move-your-stop.mp4",
+  "poster": "01-m1-move-your-stop.jpg"
  },
  {
   "id": "j1",
@@ -35,8 +35,8 @@ window.WM_LESSONS = [
     "real": "impulse move away from a zone"
    }
   ],
-  "video": "videos/02-j1-the-cake.mp4",
-  "poster": "videos/02-j1-the-cake.jpg"
+  "video": "02-j1-the-cake.mp4",
+  "poster": "02-j1-the-cake.jpg"
  },
  {
   "id": "x1",
@@ -52,8 +52,8 @@ window.WM_LESSONS = [
     "real": "demand zone"
    }
   ],
-  "video": "videos/03-x1-same-chart-two-entries.mp4",
-  "poster": "videos/03-x1-same-chart-two-entries.jpg"
+  "video": "03-x1-same-chart-two-entries.mp4",
+  "poster": "03-x1-same-chart-two-entries.jpg"
  },
  {
   "id": "m2",
@@ -64,8 +64,8 @@ window.WM_LESSONS = [
   "secs": 25,
   "summary": "After a loss the next trade is the problem. Same size, or close the laptop.",
   "terms": [],
-  "video": "videos/04-m2-revenge-trade.mp4",
-  "poster": "videos/04-m2-revenge-trade.jpg"
+  "video": "04-m2-revenge-trade.mp4",
+  "poster": "04-m2-revenge-trade.jpg"
  },
  {
   "id": "j5",
@@ -81,8 +81,8 @@ window.WM_LESSONS = [
     "real": "liquidity sweep"
    }
   ],
-  "video": "videos/05-j5-stop-hunts.mp4",
-  "poster": "videos/05-j5-stop-hunts.jpg"
+  "video": "05-j5-stop-hunts.mp4",
+  "poster": "05-j5-stop-hunts.jpg"
  },
  {
   "id": "j2",
@@ -98,8 +98,8 @@ window.WM_LESSONS = [
     "real": "fresh / used zone"
    }
   ],
-  "video": "videos/06-j2-hot-or-cold.mp4",
-  "poster": "videos/06-j2-hot-or-cold.jpg"
+  "video": "06-j2-hot-or-cold.mp4",
+  "poster": "06-j2-hot-or-cold.jpg"
  },
  {
   "id": "j3",
@@ -115,8 +115,8 @@ window.WM_LESSONS = [
     "real": "candle close back through the zone"
    }
   ],
-  "video": "videos/07-j3-the-wait.mp4",
-  "poster": "videos/07-j3-the-wait.jpg"
+  "video": "07-j3-the-wait.mp4",
+  "poster": "07-j3-the-wait.jpg"
  },
  {
   "id": "j4",
@@ -132,8 +132,8 @@ window.WM_LESSONS = [
     "real": "61.8 to 78.6% retracement"
    }
   ],
-  "video": "videos/08-j4-golden-window.mp4",
-  "poster": "videos/08-j4-golden-window.jpg"
+  "video": "08-j4-golden-window.mp4",
+  "poster": "08-j4-golden-window.jpg"
  },
  {
   "id": "j6",
@@ -149,8 +149,8 @@ window.WM_LESSONS = [
     "real": "impulse move"
    }
   ],
-  "video": "videos/09-j6-no-launch-no-cake.mp4",
-  "poster": "videos/09-j6-no-launch-no-cake.jpg"
+  "video": "09-j6-no-launch-no-cake.mp4",
+  "poster": "09-j6-no-launch-no-cake.jpg"
  },
  {
   "id": "j8",
@@ -166,8 +166,8 @@ window.WM_LESSONS = [
     "real": "candle closed through the zone"
    }
   ],
-  "video": "videos/10-j8-eaten-cakes.mp4",
-  "poster": "videos/10-j8-eaten-cakes.jpg"
+  "video": "10-j8-eaten-cakes.mp4",
+  "poster": "10-j8-eaten-cakes.jpg"
  },
  {
   "id": "j9",
@@ -183,8 +183,8 @@ window.WM_LESSONS = [
     "real": "demand / supply zone"
    }
   ],
-  "video": "videos/11-j9-sunday-map.mp4",
-  "poster": "videos/11-j9-sunday-map.jpg"
+  "video": "11-j9-sunday-map.mp4",
+  "poster": "11-j9-sunday-map.jpg"
  },
  {
   "id": "m3a",
@@ -200,8 +200,8 @@ window.WM_LESSONS = [
     "real": "fresh zone"
    }
   ],
-  "video": "videos/12-m3-not-confirmed-part-1.mp4",
-  "poster": "videos/12-m3-not-confirmed-part-1.jpg"
+  "video": "12-m3-not-confirmed-part-1.mp4",
+  "poster": "12-m3-not-confirmed-part-1.jpg"
  },
  {
   "id": "m3b",
@@ -217,8 +217,8 @@ window.WM_LESSONS = [
     "real": "fresh zone"
    }
   ],
-  "video": "videos/13-m3-not-confirmed-part-2.mp4",
-  "poster": "videos/13-m3-not-confirmed-part-2.jpg"
+  "video": "13-m3-not-confirmed-part-2.mp4",
+  "poster": "13-m3-not-confirmed-part-2.jpg"
  },
  {
   "id": "m8",
@@ -229,8 +229,8 @@ window.WM_LESSONS = [
   "secs": 26,
   "summary": "Moving your stop to entry the moment it is up a little. One small dip takes you out, then price goes to target.",
   "terms": [],
-  "video": "videos/14-m8-breakeven-too-early.mp4",
-  "poster": "videos/14-m8-breakeven-too-early.jpg"
+  "video": "14-m8-breakeven-too-early.mp4",
+  "poster": "14-m8-breakeven-too-early.jpg"
  },
  {
   "id": "m4",
@@ -241,8 +241,8 @@ window.WM_LESSONS = [
   "secs": 23,
   "summary": "One more trade to win back the last one. Your best trade today was the first one.",
   "terms": [],
-  "video": "videos/15-m4-green-day.mp4",
-  "poster": "videos/15-m4-green-day.jpg"
+  "video": "15-m4-green-day.mp4",
+  "poster": "15-m4-green-day.jpg"
  },
  {
   "id": "m12",
@@ -253,8 +253,8 @@ window.WM_LESSONS = [
   "secs": 25,
   "summary": "Mark the high and low of the open, wait for price to pick a side, then wait for a close and a retest.",
   "terms": [],
-  "video": "videos/16-m12-monday-open.mp4",
-  "poster": "videos/16-m12-monday-open.jpg"
+  "video": "16-m12-monday-open.mp4",
+  "poster": "16-m12-monday-open.jpg"
  },
  {
   "id": "n1",
@@ -270,8 +270,8 @@ window.WM_LESSONS = [
     "real": "invalidation level"
    }
   ],
-  "video": "videos/n1-m5-news-in-5-min.mp4",
-  "poster": "videos/n1-m5-news-in-5-min.jpg"
+  "video": "n1-m5-news-in-5-min.mp4",
+  "poster": "n1-m5-news-in-5-min.jpg"
  },
  {
   "id": "n2",
@@ -287,8 +287,8 @@ window.WM_LESSONS = [
     "real": "demand zone"
    }
   ],
-  "video": "videos/n2-m11-skipped-it-hit-target.mp4",
-  "poster": "videos/n2-m11-skipped-it-hit-target.jpg"
+  "video": "n2-m11-skipped-it-hit-target.mp4",
+  "poster": "n2-m11-skipped-it-hit-target.jpg"
  },
  {
   "id": "n3",
@@ -304,8 +304,8 @@ window.WM_LESSONS = [
     "real": "fresh demand zone"
    }
   ],
-  "video": "videos/n3-d1-why-wait.mp4",
-  "poster": "videos/n3-d1-why-wait.jpg"
+  "video": "n3-d1-why-wait.mp4",
+  "poster": "n3-d1-why-wait.jpg"
  },
  {
   "id": "n4",
@@ -325,8 +325,8 @@ window.WM_LESSONS = [
     "real": "strong close above the zone"
    }
   ],
-  "video": "videos/n4-m6-you-waited.mp4",
-  "poster": "videos/n4-m6-you-waited.jpg"
+  "video": "n4-m6-you-waited.mp4",
+  "poster": "n4-m6-you-waited.jpg"
  },
  {
   "id": "n5",
@@ -342,8 +342,8 @@ window.WM_LESSONS = [
     "real": "fresh demand zone"
    }
   ],
-  "video": "videos/n5-d2-excuse-of-the-week.mp4",
-  "poster": "videos/n5-d2-excuse-of-the-week.jpg"
+  "video": "n5-d2-excuse-of-the-week.mp4",
+  "poster": "n5-d2-excuse-of-the-week.jpg"
  },
  {
   "id": "n6",
@@ -359,8 +359,8 @@ window.WM_LESSONS = [
     "real": "supply zone"
    }
   ],
-  "video": "videos/n6-d3-back-door-short.mp4",
-  "poster": "videos/n6-d3-back-door-short.jpg"
+  "video": "n6-d3-back-door-short.mp4",
+  "poster": "n6-d3-back-door-short.jpg"
  },
  {
   "id": "n7",
@@ -376,7 +376,7 @@ window.WM_LESSONS = [
     "real": "demand zone"
    }
   ],
-  "video": "videos/n7-x7-dav-tries-patience.mp4",
-  "poster": "videos/n7-x7-dav-tries-patience.jpg"
+  "video": "n7-x7-dav-tries-patience.mp4",
+  "poster": "n7-x7-dav-tries-patience.jpg"
  }
 ];

@@ -49,7 +49,19 @@ Deno.serve(async (req) => {
     switch (event.type) {
       case "checkout.session.completed": {
         const s = event.data.object as Stripe.Checkout.Session;
-        if (s.mode !== "subscription" || !s.client_reference_id) break; // day pass / ebook: nothing to activate
+        // One-time store purchases (book, indicators…): record them against the account, matched by payment link.
+        if (s.mode === "payment" && s.client_reference_id && s.payment_link) {
+          const plink = typeof s.payment_link === "string" ? s.payment_link : (s.payment_link as { id: string }).id;
+          const { data: prod } = await db.from("products").select("id").eq("payment_link", plink).maybeSingle();
+          if (prod) {
+            await db.from("purchases").upsert(
+              { user_id: s.client_reference_id, product_id: prod.id, stripe_session_id: s.id, source: "stripe" },
+              { onConflict: "user_id,product_id" },
+            );
+          }
+          break;
+        }
+        if (s.mode !== "subscription" || !s.client_reference_id) break; // nothing else to activate
         await db.from("roster").update({
           status: "active", week: 1,
           stripe_customer_id: s.customer as string,
