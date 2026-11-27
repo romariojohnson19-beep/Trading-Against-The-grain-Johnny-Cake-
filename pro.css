@@ -1,0 +1,3 @@
+/* Shared polish only. Palette comes from each page / theme.css (original lime + dark earth). */
+body { font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+h1,h2,h3 { font-family: "Space Grotesk", Inter, system-ui, sans-serif; letter-spacing:-.02em; }

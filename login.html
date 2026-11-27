@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sign in · Johnny Cake Method</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0E1210">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="site.css"><script src="theme.js"></script>
+<link rel="stylesheet" href="world.css">
+<style>
+body { min-height: 100vh; display: flex; flex-direction: column; }
+.ltop { display: flex; align-items: center; justify-content: space-between; height: 64px; max-width: var(--max); width: 100%; margin: 0 auto; padding: 0 22px; }
+.ltop .back { color: var(--fg2); text-decoration: none; font-size: .92rem; }
+.lmain { flex: 1; display: flex; align-items: center; padding: 1rem 0 2.4rem; }
+.lgrid { display: grid; grid-template-columns: 1fr 420px; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
+.lgrid h1 { margin: .9rem 0 1rem; }
+.perks { list-style: none; padding: 0; margin: 1.6rem 0 0; display: grid; gap: .8rem; }
+.perks li { display: grid; grid-template-columns: 36px 1fr; gap: .8rem; align-items: start; }
+.perks i { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--accent-dim); border: 1px solid var(--accent-line); color: var(--accent); font: 600 .75rem var(--f-mono); font-style: normal; }
+.perks b { display: block; font-size: .98rem; }
+.perks span { color: var(--muted); font-size: .88rem; }
+.box { background: var(--panel); border: 1px solid var(--line2); border-radius: 22px; padding: 6px; min-height: 440px; box-shadow: var(--shadow); }
+#wma-root.wma-back { position: static !important; inset: auto !important; background: none !important; backdrop-filter: none !important; padding: 0 !important; display: block !important; overflow: visible !important; }
+#wma-root .wma-card { max-width: none !important; box-shadow: none !important; border: 0 !important; background: transparent !important; }
+@media (max-width: 860px) { .lgrid { grid-template-columns: 1fr; } .pitch { order: 2; } .box { order: 1; min-height: 0; } .pitch h1 { font-size: 1.8rem; } }
+</style>
+</head>
+<body>
+<header class="ltop"><a class="sbrand" href="index.html"><img src="media/johnny-avatar.png" alt="" width="32" height="32"><span>Johnny Cake<span class="hide-s"> Method</span></span></a><div class="snav-act"><a class="back" href="index.html">← Back to site</a></div></header>
+<main class="lmain"><div class="wrap lgrid">
+  <section class="pitch">
+    <img class="mm-crew" src="media/world/market-makers.webp" alt="The market makers: a murder of crows and a silent owl" width="873" height="399">
+    <span class="kicker acc">Free account</span>
+    <h1 class="h-lg">Your trading home base, in one login.</h1>
+    <ul class="perks">
+      <li><i>01</i><div><b>Video lessons</b><span>Start with the basics and track what you've watched.</span></div></li>
+      <li><i>02</i><div><b>The Trade Sim</b><span>24 setups. Make your call, watch it play out, keep score.</span></div></li>
+      <li><i>03</i><div><b>Your library</b><span>Books and indicators you buy show up here automatically.</span></div></li>
+      <li><i>04</i><div><b>The live room</b><span>Watch when the room is live. A seat adds the chat.</span></div></li>
+    </ul>
+  </section>
+  <section class="box" id="authbox"></section>
+</div></main>
+<p class="fine" style="text-align:center;padding:0 20px 22px">Educational only. Not financial advice.</p>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" crossorigin="anonymous" onerror="window.WMSUPA_FAIL=1"></script>
+<script src="cloud.js"></script>
+<script src="auth.js"></script>
+<script src="world.js"></script>
+<script>
+(function(){
+  var q = new URLSearchParams(location.search);
+  var mode = q.get('mode') === 'signup' ? 'signup' : 'signin';
+  var nx = q.get('next') || ''; var NEXT = /^[a-z0-9-]+\.html(#[a-z]+)?$/i.test(nx) ? nx : 'members.html';
+  function go(){
+    var u = WMAuth.user();
+    if (u) { location.replace(u.role === 'admin' ? 'admin.html' : NEXT); return; }
+    WMAuth.openModal({ mode: mode, dismissible: false, redirect: NEXT, onDone: function(){ location.replace(NEXT); } });
+    var root = document.getElementById('wma-root'), box = document.getElementById('authbox');
+    if (root && box) box.appendChild(root);
+  }
+  WMAuth.ready().then(go);
+})();
+</script>
+</body>
+</html>

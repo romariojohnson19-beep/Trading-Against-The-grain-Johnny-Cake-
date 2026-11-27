@@ -41,7 +41,7 @@ Run sessions on Discord Stage, record with OBS, upload the recording as a file i
 - Free Supabase pauses a project after a week of no activity; the first paying member makes that moot, or upgrade.
 - Messages and files are visible to all paying members; the "audience" filter (Week 4+, Day Pass) hides messages in the portal but is not a database-level wall.
 - Day Pass buyers do not get an account. Mario confirms their slot from the payment email.
-- Support email in `config.js` is `mariovsng@gmail.com`. Your handle is MarioVsNQ, so check that spelling.
+- Support email in `config.js` is `mariovsng@gmail.com`. Your TikTok is @johnnycrowtrades. Check that the support email is the one you want customers to see.
 
 ## Challenge results (new)
 1. Supabase → SQL Editor → paste `supabase/results.sql` → Run. (No Clerk, nothing to replace: it uses the same admin check as the rest of the site.)

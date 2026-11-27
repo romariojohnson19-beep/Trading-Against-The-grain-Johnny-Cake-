@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+/* Johnny Crow: the Wingman mascot. Popup card + book-section note.
+   The base popup rules are repeated here so the home page (which does not load pages.css) shows the card styled. */
+.wm-promo { position: fixed; z-index: 1500; right: 20px; bottom: 20px; width: min(360px, calc(100vw - 32px)); background: var(--panel2); border: 1px solid var(--accent); border-radius: 18px; padding: 1.2rem 1.2rem 1.1rem; box-shadow: 0 24px 70px rgba(0,0,0,.6); font-family: 'Inter', system-ui, sans-serif; color: var(--fg); animation: wmUp .35s ease-out; }
+@keyframes wmUp { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .wm-promo { animation: none; } }
+.wm-promo .k { font: 600 .6rem 'JetBrains Mono', monospace; letter-spacing: .16em; text-transform: uppercase; color: var(--warm); }
+.wm-promo .t { font-family: 'Bricolage Grotesque', serif; font-weight: 800; font-size: 1.35rem; letter-spacing: -.02em; line-height: 1.1; margin: .35rem 1.6rem .35rem 0; }
+.wm-promo .d { color: var(--muted); font-size: .88rem; line-height: 1.5; }
+.wm-promo .row { display: flex; gap: .6rem; align-items: center; margin-top: .9rem; flex-wrap: wrap; }
+.wm-promo .x { position: absolute; top: 8px; right: 10px; background: none; border: none; color: var(--muted); font-size: 24px; line-height: 1; cursor: pointer; width: 44px; height: 44px; }
+.wm-promo .x:hover { color: var(--fg); }
+.wm-promo .go { font-weight: 600; font-size: .85rem; color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
+.wm-promo .ends { color: var(--muted); font-size: .76rem; margin-top: .6rem; }
+@media (max-width: 560px) { .wm-promo { right: 16px; left: 16px; bottom: 16px; width: auto; } }
+.wm-promo .code-pill { font: 600 .82rem 'JetBrains Mono', monospace; letter-spacing: .08em; background: var(--bg); border: 1px dashed var(--accent); color: var(--accent); border-radius: 8px; padding: .45rem .8rem; cursor: pointer; min-height: 38px; }
+.wm-promo .code-pill:hover { background: rgba(185,215,122,.08); }
+
+/* Johnny Crow, carousel style: white sticker outline, soft green glow, light speech bubble */
+:root { --jc-bubble: #E6E8E3; --jc-ink: #141816; --jc-lime: #B9D77A; }
+
+/* Promo card: Johnny peeks over the top */
+.wm-promo.has-johnny { margin-top: 74px; padding-top: 1.3rem; }
+.wm-promo .johnny { position: absolute; left: 8px; top: -92px; width: 110px; height: auto; pointer-events: none; filter: drop-shadow(0 8px 14px rgba(0,0,0,.45)); }
+.wm-promo.has-johnny .k { margin-left: 112px; min-height: 1.2em; color: var(--jc-lime); }
+.wm-promo.has-johnny .k span { color: var(--muted, #8D978F); }
+html[data-theme="light"] .wm-promo.has-johnny .k { color: #4E7A12; }
+@media (prefers-reduced-motion: no-preference) { .wm-promo .johnny { animation: johnnyPop .5s .15s ease-out both; } }
+@keyframes johnnyPop { from { transform: translateY(18px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* Book section: Johnny + speech bubble, like the carousel slides */
+.johnny-note { position: relative; display: flex; align-items: flex-end; gap: 1rem; margin: 1.8rem auto 0; max-width: 460px; }
+.johnny-note::before { content: ""; position: absolute; left: -30px; bottom: -20px; width: 220px; height: 180px; background: radial-gradient(closest-side, rgba(185,215,122,.22), transparent); pointer-events: none; }
+.johnny-note img { position: relative; width: 120px; height: auto; flex: none; filter: drop-shadow(0 8px 14px rgba(0,0,0,.35)); }
+.johnny-note .bubble { position: relative; background: var(--jc-bubble); color: var(--jc-ink); border-radius: 22px; padding: 1rem 1.1rem; font: 500 .95rem/1.45 'Poppins', 'Inter', system-ui, sans-serif; margin: 0 0 1.6rem; min-width: 0; }
+.johnny-note .bubble::before { content: ""; position: absolute; left: -9px; bottom: 22px; border-style: solid; border-width: 9px 10px 9px 0; border-color: transparent var(--jc-bubble) transparent transparent; }
+.johnny-note .who { display: block; font: 600 .6rem 'JetBrains Mono', monospace; letter-spacing: .14em; text-transform: uppercase; color: #5E6A60; margin-top: .5rem; }
+html[data-theme="light"] .johnny-note .bubble { box-shadow: 0 0 0 1px #D5D9CF; }
+
+/* Brand mark: Johnny's avatar replaces the old hexagon */
+.brand-jc { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--accent, #B9D77A); object-fit: cover; flex: none; background: #1B221E; }
+
+/* Note variants */
+.johnny-note.center { justify-content: center; text-align: left; margin: 1.6rem auto 1.8rem; }
+.hero-note { max-width: 480px; }
+.hero-note .bubble { margin-bottom: 1.2rem; }
+.section-p + .johnny-note { margin-left: 0; }
+.hero-p .johnny-note, .lead + .johnny-note { margin-left: 0; margin-top: 1.4rem; }
+@media (max-width: 420px) {
+  .johnny-note img { width: 96px; }
+  .johnny-note .bubble { font-size: .88rem; padding: .85rem .95rem; }
+}
+
+/* Meet Johnny (replaces the author block) */
+.author-av.jc { width: 120px; height: 120px; background: #1B221E; border-width: 2px; }
+.author-av.jc img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.author .section-label { margin-bottom: .4rem; }
+
+/* Members area: Johnny is the sender avatar */
+.msg-av img, .md-av img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+.msg-av:has(img), .md-av:has(img) { overflow: hidden; background: #1B221E; }
+.johnny-note .bubble { text-transform: none; letter-spacing: normal; text-align: left; }
+.johnny-note .who { text-transform: uppercase; letter-spacing: .14em; }
+
+/* Members portal */
+.sb-jc { width: 34px; height: 34px; }
+.jc-welcome { margin: 0 0 1.2rem; max-width: 640px; }
+.jc-welcome img { width: 110px; }
+.jc-welcome .bubble { margin-bottom: 1rem; }
+.jc-empty { display: flex; flex-direction: column; align-items: center; gap: .6rem; padding: 1.6rem 1rem; text-align: center; color: var(--muted, #8D978F); font-size: .9rem; }
+.jc-empty img { height: auto; filter: drop-shadow(0 6px 10px rgba(0,0,0,.3)); }
+.jc-mini { width: 24px; height: 24px; border-radius: 50%; vertical-align: -6px; margin-right: .5rem; border: 1px solid var(--accent, #B9D77A); }
+
+/* ── Johnny animations (johnny.js adds .jc-js when motion is allowed) ── */
+.johnny-note.full img { width: 140px; }
+.johnny-note.full.big img { width: 170px; }
+.jc-js [data-jc] > img, .jc-js [data-jc] > .jc-stage { opacity: 0; transform: translateY(26px) scale(.94); transition: opacity .5s ease, transform .6s cubic-bezier(.2, 1.4, .4, 1); }
+.jc-js [data-jc].jc-in > img, .jc-js [data-jc].jc-in > .jc-stage { opacity: 1; transform: none; }
+.jc-js [data-jc] > .bubble { opacity: 0; transform: translateX(-10px); transition: opacity .45s ease .2s, transform .45s ease .2s; }
+.jc-js [data-jc].jc-in > .bubble { opacity: 1; transform: none; }
+.jc-js [data-jc].jc-in.jc-on > img.jc-bob { animation: jcBob 3.6s ease-in-out .7s infinite; }
+.jc-js [data-jc].jc-in.jc-on > img.jc-sway { animation: jcSway 4.4s ease-in-out .7s infinite; transform-origin: 50% 100%; }
+.jc-js [data-jc] > img:hover { animation: jcWiggle .55s ease !important; }
+/* Flipbook stage: fixed box, every pose sits on the same baseline at the same scale */
+.jc-stage { position: relative; display: block; flex: none; }
+.jc-stage > img { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); max-width: none; }
+.jc-stage > img.jc-measure { position: static; transform: none; }
+@keyframes jcBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+@keyframes jcSway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+@keyframes jcWiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } }
+
+/* Johnny tucked into the corner of a section (legal pages, footer, final CTA) */
+.jc-corner { float: right; width: 130px; height: auto; margin: 0 0 1rem 1.2rem; filter: drop-shadow(0 8px 14px rgba(0,0,0,.3)); }
+.jc-foot { display: block; width: 92px; height: auto; margin: 0 auto 1rem; filter: drop-shadow(0 6px 10px rgba(0,0,0,.3)); }
+.final-jc { display: flex; justify-content: center; margin-bottom: 1rem; }
+.final-jc img { width: 150px; height: auto; filter: drop-shadow(0 10px 18px rgba(0,0,0,.35)); }
+@media (max-width: 420px) {
+  .johnny-note.full img { width: 112px; }
+  .johnny-note.full.big img { width: 128px; }
+  .jc-corner { width: 96px; }
+}
+.johnny-note img.jc-h { width: auto; height: var(--jc-h, 150px); }
+.jc-meet { flex: none; display: flex; justify-content: center; }
+.jc-meet img { width: auto; height: 210px; filter: drop-shadow(0 10px 18px rgba(0,0,0,.35)); }
+.dp-card .johnny-note { margin: 1.4rem auto 1.2rem; }
+.jc-empty img { width: 120px; }
+@media (max-width: 420px) { .johnny-note img.jc-h { height: calc(var(--jc-h, 150px) * .8); } .jc-meet img { height: 170px; } }

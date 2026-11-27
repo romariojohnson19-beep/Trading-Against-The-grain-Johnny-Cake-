@@ -3,795 +3,438 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Prop Firm Wingman — Live Trade Room</title>
-<meta name="description" content="Failed another prop firm eval? Trade NQ live with a wingman. 12 weekly seats, real entries, real time.">
-<meta property="og:title" content="Prop Firm Wingman — Live Trade Room">
-<meta property="og:description" content="Failed another prop firm eval? Trade NQ live with a wingman. 12 weekly seats, real entries, real time.">
+<title>Johnny Cake Method · Lessons, Trade Sim, books, indicators and a live room</title>
+<meta name="description" content="A home base for futures and forex traders: video lessons, a Trade Sim, the Johnny Cake Method books, TradingView indicators and a live room, all under one login.">
+<meta property="og:title" content="Johnny Cake Method · Futures trading lessons and live room">
+<meta property="og:description" content="Free video lessons, the book, TradingView indicators and the Wingman live room.">
 <meta property="og:image" content="https://www.smartmoneystore.com/og-image.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
-<style>
-:root {
-  --bg: #0E1210;
-  --panel: #151B18;
-  --panel2: #1B221E;
-  --line: #26302B;
-  --fg: #E6E9E2;
-  --muted: #8D978F;
-  --accent: #B9D77A;
-  --accent-dim: rgba(185,215,122,.08);
-  --accent-border: rgba(185,215,122,.18);
-  --warm: #E8946F;
-  --red: #E5675F;
-  color-scheme: dark;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-body {
-  background-color: var(--bg);
-  background-image:
-    radial-gradient(ellipse 110% 55% at 50% -5%, rgba(30, 44, 35, 0.75) 0%, transparent 65%),
-    radial-gradient(ellipse 55% 45% at 0% 100%, rgba(22, 32, 26, 0.5) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 100% 30%, rgba(18, 26, 21, 0.4) 0%, transparent 60%);
-  color: var(--fg);
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-
-/* ── Reveal ── */
-[data-r] { opacity: 0; transform: translateY(28px); transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1); }
-[data-r].on { opacity: 1; transform: none; }
-[data-r="up2"] { transition-delay: .1s; }
-[data-r="up3"] { transition-delay: .2s; }
-[data-r="scale"] { transform: scale(.95) translateY(16px); }
-[data-r="scale"].on { transform: none; }
-
-/* ── Layout ── */
-.wrap { max-width: 1040px; margin-inline: auto; padding-inline: max(24px, env(safe-area-inset-left, 0px)); }
-.label { font-family: 'JetBrains Mono', monospace; font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
-
-/* ══ BANNER ══ */
-.banner {
-  background: rgba(185,215,122,.09);
-  border-bottom: 1px solid rgba(185,215,122,.16);
-  color: var(--accent);
-  text-align: center;
-  padding: .55rem 24px;
-  font-size: .85rem;
-  font-weight: 500;
-  letter-spacing: .01em;
-}
-.banner b { font-weight: 600; color: var(--fg); }
-
-/* ══ NAV ══ */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 90;
-  background: rgba(11,13,17,.8);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--line);
-  padding-top: env(safe-area-inset-top, 0px);
-}
-.nav-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: .7rem max(24px, env(safe-area-inset-left, 0px));
-}
-.brand {
-  display: flex; align-items: center; gap: .55rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--fg); text-decoration: none;
-}
-.brand-mark {
-  width: 28px; height: 28px; border-radius: 8px;
-  background: var(--accent); display: flex; align-items: center; justify-content: center;
-}
-.brand-mark svg { width: 14px; height: 14px; }
-.nav-cta {
-  font-weight: 600; font-size: .85rem;
-  background: var(--accent); color: var(--on-accent,#101A08);
-  border: none; border-radius: 8px; padding: .5rem 1.1rem;
-  text-decoration: none; cursor: pointer;
-  min-height: 38px; display: flex; align-items: center;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity .15s;
-}
-.nav-cta:hover { opacity: .88; }
-.nav-actions { display: flex; align-items: center; gap: 1.1rem; }
-.nav-link { color: var(--muted); font-weight: 500; font-size: .88rem; text-decoration: none; transition: color .15s; }
-.nav-link:hover { color: var(--fg); }
-
-/* ══ HERO ══ */
-.hero {
-  min-height: 100svh;
-  display: flex; align-items: center;
-  padding-top: calc(80px + env(safe-area-inset-top, 0px));
-  padding-bottom: 80px;
-  position: relative; overflow: hidden;
-}
-/* Subtle grid */
-.hero::before {
-  content: "";
-  position: absolute; inset: 0; pointer-events: none;
-  background-image:
-    linear-gradient(to right, #26302B 1px, transparent 1px),
-    linear-gradient(to bottom, #26302B 1px, transparent 1px);
-  background-size: 72px 72px;
-  opacity: .3;
-  mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black 20%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 40%, black 20%, transparent 80%);
-}
-/* Glow — warm + lime dual tone for battle energy */
-.hero::after {
-  content: "";
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 50% 40% at 30% 50%, rgba(229,103,95,.05) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 55% at 65% 40%, rgba(185,215,122,.06) 0%, transparent 70%);
-}
-
-.hero-inner {
-  position: relative; z-index: 1;
-  display: flex; flex-direction: column; align-items: center;
-  text-align: center; gap: 0; width: 100%;
-}
-
-/* Live pill */
-.live-pill {
-  display: inline-flex; align-items: center; gap: .5rem;
-  background: rgba(229,103,95,.1); border: 1px solid rgba(229,103,95,.25);
-  border-radius: 100px; padding: .32rem .85rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--red);
-  margin-bottom: 2rem;
-}
-.live-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--red);
-  animation: blink 1.6s ease-in-out infinite;
-}
-@keyframes blink { 0%,100% { opacity:1 } 50% { opacity:.3 } }
-
-.hero h1 {
-  font-family: 'Bricolage Grotesque', serif;
-  font-weight: 800;
-  font-size: clamp(3.2rem, 12vw, 7.4rem);
-  line-height: .92;
-  letter-spacing: -.04em;
-  max-width: 10ch;
-  margin-bottom: 1.6rem;
-}
-.hero h1 em { font-style: normal; color: var(--accent); }
-/* VS separator — small caps, spaced, muted */
-.vs-sep {
-  display: block;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(.85rem, 2.5vw, 1.5rem);
-  font-weight: 700;
-  letter-spacing: .42em;
-  color: var(--muted);
-  text-transform: uppercase;
-  margin-block: .3em;
-  padding-left: .42em; /* optical center for letter-spacing */
-}
-
-.hero-sub {
-  font-size: clamp(1rem, 2.4vw, 1.2rem);
-  color: var(--muted);
-  max-width: 36ch;
-  line-height: 1.65;
-  margin-bottom: 2.8rem;
-}
-.hero-sub b { color: var(--fg); }
-
-.hero-cta {
-  display: inline-flex; align-items: center; gap: .6rem;
-  background: var(--accent); color: var(--on-accent,#101A08);
-  font-weight: 700; font-size: 1.05rem;
-  border: none; border-radius: 12px;
-  padding: 1rem 2rem; text-decoration: none; cursor: pointer;
-  min-height: 54px;
-  box-shadow: 0 0 0 0 rgba(185,215,122,0);
-  transition: transform .2s, box-shadow .2s;
-  -webkit-tap-highlight-color: transparent;
-}
-.hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(185,215,122,.16); }
-.hero-cta:active { transform: scale(.97); }
-.hero-cta svg { width: 18px; height: 18px; }
-
-.hero-note {
-  margin-top: 1.2rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
-}
-
-/* ── Chart visual ── */
-.chart-wrap {
-  width: 100%; max-width: 680px;
-  margin: 4rem auto 0;
-  position: relative;
-}
-.chart-frame {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  overflow: hidden;
-}
-.chart-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: .9rem 1.3rem;
-  border-bottom: 1px solid var(--line);
-}
-.chart-header-left {
-  display: flex; align-items: center; gap: .7rem;
-}
-.chart-ticker { font-family: 'JetBrains Mono', monospace; font-size: .78rem; letter-spacing: .08em; font-weight: 600; }
-.chart-tf {
-  font-family: 'JetBrains Mono', monospace; font-size: .6rem;
-  color: var(--muted); letter-spacing: .1em;
-  background: var(--line); border-radius: 5px; padding: 2px 7px;
-}
-.chart-live-badge {
-  display: flex; align-items: center; gap: .4rem;
-  font-family: 'JetBrains Mono', monospace; font-size: .58rem;
-  letter-spacing: .12em; text-transform: uppercase; color: var(--warm);
-}
-.chart-live-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--warm); animation: blink 1.8s ease-in-out infinite;
-}
-.chart-body { padding: 1.2rem; }
-.chart-footer {
-  padding: .8rem 1.3rem;
-  border-top: 1px solid var(--line);
-  display: flex; gap: 1.4rem; align-items: center;
-}
-.cf-stat { display: flex; flex-direction: column; gap: .1rem; }
-.cf-val { font-family: 'Bricolage Grotesque', serif; font-weight: 800; font-size: 1.1rem; letter-spacing: -.02em; }
-.cf-val.green { color: var(--accent); }
-.cf-val.red { color: var(--red); }
-.cf-lbl { font-family: 'JetBrains Mono', monospace; font-size: .55rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-
-
-/* ── Live session proof ── */
-.live-wrap { width: 100%; max-width: 980px; margin: 4rem auto 0; position: relative; }
-.live-grid {
-  display: grid; grid-template-columns: 1fr; gap: 2.2rem; align-items: center;
-  background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 1.6rem;
-  text-align: left;
-}
-/* room copy panel removed: the clip stands alone */
-.live-grid { display: block; background: none; border: 0; padding: 0; }
-.live-kicker {
-  display: inline-flex; align-items: center; gap: .5rem;
-  font-family: 'JetBrains Mono', monospace; font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--warm);
-}
-.live-h { font-family: 'Bricolage Grotesque', serif; font-weight: 800; font-size: clamp(1.8rem, 4vw, 2.6rem); letter-spacing: -.03em; line-height: 1; margin: .8rem 0 .7rem; }
-.live-p { color: var(--muted); font-size: .98rem; line-height: 1.6; max-width: 34ch; }
-.live-list { list-style: none; margin-top: 1.4rem; display: flex; flex-direction: column; gap: .9rem; }
-.live-list li { display: flex; flex-direction: column; gap: .1rem; padding-left: 1rem; border-left: 2px solid var(--accent); }
-.live-list b { font-weight: 700; font-size: .98rem; }
-.live-list span { color: var(--muted); font-size: .85rem; line-height: 1.5; }
-.live-phone { margin: 0; display: flex; flex-direction: column; align-items: center; gap: .8rem; }
-.phone-frame {
-  position: relative; width: 100%; max-width: 300px; aspect-ratio: 480 / 846;
-  background: #0A0E0C; border: 1px solid var(--line); border-radius: 30px; padding: 8px;
-  box-shadow: 0 30px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(185,215,122,.08);
-  overflow: hidden;
-}
-.phone-frame video { width: 100%; height: 100%; object-fit: cover; border-radius: 22px; display: block; background: #0A0E0C; }
-.vid-toggle {
-  position: absolute; right: 16px; bottom: 16px;
-  background: rgba(14,18,16,.82); color: var(--fg); border: 1px solid var(--line); border-radius: 100px;
-  font: 600 .66rem 'JetBrains Mono', monospace; letter-spacing: .1em; text-transform: uppercase;
-  padding: 7px 12px; cursor: pointer; min-height: 32px;
-}
-.vid-toggle:hover { border-color: var(--accent); }
-.live-phone figcaption { font-family: 'JetBrains Mono', monospace; font-size: .56rem; letter-spacing: .08em; color: var(--muted); text-align: center; max-width: 34ch; line-height: 1.6; }
-
-/* ── Week strip ── */
-.week-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: .4rem; margin-bottom: .9rem; }
-.wk { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: .7rem .3rem; text-align: center; }
-.wk b { display: block; font-family: 'JetBrains Mono', monospace; font-size: .62rem; letter-spacing: .12em; color: var(--muted); }
-.wk span { display: block; margin-top: .35rem; font-size: .66rem; line-height: 1.25; color: var(--muted); }
-.wk.plan { border-color: rgba(232,148,111,.5); } .wk.plan b { color: var(--warm); }
-.wk.live { border-color: rgba(185,215,122,.55); background: var(--panel2); } .wk.live b { color: var(--accent); } .wk.live span { color: var(--fg); }
-@media (max-width: 480px) { .wk span { font-size: .6rem; } .wk { padding: .6rem .15rem; } }
-
-/* ── Wingman card gets the spotlight ── */
-@media (min-width: 900px) {
-  .offer-card.hero-card { transform: translateY(-14px); padding: 2.4rem 1.8rem; background: linear-gradient(180deg, var(--panel2), var(--panel)); }
-  .offer-card.hero-card .offer-name { font-size: 1.7rem; }
-}
-
-/* Chat strip */
-.chat-strip {
-  border-top: 1px solid var(--line);
-  padding: .9rem 1.3rem;
-  display: flex; flex-direction: column; gap: .5rem;
-}
-.chat-msg { display: flex; gap: .6rem; align-items: flex-start; }
-.chat-av {
-  width: 22px; height: 22px; border-radius: 50%; flex: none;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'JetBrains Mono', monospace; font-size: .5rem; font-weight: 600;
-}
-.chat-text { font-size: .82rem; line-height: 1.45; color: var(--muted); }
-.chat-text b { color: var(--fg); }
-.chat-text .hi { color: var(--accent); }
-
-/* ══ PROOF STRIP ══ */
-.proof { padding: 48px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.proof-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-}
-.proof-item {
-  padding: 1.2rem 1.6rem;
-  border-right: 1px solid var(--line);
-  display: flex; flex-direction: column; gap: .2rem;
-}
-.proof-item:last-child { border-right: none; }
-.proof-num {
-  font-family: 'Bricolage Grotesque', serif;
-  font-weight: 800; font-size: clamp(1.7rem, 5vw, 2.8rem);
-  letter-spacing: -.04em; line-height: 1;
-  color: var(--accent); white-space: nowrap;
-}
-.proof-lbl { font-size: .88rem; color: var(--muted); line-height: 1.4; }
-@media (max-width: 480px) {
-  .proof-grid { grid-template-columns: 1fr 1fr; }
-  .proof-item:nth-child(2) { border-right: none; }
-  .proof-item:nth-child(3) { border-right: 1px solid var(--line); border-top: 1px solid var(--line); }
-  .proof-item:nth-child(3) ~ .proof-item { border-top: 1px solid var(--line); }
-}
-
-/* ══ WHAT IS WINGMAN ══ */
-.what { padding: 96px 0; }
-.what-inner {
-  display: grid; grid-template-columns: 1fr; gap: 4rem;
-}
-@media (min-width: 720px) {
-  .what-inner { grid-template-columns: 1fr 1fr; align-items: center; }
-}
-.section-label { margin-bottom: .6rem; }
-.section-h {
-  font-family: 'Bricolage Grotesque', serif;
-  font-weight: 800;
-  font-size: clamp(2rem, 5vw, 3rem);
-  letter-spacing: -.03em;
-  line-height: 1.06;
-  margin-bottom: 1.2rem;
-}
-.section-h em { font-style: normal; color: var(--accent); }
-.section-p { color: var(--muted); font-size: 1rem; line-height: 1.75; max-width: 44ch; }
-
-/* Schedule cards */
-.schedule { display: flex; flex-direction: column; gap: .6rem; }
-.sched-card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 1rem 1.2rem;
-  display: flex; gap: 1rem; align-items: flex-start;
-}
-.sched-day {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--accent); flex: none; padding-top: .2rem; min-width: 2.8rem;
-}
-.sched-body {}
-.sched-title { font-weight: 600; font-size: .96rem; margin-bottom: .15rem; }
-.sched-desc { color: var(--muted); font-size: .84rem; line-height: 1.5; }
-
-/* ══ INCLUDES ══ */
-.includes { padding: 0 0 96px; }
-.includes-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  overflow: hidden;
-  margin-top: 2.4rem;
-}
-@media (min-width: 640px) { .includes-grid { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 960px) { .includes-grid { grid-template-columns: repeat(3, 1fr); } }
-.inc-card {
-  background: var(--bg);
-  padding: 1.8rem;
-  display: flex; flex-direction: column; gap: .6rem;
-}
-.inc-icon {
-  width: 40px; height: 40px; border-radius: 10px;
-  background: var(--accent-dim); border: 1px solid var(--accent-border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem; margin-bottom: .2rem;
-}
-.inc-title { font-weight: 600; font-size: 1rem; }
-.inc-desc { color: var(--muted); font-size: .88rem; line-height: 1.55; }
-
-/* ══ DAY PASS ══ */
-.daypass { padding: 0 0 96px; }
-.dp-card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: clamp(2rem, 5vw, 3rem);
-  display: flex; flex-direction: column;
-  gap: 1.4rem;
-  max-width: 560px;
-  margin-inline: auto;
-  text-align: center;
-  align-items: center;
-}
-.dp-badge {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
-  background: rgba(232,148,111,.1); border: 1px solid rgba(232,148,111,.25);
-  color: var(--warm); border-radius: 100px; padding: .3rem .9rem;
-}
-.dp-title {
-  font-family: 'Bricolage Grotesque', serif;
-  font-weight: 800; font-size: clamp(1.8rem, 5vw, 2.6rem);
-  letter-spacing: -.03em; line-height: 1.06;
-}
-.dp-title em { font-style: normal; color: var(--warm); }
-.dp-copy { color: var(--muted); font-size: .98rem; line-height: 1.7; max-width: 36ch; }
-.dp-guarantee {
-  background: rgba(232,148,111,.06);
-  border: 1px solid rgba(232,148,111,.18);
-  border-radius: 12px; padding: 1rem 1.4rem;
-  font-weight: 600; font-size: .95rem; color: var(--warm); width: 100%;
-}
-.dp-btn {
-  display: inline-flex; align-items: center; gap: .6rem;
-  background: var(--warm); color: #1a0800;
-  font-weight: 700; font-size: 1rem;
-  border: none; border-radius: 12px;
-  padding: .95rem 2rem; text-decoration: none; cursor: pointer;
-  min-height: 52px; width: 100%; justify-content: center;
-  transition: opacity .15s;
-}
-.dp-btn:hover { opacity: .88; }
-
-/* ══ METHOD / BOOK ══ */
-.method { padding: 96px 0; background: var(--panel); border-block: 1px solid var(--line); }
-.method-inner {
-  display: grid; grid-template-columns: 1fr; gap: 4rem;
-}
-@media (min-width: 720px) { .method-inner { grid-template-columns: 1fr 1fr; align-items: center; } }
-
-/* 3D book */
-.book-3d-wrap { display: flex; justify-content: center; perspective: 1200px; }
-.book-3d {
-  width: min(200px, 46vw);
-  aspect-ratio: 2/3;
-  border-radius: 4px 14px 14px 4px;
-  background: linear-gradient(145deg, #141920, #0c1016);
-  border: 1px solid rgba(255,255,255,.07);
-  box-shadow: -18px 28px 52px rgba(0,0,0,.7), inset 2px 0 0 rgba(255,255,255,.04);
-  transform: rotateY(-18deg) rotateX(3deg);
-  transform-style: preserve-3d;
-  padding: 22px 18px;
-  display: flex; flex-direction: column;
-  overflow: hidden;
-  position: relative;
-  transition: transform .6s cubic-bezier(.22,1,.36,1);
-}
-.book-3d:hover { transform: rotateY(-8deg) rotateX(1deg); }
-.book-3d::before {
-  content: "";
-  position: absolute; left: 7px; top: 0; bottom: 0; width: 7px;
-  border-radius: 2px;
-  background: linear-gradient(180deg, var(--accent), #7E9A45);
-}
-.book-lbl {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .5rem; letter-spacing: .18em; text-transform: uppercase;
-  color: var(--muted); padding-left: 8px;
-}
-.book-h {
-  font-family: 'Bricolage Grotesque', serif;
-  font-weight: 800; font-size: 1.6rem; line-height: .96;
-  letter-spacing: -.03em; margin-top: auto; padding-left: 8px;
-  color: var(--fg);
-}
-.book-h em { font-style: normal; color: var(--accent); }
-.book-rule { height: 1px; background: var(--line); margin: 12px 0; }
-.book-foot { font-family: 'JetBrains Mono', monospace; font-size: .5rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding-left: 8px; }
-.book-glow {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
-  background: linear-gradient(transparent, rgba(185,215,122,.04));
-  pointer-events: none;
-}
-
-.steps { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; margin-top: 2rem; }
-.step-row {
-  display: grid; grid-template-columns: 2.8rem 1fr;
-  border-bottom: 1px solid var(--line);
-}
-.step-row:last-child { border-bottom: none; }
-.step-n {
-  font-family: 'JetBrains Mono', monospace; font-size: .6rem;
-  color: var(--accent); letter-spacing: .1em;
-  padding: 1rem .5rem 1rem 1rem;
-  border-right: 1px solid var(--line);
-  background: rgba(185,215,122,.03);
-  display: flex; align-items: flex-start;
-}
-.step-body { padding: .9rem 1.2rem; }
-.step-title { font-weight: 600; font-size: .95rem; }
-.step-desc { color: var(--muted); font-size: .83rem; margin-top: .15rem; line-height: 1.5; }
-
-/* ══ OFFERS ══ */
-.offers { padding: 96px 0; }
-.offers-grid {
-  display: grid; grid-template-columns: 1fr; gap: 1.2rem;
-  margin-top: 2.8rem;
-}
-@media (min-width: 560px) { .offers-grid { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 900px) { .offers-grid { grid-template-columns: repeat(3, 1fr); } }
-
-.offer-card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: 2rem 1.6rem;
-  display: flex; flex-direction: column; gap: 1.2rem;
-  position: relative;
-}
-.offer-card.hero-card {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent), 0 8px 48px rgba(185,215,122,.1);
-}
-.offer-card.dimmed { user-select: none; }
-.offer-card.dimmed > :not(:last-child) { opacity: .45; pointer-events: none; }
-.offer-badge {
-  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .58rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-  padding: 4px 14px; border-radius: 100px; white-space: nowrap;
-}
-.offer-badge.lime { background: var(--accent); color: var(--on-accent,#101A08); }
-.offer-badge.warm { background: var(--warm); color: #1a0800; }
-.offer-badge.muted { background: #2a2f38; color: var(--muted); }
-.offer-name {
-  font-family: 'Bricolage Grotesque', serif;
-  font-weight: 800; font-size: 1.4rem; letter-spacing: -.02em;
-}
-.offer-sub { font-family: 'JetBrains Mono', monospace; font-size: .6rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: .2rem; }
-.offer-list { list-style: none; display: flex; flex-direction: column; gap: .45rem; flex: 1; }
-.offer-list li { display: flex; gap: .5rem; font-size: .9rem; line-height: 1.5; }
-.offer-list .ck { color: var(--accent); font-weight: 700; flex: none; }
-.offer-list .ck.dim { color: var(--muted); }
-
-.offer-btn {
-  display: flex; align-items: center; justify-content: center; gap: .5rem;
-  font-weight: 700; font-size: .95rem;
-  border-radius: 10px; padding: .85rem 1.2rem;
-  text-decoration: none; border: none; cursor: pointer;
-  min-height: 48px; width: 100%;
-  transition: opacity .15s, transform .15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.offer-btn.lime { background: var(--accent); color: var(--on-accent,#101A08); }
-.offer-btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
-.offer-btn.ghost:hover { border-color: var(--muted); }
-.offer-btn.lime:hover { opacity: .88; transform: translateY(-1px); }
-.offer-note { font-family: 'JetBrains Mono', monospace; font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-align: center; margin-top: .3rem; }
-
-/* ══ COMPARE ══ */
-.compare { padding: 0 0 96px; }
-.compare-table {
-  margin-top: 2.4rem;
-  border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
-}
-.ct-row {
-  display: grid; grid-template-columns: 1fr 1fr 1fr;
-  border-bottom: 1px solid var(--line);
-}
-.ct-row:last-child { border-bottom: none; }
-.ct-cell {
-  padding: .9rem 1.2rem;
-  border-right: 1px solid var(--line);
-  font-size: .9rem; line-height: 1.5;
-}
-.ct-cell:last-child { border-right: none; }
-.ct-row.header .ct-cell {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--muted); background: var(--panel);
-}
-.ct-row.header .ct-cell.active { color: var(--accent); }
-.ct-cell.active { color: var(--accent); font-weight: 600; }
-.ct-cell.muted { color: var(--muted); }
-.x { color: var(--red); }
-.ck2 { color: var(--accent); }
-
-/* ══ AUTHOR ══ */
-.author { padding: 96px 0; background: var(--panel); border-block: 1px solid var(--line); }
-.author-inner {
-  display: flex; flex-direction: column; gap: 2rem;
-}
-@media (min-width: 540px) { .author-inner { flex-direction: row; align-items: flex-start; gap: 2.4rem; } }
-.author-av { overflow: hidden;
-  width: 96px; height: 96px; border-radius: 50%; flex: none;
-  background: var(--line); border: 2px solid var(--accent);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--muted);
-}
-.author-name { font-family: 'Bricolage Grotesque', serif; font-weight: 800; font-size: 1.4rem; letter-spacing: -.02em; margin-bottom: .5rem; }
-.author-copy { color: var(--muted); font-size: .96rem; line-height: 1.7; max-width: 54ch; }
-.author-handle { font-family: 'JetBrains Mono', monospace; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: .8rem; }
-
-/* ══ FAQ ══ */
-.faq { padding: 96px 0; }
-.faq-wrap { max-width: 680px; }
-details { border-bottom: 1px solid var(--line); padding: 1rem 0; }
-details summary {
-  cursor: pointer; list-style: none;
-  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
-  font-weight: 600; font-size: 1rem;
-  -webkit-tap-highlight-color: transparent;
-}
-details summary::-webkit-details-marker { display: none; }
-.faq-plus { color: var(--accent); font-size: 1.3rem; flex: none; transition: transform .2s; line-height: 1; }
-details[open] .faq-plus { transform: rotate(45deg); }
-.faq-body { color: var(--muted); font-size: .95rem; line-height: 1.7; margin-top: .7rem; padding-right: 1rem; }
-
-/* ══ FINAL CTA ══ */
-.final {
-  background: linear-gradient(180deg, #131A16 0%, #18221C 100%);
-  border-top: 1px solid var(--line);
-  padding: 96px 0;
-}
-.final-inner {
-  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.4rem;
-}
-.final h2 {
-  font-family: 'Bricolage Grotesque', serif;
-  font-weight: 800; font-size: clamp(2.2rem, 7vw, 4rem);
-  letter-spacing: -.04em; line-height: .96;
-  color: var(--fg); max-width: 14ch;
-}
-.final p { color: var(--muted); font-size: 1rem; max-width: 34ch; line-height: 1.6; }
-.final-btn {
-  display: inline-flex; align-items: center; gap: .6rem;
-  background: var(--accent); color: var(--on-accent,#101A08);
-  font-weight: 700; font-size: 1.05rem;
-  border: none; border-radius: 12px; padding: 1rem 2.2rem;
-  text-decoration: none; cursor: pointer; min-height: 54px;
-  box-shadow: 0 8px 28px rgba(0,0,0,.25);
-  transition: opacity .15s;
-}
-.final-btn:hover { opacity: .88; }
-
-
-/* ══ FOOTER ══ */
-footer {
-  padding: 2rem 0; padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
-  border-top: 1px solid var(--line);
-}
-.foot-inner { display: flex; flex-direction: column; gap: .7rem; }
-.foot-disc { color: var(--muted); font-size: .78rem; line-height: 1.6; max-width: 72ch; }
-.foot-row {
-  display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
-}
-
-.foot-links{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;margin:1rem 0;font-size:.85rem}.foot-links a{color:var(--muted);text-decoration:none}.foot-links a:hover{color:var(--fg)}
-@media(max-width:560px){.nav-hide{display:none}}
-/* ── Grain overlay ── */
-body::before {
-  content: "";
-  position: fixed; inset: 0; z-index: 0;
-  pointer-events: none;
-  opacity: .022;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
-}
-/* Everything sits above grain */
-nav, section, .proof, footer, .banner { position: relative; z-index: 1; }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition: none !important; animation: none !important; }
-  [data-r] { opacity: 1; transform: none; }
-}
-</style>
+<meta name="theme-color" content="#0E1210">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="site.css"><script src="theme.js"></script>
 <link rel="stylesheet" href="results.css">
-<link rel="stylesheet" href="theme.css">
-<script src="theme.js"></script>
+<style>
+/* ── landing only ── */
+.hero { position: relative; padding: clamp(2.4rem, 7vw, 5rem) 0 clamp(3rem, 7vw, 5.5rem); overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: -20% -10% auto auto; width: 70vw; height: 70vw; max-width: 820px; max-height: 820px; background: radial-gradient(closest-side, rgba(185,215,122,.10), transparent 70%); pointer-events: none; }
+.hero-grid { display: grid; grid-template-columns: 1.08fr .92fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; position: relative; }
+.hero h1 { margin: 1.1rem 0 1.2rem; }
+.hero h1 span { color: var(--accent); }
+.hero-ctas { display: flex; gap: .7rem; flex-wrap: wrap; margin-top: 1.8rem; }
+.hero-facts { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: .5rem 2rem; margin-top: 2rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+.hero-facts div { font-size: .9rem; color: var(--fg2); }
+.hero-facts b { display: block; font: 800 1.35rem var(--f-head); color: var(--fg); letter-spacing: -.02em; }
+.stage { position: relative; display: flex; justify-content: center; }
+.phone { position: relative; width: min(300px, 74vw); aspect-ratio: 9/18.5; border-radius: 42px; padding: 10px; background: #050706; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 40px 90px rgba(0,0,0,.55), inset 0 0 0 2px #1d2420; }
+.phone video, .phone img.poster { width: 100%; height: 100%; object-fit: cover; border-radius: 33px; background: #0b0f0d; }
+.phone::after { content: ""; position: absolute; top: 18px; left: 50%; width: 76px; height: 20px; margin-left: -38px; border-radius: 20px; background: #050706; }
+.float { position: absolute; background: color-mix(in srgb, var(--panel) 92%, transparent); backdrop-filter: blur(10px); border: 1px solid var(--line2); border-radius: 14px; padding: .75rem .9rem; box-shadow: var(--shadow); font-size: .84rem; }
+.float b { display: block; font-weight: 700; color: var(--fg); }
+.float span { color: var(--muted); }
+.float.live { left: max(0px, calc(50% - 250px)); bottom: 13%; display: flex; gap: .65rem; align-items: center; }
+.float.live .dot { flex: none; }
+.float.term { right: max(0px, calc(50% - 255px)); top: 14%; max-width: 190px; }
+.float.term .t { font: 500 .66rem var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.peek { position: absolute; right: max(-10px, calc(50% - 280px)); bottom: -8px; width: 118px; filter: drop-shadow(0 14px 18px rgba(0,0,0,.45)); }
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .stage { margin-top: .5rem; }
+  .float.term { display: none; }
+  .hero-facts { gap: .5rem 1.2rem; } .hero-facts div { font-size: .8rem; } .hero-facts b { font-size: 1.15rem; }
+  .float.live { left: 0; bottom: 10%; }
+  .peek { right: -6px; width: 92px; }
+}
+
+/* inside: 4 product tiles */
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+@media (max-width: 1080px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+.you { display: grid; grid-template-columns: .9fr 1.1fr; gap: 1.2rem 2.4rem; padding: clamp(1.4rem, 3vw, 2.2rem); align-items: start; border-color: var(--accent-line); background: linear-gradient(135deg, var(--accent-dim), transparent 55%), var(--panel); }
+.you-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .7rem; }
+.you-list li { padding-left: 1.6rem; position: relative; color: var(--fg2); }
+.you-list li::before { content: ""; position: absolute; left: 0; top: .55em; width: 10px; height: 10px; border-radius: 3px; border: 1.5px solid var(--accent); }
+.you-end { grid-column: 1 / -1; color: var(--fg); font-weight: 500; padding-top: .9rem; border-top: 1px solid var(--line); }
+@media (max-width: 900px) { .you { grid-template-columns: 1fr; } }
+.tile { position: relative; display: grid; grid-template-rows: 230px auto; overflow: hidden; text-decoration: none; color: inherit; transition: border-color .2s, transform .2s; }
+.tile:hover { border-color: var(--line2); transform: translateY(-2px); }
+.tile-vis { position: relative; overflow: hidden; background: var(--bg2); border-bottom: 1px solid var(--line); }
+.tile-body { padding: 1.3rem 1.4rem 1.5rem; display: flex; flex-direction: column; gap: .55rem; }
+.tile-top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.tile h3 { font-size: 1.35rem; }
+.tile .price { font: 600 .9rem var(--f-body); color: var(--accent); white-space: nowrap; }
+.tile p { color: var(--fg2); font-size: .95rem; }
+.tile .go { margin-top: .3rem; color: var(--fg); font-weight: 600; font-size: .9rem; display: inline-flex; gap: .35rem; align-items: center; }
+.tile .go::after { content: "→"; color: var(--accent); transition: transform .2s; }
+.tile:hover .go::after { transform: translateX(3px); }
+.stack { position: absolute; inset: 0; display: flex; justify-content: center; align-items: flex-end; }
+.stack img { position: absolute; bottom: -40px; width: 122px; border-radius: 14px; border: 1px solid var(--line2); box-shadow: 0 18px 40px rgba(0,0,0,.5); }
+.stack img:nth-child(1) { transform: translateX(-108px) rotate(-7deg); }
+.stack img:nth-child(2) { z-index: 2; bottom: -22px; width: 132px; }
+.stack img:nth-child(3) { transform: translateX(108px) rotate(7deg); }
+.shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 38%; opacity: .92; }
+.shot.chart { object-position: center; opacity: 1; }
+.shot-tag { position: absolute; left: 14px; top: 14px; z-index: 2; }
+.book { position: absolute; left: 50%; bottom: -26px; width: 150px; height: 210px; margin-left: -75px; border-radius: 4px 10px 10px 4px; background: linear-gradient(135deg, #1d2a17, #0f150e 70%); border: 1px solid rgba(185,215,122,.35); box-shadow: -10px 0 0 -4px #0a0e09 inset, 0 24px 50px rgba(0,0,0,.55); padding: 20px 16px; display: flex; flex-direction: column; transform: perspective(700px) rotateY(-14deg); }
+.book .v { font: 500 .55rem var(--f-mono); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }
+.book .t { font: 800 1.35rem/1 var(--f-head); color: #F1F3EE; margin-top: 18px; letter-spacing: -.02em; }
+.book .t em { font-style: normal; color: var(--accent); }
+.book .r { height: 1px; background: rgba(185,215,122,.35); margin: 14px 0 8px; }
+.book .a { font-size: .62rem; color: #9AA39C; }
+.ind { position: absolute; inset: 18px 18px 0; }
+html[data-theme="light"] .book { background: linear-gradient(135deg, #2a3a20, #121a10 70%); }
+
+/* path */
+.path { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; counter-reset: step; }
+.step { padding: 1.6rem 1.5rem; display: flex; flex-direction: column; gap: .7rem; position: relative; }
+.step .n { font: 500 .72rem var(--f-mono); color: var(--accent); letter-spacing: .14em; }
+.step h3 { font-size: 1.45rem; }
+.step p { color: var(--fg2); font-size: .95rem; }
+.step ul { list-style: none; padding: 0; margin: .4rem 0 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+.step li { font-size: .78rem; padding: .3rem .6rem; border-radius: 8px; background: var(--panel2); color: var(--fg2); border: 1px solid var(--line); }
+.step.top { border-color: var(--accent-line); background: linear-gradient(180deg, var(--accent-dim), transparent 60%), var(--panel); }
+.step .cta { margin-top: auto; padding-top: .6rem; }
+.path-foot { margin-top: 1.4rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: .92rem; }
+
+/* lessons rail */
+.rail { display: grid; grid-auto-flow: column; grid-auto-columns: 200px; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 2px 1rem; scrollbar-width: thin; }
+.lcard { scroll-snap-align: start; position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); cursor: pointer; text-align: left; padding: 0; color: inherit; }
+.lcard img { width: 100%; aspect-ratio: 9/14; object-fit: cover; object-position: top; }
+.lcard .meta { padding: .75rem .85rem .9rem; }
+.lcard .meta b { display: block; font-size: .95rem; line-height: 1.3; }
+.lcard .meta span { font: 500 .66rem var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.lcard .badge { position: absolute; top: 10px; left: 10px; padding: .25rem .55rem; border-radius: 8px; font: 600 .7rem var(--f-body); background: var(--accent); color: var(--accent-ink); }
+.lcard.locked img { filter: blur(3px) brightness(.55); }
+.lcard.locked .badge { background: rgba(0,0,0,.6); color: #fff; border: 1px solid rgba(255,255,255,.2); }
+.lcard .play { position: absolute; top: 34%; left: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: rgba(14,18,16,.72); border: 1px solid rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; }
+.lcard .play svg { width: 20px; height: 20px; color: #fff; }
+dialog.vid { border: 0; padding: 0; background: transparent; max-width: min(420px, 92vw); }
+dialog.vid::backdrop { background: rgba(0,0,0,.8); }
+dialog.vid video { width: 100%; max-height: 82vh; border-radius: 18px; background: #000; }
+dialog.vid .x { position: absolute; top: -46px; right: 0; }
+
+/* scoreboard */
+.sb { display: grid; grid-template-columns: 1fr auto; gap: 1rem 2rem; align-items: center; padding: 1.2rem 1.4rem; }
+.sb-head p { color: var(--fg2); font-size: .92rem; margin-top: .35rem; }
+.sb-cells { display: flex; gap: .5rem; flex-wrap: wrap; }
+.sb-cell { min-width: 92px; padding: .7rem .9rem; border-radius: 12px; background: var(--panel2); border: 1px solid var(--line); text-align: center; }
+.sb-cell b { display: block; font: 800 1.7rem/1 var(--f-head); letter-spacing: -.02em; }
+.sb-cell span { font-size: .74rem; color: var(--muted); }
+.sb-cell.pass b { color: var(--accent); } .sb-cell.fail b { color: var(--red); } .sb-cell.test b { color: var(--warm); }
+.sb-link { grid-column: 1 / -1; font-size: .9rem; }
+@media (max-width: 760px) { .sb { grid-template-columns: 1fr; } .sb-cells { display: grid; grid-template-columns: repeat(2, 1fr); } }
+
+/* sim */
+.sim-wrap { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 5vw, 3.6rem); align-items: center; }
+.sim-pts { list-style: none; padding: 0; margin: 1.4rem 0 0; display: grid; gap: .55rem; color: var(--fg2); }
+.sim-pts li::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: .6rem; vertical-align: middle; }
+@media (max-width: 900px) { .sim-wrap { grid-template-columns: 1fr; } }
+
+/* live */
+.live-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; }
+.live-vid { position: relative; max-width: 340px; margin: 0 auto; border-radius: 24px; overflow: hidden; border: 1px solid var(--line2); box-shadow: var(--shadow); }
+.live-vid video { width: 100%; aspect-ratio: 540/984; object-fit: cover; }
+.live-vid .pill { position: absolute; left: 12px; top: 12px; background: rgba(14,18,16,.75); color: #fff; border-color: rgba(255,255,255,.2); }
+.week { display: grid; grid-template-columns: repeat(6, 1fr); gap: .4rem; margin: 1.6rem 0; }
+.week div { text-align: center; padding: .7rem .2rem; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); }
+.week b { display: block; font: 500 .7rem var(--f-mono); letter-spacing: .1em; color: var(--muted); }
+.week span { font-size: .78rem; font-weight: 600; }
+.week .on { border-color: var(--accent-line); background: var(--accent-dim); }
+.week .on span { color: var(--accent); }
+.price-row { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; margin: .4rem 0 1.2rem; }
+.price-row b { font: 800 2rem var(--f-head); letter-spacing: -.02em; }
+.price-row span { color: var(--muted); }
+.dpass { margin-top: 1.4rem; padding: 1.1rem 1.2rem; display: flex; gap: 1rem; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.dpass p { font-size: .92rem; color: var(--fg2); max-width: 40ch; }
+.dpass p b { color: var(--fg); }
+
+/* store strip */
+.shop { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.prod { padding: 1.3rem; display: flex; flex-direction: column; gap: .5rem; text-decoration: none; color: inherit; }
+.prod .k { font: 500 .66rem var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.prod h3 { font-size: 1.15rem; }
+.prod p { color: var(--fg2); font-size: .9rem; flex: 1; }
+.prod .p { font-weight: 700; color: var(--accent); }
+
+/* about */
+.about { display: grid; grid-template-columns: 300px 1fr; gap: clamp(2rem, 5vw, 3.6rem); align-items: center; }
+.about-photo { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 22px; border: 1px solid var(--line2); }
+.about-photo.jc { object-fit: contain; background: radial-gradient(circle at 50% 60%, var(--accent-dim), transparent 70%), var(--panel); padding: 18px; }
+.about blockquote { margin: 1.2rem 0 0; font: 600 clamp(1.15rem, 2.2vw, 1.4rem)/1.45 var(--f-body); color: var(--fg); letter-spacing: -.01em; }
+.about p.body { color: var(--fg2); margin-top: 1rem; max-width: 60ch; }
+.duo { display: flex; gap: .8rem; margin-top: 1.6rem; flex-wrap: wrap; }
+.duo a { display: flex; align-items: center; gap: .7rem; padding: .55rem .9rem .55rem .55rem; text-decoration: none; color: inherit; }
+.duo img { width: 44px; height: 52px; object-fit: contain; }
+.duo b { display: block; font-size: .92rem; }
+.duo span { font-size: .78rem; color: var(--muted); }
+
+/* close */
+.close { text-align: center; padding: clamp(3.4rem, 9vw, 6rem) 0; border-top: 1px solid var(--line); background: radial-gradient(60% 80% at 50% 0%, var(--accent-dim), transparent 70%); }
+.close .lead { margin: 1rem auto 0; }
+.close .hero-ctas { justify-content: center; }
+
+@media (max-width: 900px) {
+  .tiles, .shop { grid-template-columns: 1fr; }
+  .path { grid-template-columns: 1fr; }
+  .live-grid, .about { grid-template-columns: 1fr; }
+  .about-photo { max-width: 220px; }
+  .tile { grid-template-rows: 200px auto; }
+}
+/* results block from results.css: align with this page */
+.results .label { font: 500 .7rem var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.results .section-h { font-size: clamp(2rem, 5vw, 3.1rem); margin: .8rem 0; }
+.results .section-p { color: var(--fg2); }
+/* the back room: the market makers */
+.backroom { background: radial-gradient(ellipse at 75% 60%, rgba(185,215,122,.07), transparent 60%), var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden; }
+.br-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(1.6rem, 4vw, 3rem); align-items: center; }
+.br-crew { width: 100%; height: auto; filter: drop-shadow(0 24px 34px rgba(0,0,0,.6)); }
+@media (max-width: 900px) { .br-grid { grid-template-columns: 1fr; } .br-crew { order: -1; max-width: 520px; margin: 0 auto; } }
+/* two ways in */
+.ways { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.way { display: flex; gap: 1.1rem; align-items: center; padding: 1.2rem 1.3rem; }
+.way img { width: 112px; height: 112px; object-fit: contain; flex: none; }
+.way .tag { font: 500 .7rem var(--f-mono); letter-spacing: .12em; text-transform: uppercase; }
+.way.dav .tag { color: var(--red); } .way.jc .tag { color: var(--accent); }
+.way.dav { border-color: rgba(229,103,95,.35); } .way.jc { border-color: var(--accent-line); }
+.way h3 { font-family: var(--f-head); font-size: 1.15rem; margin: .35rem 0 .3rem; }
+.way p { color: var(--fg2); font-size: .93rem; margin: 0; }
+.ways-foot { margin-top: 1rem; color: var(--fg2); }
+@media (max-width: 760px) { .ways { grid-template-columns: 1fr; } .way img { width: 86px; height: 86px; } }
+</style>
 </head>
 <body>
+<!--NAV--><header class="snav"><div class="snav-bar">
+  <a class="sbrand" href="index.html"><img src="media/johnny-avatar.png" alt="" width="32" height="32"><span>Johnny Cake<span class="hide-s"> Method</span></span></a>
+  <nav class="snav-links" aria-label="Main"><a href="index.html#lessons">Lessons</a><a href="index.html#sim">Trade Sim</a><a href="index.html#live">Live room</a><a href="store.html">Store</a><a href="pricing.html">Pricing</a></nav>
+  <div class="snav-act"><a class="signin" href="#" data-auth="signin" data-nav="signin">Sign in</a><a class="btn sm" href="#" data-auth="signup" data-nav="join">Join free</a><button class="snav-menu" id="snav-menu" type="button" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+</div><div class="snav-sheet" id="snav-sheet"><a href="index.html#lessons">Lessons</a><a href="index.html#sim">Trade Sim</a><a href="index.html#live">Live room</a><a href="store.html">Store</a><a href="pricing.html">Pricing</a><a href="#" data-auth="signin" data-nav="signin">Sign in</a></div></header><!--/NAV-->
 
-<!-- ══ BANNER ══ -->
-<div class="banner">
-  Prop firm traders — your wingman is live on the NQ. <b>12 weekly seats. Let's get you funded.</b>
-</div>
-
-<!-- ══ NAV ══ -->
-<nav>
-  <div class="nav-bar">
-    <a class="brand" href="#">
-      <div class="brand-mark">
-        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M7 1L12 4V10L7 13L2 10V4L7 1Z" fill="#101A08"/>
-        </svg>
+<main>
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="pill acc" data-r>Futures &amp; forex · price action</span>
+      <h1 class="h-xl" data-r>Most evals aren't lost on the chart. <span>They're lost on the click.</span></h1>
+      <p class="lead" data-r>Johnny Crow waits for the setup to prove itself. Dæv takes the hot entry. Learn both ways in and practice them in the Trade Sim. Lessons, books and indicators, all under one login, with a live room on the way.</p>
+      <div class="hero-ctas" data-r>
+        <a class="btn" href="#sim">Try the Trade Sim</a>
+        <a class="btn ghost" href="#" data-auth="signup">Start free <svg viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
-      Wingman Live
-    </a>
-    <div class="nav-actions">
-      <a class="nav-link nav-hide" href="pricing.html">Pricing</a>
-      <a class="nav-link nav-hide" href="faq.html">FAQ</a>
-      <a class="nav-link" href="#" id="nav-signin" data-auth="signin">Sign in</a>
-      <a class="nav-cta" href="#" id="nav-join" data-auth="signup">Join</a>
+      <div class="hero-facts" data-r>
+        <div><b>23</b>video lessons</div>
+        <div><b>24</b>sim setups</div>
+        <div><b>1</b>login for all of it</div>
+      </div>
     </div>
-  </div>
-</nav>
-
-<!-- ══ HERO ══ -->
-<section class="hero" style="padding-top: calc(80px + 36px + env(safe-area-inset-top, 0px))">
-  <div class="wrap">
-    <div class="hero-inner">
-      <div class="live-pill" data-r>
-        <span class="live-dot"></span>
-        Live trade room · NQ · ES · GC · Futures &amp; Micros
+    <div class="stage" data-r>
+      <div class="phone">
+        <video src="hero-dav-takes-the-wheel.mp4" poster="hero-dav-takes-the-wheel.jpg" autoplay muted loop playsinline preload="metadata" aria-label="A lesson from the Johnny Cake Method"></video>
       </div>
-
-      <h1 data-r="up2">
-        Prop Firm<br><em>Wingman.</em>
-      </h1>
-
-      <p class="hero-sub" data-r="up3">
-        <b>Failed another prop firm eval?</b><br>
-        Your wingman is live on the charts. Watch real NQ entries and the decisions that get traders funded, in real time. 12 weekly seats.
-      </p>
-
-      <a class="hero-cta" href="#wingman" data-r>
-        Learn more
-        <svg viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-</div>
+      <div class="float term"><div class="t">Trade Sim</div><span>Dæv, Johnny, skip, or your own entry. Then see who was right.</span></div>
+      <div class="float live"><span class="dot"></span><div><b>Wingman live room</b><span>Opening soon · waitlist open</span></div></div>
+      <img class="peek" src="media/jc-binoculars.webp" alt="" width="118" height="110">
+    </div>
   </div>
 </section>
 
-<!-- ══ PROOF STRIP ══ -->
-<div class="proof">
+<!-- FOR YOU -->
+<section class="section tight" id="you" style="padding-top:0">
   <div class="wrap">
-    <div class="proof-grid">
-      <div class="proof-item" data-r>
-        <div class="proof-num">12</div>
-        <div class="proof-lbl">Weekly seats.<br>Stays intimate.</div>
+    <div class="you card" data-r>
+      <div>
+        <span class="kicker acc">Sound like you?</span>
+        <h2 class="h-md" style="margin-top:.7rem">You know the setups. It's the click that keeps costing you.</h2>
       </div>
-      <div class="proof-item" data-r="up2">
-        <div class="proof-num">Mon–Thu</div>
-        <div class="proof-lbl">Live chart<br>sessions.</div>
+      <ul class="you-list">
+        <li>You've watched the videos and read the threads, and you still get in a candle too early.</li>
+        <li>You move your stop "just a little," then watch it turn into the full loss.</li>
+        <li>You've paid for an eval, or three, and lost it on one bad afternoon.</li>
+      </ul>
+      <p class="you-end">It's not your analysis. It's where the market puts its orders, and what your click does when price gets there.</p>
+    </div>
+  </div>
+</section>
+
+<!-- THE BACK ROOM -->
+<section class="section backroom" id="backroom">
+  <div class="wrap br-grid">
+    <div data-r>
+      <span class="kicker acc">The back room</span>
+      <h2 class="h-lg" style="margin-top:.8rem">Every chart has a back room.</h2>
+      <p class="lead" style="margin-top:1rem">Orders pile up where most traders put their stops. Someone is always there to fill them.</p>
+      <p class="body" style="margin-top:.8rem;color:var(--fg2)">Who they are and where they wait is lesson one.</p>
+      <a class="btn ghost" href="#" data-auth="signup" style="margin-top:1.2rem">Watch lesson one free</a>
+    </div>
+    <img class="br-crew" src="media/world/market-makers.webp" alt="The market makers: a murder of crows and a silent owl" width="873" height="399" loading="lazy" data-r>
+  </div>
+</section>
+
+<!-- TWO WAYS IN -->
+<section class="section" id="ways">
+  <div class="wrap">
+    <div class="sec-head" data-r><div><span class="kicker">Two ways in</span><h2 class="h-lg">Every setup. Two entries.</h2></div></div>
+    <div class="ways">
+      <div class="way card dav" data-r>
+        <img src="media/dv-stand.webp" alt="Dæv" loading="lazy">
+        <div><span class="tag">Dæv · the hot entry</span><h3>Buys the second price touches the zone.</h3><p>Best price, least proof. He's the voice that rushes your click.</p></div>
       </div>
-      <div class="proof-item" data-r="up3">
-        <div class="proof-num">Sun–Mon</div>
-        <div class="proof-lbl">Pre-week<br>game plan.</div>
+      <div class="way card jc" data-r>
+        <img src="media/jc-stand.webp" alt="Johnny Crow" loading="lazy">
+        <div><span class="tag">Johnny · the confirmed entry</span><h3>Waits for price to prove itself.</h3><p>Worse price, more proof. Some days that costs him the move. Some days it saves the account.</p></div>
+      </div>
+    </div>
+    <p class="ways-foot" data-r>You'll see both on every chart, with what each one risked. You decide who's right.</p>
+  </div>
+</section>
+
+<!-- TRADE SIM -->
+<section class="section" id="sim" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap sim-wrap">
+    <div data-r>
+      <span class="kicker acc">New · Trade Sim</span>
+      <h2 class="h-lg" style="margin-top:.8rem">Would you have taken it?</h2>
+      <p class="lead" style="margin-top:1rem">You get a setup. Trade it Dæv's way, Johnny's way, skip it, or place your own entry. Then price plays out and you see who was right.</p>
+      <ul class="sim-pts"><li>Futures, gold, oil and forex setups</li><li>Your score is kept as you play</li><li>One free setup here, 23 more inside</li></ul>
+    </div>
+    <div id="sim-free" data-r></div>
+  </div>
+</section>
+
+<!-- WHAT'S INSIDE -->
+<section class="section" id="inside" style="padding-top:clamp(1rem,3vw,2rem)">
+  <div class="wrap">
+    <div class="sec-head" data-r>
+      <div><span class="kicker">Everything inside</span><h2 class="h-lg">Your trading home base.</h2></div>
+      <p class="lead" style="max-width:40ch">One account. Your lessons, your practice, your tools and your purchases all in the same place.</p>
+    </div>
+    <div class="tiles">
+      <a class="tile card" href="#lessons" data-r>
+        <div class="tile-vis"><div class="stack"><img src="media/cards/lesson-hot-entry.jpg" alt="" loading="lazy"><img src="media/cards/lesson-swept.jpg" alt="" loading="lazy"><img src="media/cards/lesson-two-entries.jpg" alt="" loading="lazy"></div></div>
+        <div class="tile-body"><div class="tile-top"><h3>Video lessons</h3><span class="price">Free to start</span></div><p>Short lessons on real charts. Johnny waits for proof, Dæv takes the hot entry, and you see how each one turns out. New ones every week.</p><span class="go">Watch a few</span></div>
+      </a>
+      <a class="tile card" href="#sim" data-r>
+        <div class="tile-vis"><div class="stack"><img src="media/cards/sim-phone-b.jpg" alt="" loading="lazy"><img src="media/cards/sim-phone-a.jpg" alt="A Trade Sim setup asking what you would do" loading="lazy"><img src="media/cards/sim-phone-c.jpg" alt="" loading="lazy"></div></div>
+        <div class="tile-body"><div class="tile-top"><h3>Trade Sim</h3><span class="price">Free with an account</span></div><p>24 setups across futures, gold, oil and forex. Make your call, watch price play out, and keep score. Practice before it costs you.</p><span class="go">Try one now</span></div>
+      </a>
+      <a class="tile card" href="#" data-lead="liveroom" data-r>
+        <div class="tile-vis"><img class="shot" src="media/session-poster.jpg" alt="A live futures chart from a Wingman session" loading="lazy"><span class="pill shot-tag" style="background:rgba(14,18,16,.75);color:#fff;border-color:rgba(255,255,255,.2)"><span class="dot"></span>Live</span></div>
+        <div class="tile-body"><div class="tile-top"><h3>Wingman live room</h3><span class="price">Opening soon</span></div><p>Watch how I plan, wait and manage a session, and why I skip the setups I skip. Twelve seats when it opens.</p><span class="go">Join the waitlist</span></div>
+      </a>
+      <a class="tile card" href="store.html" data-r>
+        <div class="tile-vis"><div class="book"><div class="v">Volumes 1 &amp; 2</div><div class="t">The <em>Johnny Cake</em> Method</div><div class="r"></div><div class="a">Johnny Crow &amp; Dæv</div></div></div>
+        <div class="tile-body"><div class="tile-top"><h3>The books</h3><span class="price">From $47</span></div><p>Volume 1 lays out the method. Volume 2 puts Johnny and Dæv on the same setups, two entries on each, and comes only in the bundle: both books for $59.</p><span class="go">Get the books</span></div>
+      </a>
+      <a class="tile card" href="store.html" data-r>
+        <div class="tile-vis"><img class="shot chart" src="media/cards/indicator-chart.jpg" alt="A demand zone marked on a futures chart" loading="lazy"></div>
+        <div class="tile-body"><div class="tile-top"><h3>The indicators</h3><span class="price">TradingView</span></div><p>A growing set of TradingView tools, including the Cake Game and FIBiT Lite. They mark what the books teach on your own charts. For your analysis, not signals.</p><span class="go">See the indicators</span></div>
+      </a>
+      <a class="tile card" href="#" data-auth="signup" data-r>
+        <div class="tile-vis"><img class="shot" src="media/jc-desk-charts.webp" alt="" loading="lazy" style="object-fit:contain;padding:14px;opacity:1"></div>
+        <div class="tile-body"><div class="tile-top"><h3>Your members area</h3><span class="price">Free</span></div><p>Your progress, your sim score, the live schedule, and everything you buy, waiting in your library the moment you check out.</p><span class="go">Make your account</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PATH -->
+<section class="section" id="path" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head" data-r><div><span class="kicker">Your path</span><h2 class="h-lg">Learn it in order.</h2></div><p class="lead" style="max-width:44ch">Three levels. Start wherever you are, and move up when the last one feels easy.</p></div>
+    <div class="path">
+      <div class="step card" data-r>
+        <span class="n">01 · BEGINNER</span><h3>The basics</h3>
+        <p>How price moves, how to read a chart without the noise, and the risk rules that keep an account alive.</p>
+        <ul><li>Free lessons</li><li>Trade Sim</li><li>The books</li></ul>
+        <div class="cta"><a class="btn ghost sm" href="#" data-auth="signup">Start here</a></div>
+      </div>
+      <div class="step card" data-r>
+        <span class="n">02 · STRATEGIES</span><h3>The setups</h3>
+        <p>The setups Johnny and Dæv trade, when to act, and how to plan your week before it starts.</p>
+        <ul><li>Member lessons</li><li>Indicators</li><li>Sunday plan</li></ul>
+        <div class="cta"><a class="btn ghost sm" href="#" data-auth="signup">Join to unlock</a></div>
+      </div>
+      <div class="step card top" data-r>
+        <span class="n">03 · TRADE LIVE</span><h3>Trade with me</h3>
+        <p>Trade the session in the Wingman room. Ask why between setups, and see the calls before they happen.</p>
+        <ul><li>Wingman seat</li><li>Live chat</li><li>Friday recap</li></ul>
+        <div class="cta"><a class="btn sm" href="#" data-lead="liveroom">Join the waitlist</a></div>
+      </div>
+    </div>
+    <p class="path-foot" data-r>Want one-on-one mentoring? <a class="link" href="#" data-lead="bootcamp">Join the waitlist</a></p>
+  </div>
+</section>
+
+<!-- LESSONS -->
+<section class="section" id="lessons">
+  <div class="wrap">
+    <div class="sec-head" data-r><div><span class="kicker">Lessons</span><h2 class="h-lg">Watch a few first.</h2></div><p class="lead" style="max-width:40ch">The first three are free with no account. The rest open when you join.</p></div>
+    <div class="rail" id="rail" data-r></div>
+  </div>
+</section>
+<dialog class="vid" id="vid"><button class="btn ghost sm x" type="button" id="vid-x">Close</button><video id="vid-v" controls playsinline></video></dialog>
+
+<!-- STORE -->
+<section class="section" id="shop">
+  <div class="wrap">
+    <div class="sec-head" data-r><div><span class="kicker">Store</span><h2 class="h-lg">Add what you need.</h2></div><a class="link" href="store.html">Open the store →</a></div>
+    <div class="shop" id="shop-list">
+      <a class="prod card" href="store.html" data-r><span class="k">Books</span><h3>The Johnny Cake Method</h3><p>Vol. 1 for $47, or both volumes for $59. Volume 2 only comes in the bundle.</p><span class="p">From $47</span></a>
+      <a class="prod card" href="store.html" data-r><span class="k">Indicators</span><h3>TradingView tools</h3><p>The Cake Game, FIBiT Lite and more, for your own charts.</p><span class="p">See them all</span></a>
+      <a class="prod card" href="#live" data-r><span class="k">Live room</span><h3>Wingman seat</h3><p>Opening soon: sessions Monday to Thursday, plus the Sunday plan and Friday recap.</p><span class="p">Join the waitlist</span></a>
+    </div>
+    <p class="fine" style="margin-top:1rem">Everything you buy shows up in your account library.</p>
+  </div>
+</section>
+
+<!-- LIVE -->
+<section class="section" id="live" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap live-grid">
+    <div class="live-vid" data-r>
+      <video src="media/session.mp4" poster="media/session-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Clip from a live futures session"></video>
+      <span class="pill"><span class="dot"></span>From a live session</span>
+    </div>
+    <div data-r>
+      <span class="kicker acc">Wingman · opening soon</span>
+      <h2 class="h-lg" style="margin-top:.8rem">Watch the session with me.</h2>
+      <p class="lead" style="margin-top:1rem">How I plan the day, how I wait, how I manage a trade, and why I pass on the ones I skip. Most evals are lost on execution. This is where you see it done. Your account, your decisions.</p>
+      <div class="week" aria-label="Weekly schedule">
+        <div><b>SUN</b><span>Plan</span></div><div class="on"><b>MON</b><span>Live</span></div><div class="on"><b>TUE</b><span>Live</span></div><div class="on"><b>WED</b><span>Live</span></div><div class="on"><b>THU</b><span>Live</span></div><div><b>FRI</b><span>Recap</span></div>
+      </div>
+      <div class="price-row"><b>$200</b><span>per week when it opens · 12 seats · cancel any time</span></div>
+      <a class="btn" href="#" data-lead="liveroom">Join the waitlist</a>
+      <p class="fine" style="margin-top:.6rem">Seats open once the waitlist can fill a room. You'll hear first, and you pay nothing until then.</p>
+      <div class="dpass card">
+        <p><b>Want a taste first?</b> I run occasional Day Pass sessions before the room opens. If I don't take a trade, you don't pay.</p>
+        <a class="btn ghost sm" href="#" data-lead="daypass">Book a Day Pass</a>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- ══ RESULTS (hidden until a result is logged in Admin → Results) ══ -->
-<section class="results" id="results" hidden>
+<!-- SCOREBOARD (admin-controlled; hidden until there is something to show) -->
+<section class="section tight" style="padding-top:0" aria-label="Eval scoreboard">
+  <div class="wrap">
+    <div class="sb card" id="scoreboard" hidden data-r>
+      <div class="sb-head"><span class="kicker acc">The scoreboard · <span data-sb="period">Lifetime</span></span><p>Every eval counts, pass or fail. We publish the fails too.</p></div>
+      <div class="sb-cells">
+        <div class="sb-cell"><b data-sb="total">0</b><span>evals taken</span></div>
+        <div class="sb-cell pass"><b data-sb="pass">0</b><span>passed</span></div>
+        <div class="sb-cell fail"><b data-sb="fail">0</b><span>failed</span></div>
+        <div class="sb-cell test"><b data-sb="testing">0</b><span>testing now</span></div>
+      </div>
+      <a class="link sb-link" href="#results" data-sb="link" hidden>See every result →</a>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS (hidden until a result is logged in Admin → Results) -->
+<section class="results section" id="results" hidden>
   <div class="wrap">
     <div class="wr" id="wingman-results">
-      <div class="label section-label" data-r>Results</div>
-      <h2 class="section-h" data-r style="max-width:16ch">Every attempt.<br><em>Pass or fail.</em></h2>
-      <p class="section-p" style="max-width:56ch" data-r>Every challenge I attempt on my own accounts is logged here, passes and fails, with the date. Weekly and monthly counts reset automatically.</p>
+      <div class="label">Results</div>
+      <h2 class="section-h">Every eval, pass or fail.</h2>
+      <p class="section-p" style="max-width:56ch">Every eval I take gets logged here with the date, passes and fails. Weekly and monthly counts reset on their own.</p>
       <div class="wr-stats" id="wr-stats" aria-live="polite"></div>
       <div class="wr-filters" role="group" aria-label="Filter screenshots">
         <button class="wr-chip" data-f="all" aria-pressed="true" type="button">All</button>
@@ -803,486 +446,127 @@ nav, section, .proof, footer, .banner { position: relative; z-index: 1; }
     </div>
   </div>
 </section>
-<dialog class="wr wr-lightbox" id="wr-lightbox" aria-label="Screenshot">
-  <img id="wr-lb-img" alt="">
-  <p id="wr-lb-cap"></p>
-  <button class="wr-btn ghost" id="wr-lb-close" type="button">Close</button>
-</dialog>
+<dialog class="wr wr-lightbox" id="wr-lightbox" aria-label="Screenshot"><img id="wr-lb-img" alt=""><p id="wr-lb-cap"></p><button class="wr-btn ghost" id="wr-lb-close" type="button">Close</button></dialog>
 
-<!-- ══ WHAT IS WINGMAN ══ -->
-<section class="what" id="wingman">
-  <div class="wrap">
-    <div class="what-inner">
-      <div>
-        <div class="label section-label" data-r>Wingman Live</div>
-        <h2 class="section-h" data-r>Not a course.<br>Not a signal.<br><em>A live trade room.</em></h2>
-        <p class="section-p" data-r>Prop firm evals don't fail you because you lack strategy. They fail you because you've never seen real execution in real time. Mario trades live — you're in the room watching every entry, every decision, every exit. Same chart, same price, same moment. Not a replay.</p>
-      </div>
-      <div class="schedule" data-r="up2">
-        <div class="week-strip" aria-label="Weekly schedule">
-          <div class="wk plan"><b>SUN</b><span>Game plan</span></div>
-          <div class="wk live"><b>MON</b><span>Plan + live</span></div>
-          <div class="wk live"><b>TUE</b><span>Live</span></div>
-          <div class="wk live"><b>WED</b><span>Live</span></div>
-          <div class="wk live"><b>THU</b><span>Live</span></div>
-          <div class="wk plan"><b>FRI</b><span>Recap</span></div>
-        </div>
-        <div class="sched-card">
-          <div class="sched-day">Sun–Mon</div>
-          <div class="sched-body">
-            <div class="sched-title">Pre-Week Game Plan</div>
-            <div class="sched-desc">Key levels, weekly bias, what to watch and what to ignore.</div>
-          </div>
-        </div>
-        <div class="sched-card">
-          <div class="sched-day">Mon–Thu</div>
-          <div class="sched-body">
-            <div class="sched-title">Live Chart Sessions</div>
-            <div class="sched-desc">Real setups. Real entries. Real exits. Live, as it happens.</div>
-          </div>
-        </div>
-        <div class="sched-card">
-          <div class="sched-day">Fri</div>
-          <div class="sched-body">
-            <div class="sched-title">Post-Week Breakdown</div>
-            <div class="sched-desc">What worked, what didn't, what to bring into next week.</div>
-          </div>
-        </div>
+<!-- ABOUT -->
+<section class="section" id="about" style="border-top:1px solid var(--line)">
+  <div class="wrap about">
+    <img class="about-photo jc" src="media/jc-stand.webp" alt="Johnny Crow" width="300" height="300" loading="lazy" data-r>
+    <div data-r>
+      <span class="kicker">Who's teaching</span>
+      <h2 class="h-lg" style="margin-top:.8rem">I'm Johnny Crow.</h2>
+      <blockquote>Most evals don't die on bad analysis. They die on chasing, moving the stop, and trading the news.</blockquote>
+      <p class="body">I trade futures, and the habits I teach carry straight over to forex. I wait for price to prove itself before I go. My friend Dæv doesn't. You'll see us both on every chart, and you'll see what each of us risked.</p>
+      <div class="duo">
+        <a class="card" href="universe.html"><img src="media/dv-stand.webp" alt="" loading="lazy"><div><b>Dæv</b><span>The hot entry</span></div></a>
+        <a class="card" href="universe.html"><img src="media/npc-bull-cake.webp" alt="" loading="lazy"><div><b>The crew</b><span>Meet everyone</span></div></a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ INCLUDES ══ -->
-<section class="includes">
-  <div class="wrap">
-    <div class="label" data-r>What's included</div>
-    <div class="includes-grid">
-      <div class="inc-card" data-r>
-        <div class="inc-icon">📡</div>
-        <div class="inc-title">Live Chart Sessions</div>
-        <div class="inc-desc">Mario trades live Monday through Thursday during market hours. You're in the room watching every decision unfold.</div>
-      </div>
-      <div class="inc-card" data-r="up2">
-        <div class="inc-icon">🗺</div>
-        <div class="inc-title">Pre-Week Game Plan</div>
-        <div class="inc-desc">Sunday into Monday: key levels, weekly bias, what to watch. The week starts with a plan, not a guess.</div>
-      </div>
-      <div class="inc-card" data-r="up3">
-        <div class="inc-icon">📋</div>
-        <div class="inc-title">Friday Recap</div>
-        <div class="inc-desc">What fired, what didn't, and what changes next week.</div>
-      </div>
-      <div class="inc-card" data-r>
-        <div class="inc-icon">💬</div>
-        <div class="inc-title">Discord Access</div>
-        <div class="inc-desc">Members-only channel and notes between sessions.</div>
-      </div>
-      <div class="inc-card" data-r="up2">
-        <div class="inc-icon">🔒</div>
-        <div class="inc-title">12 Weekly Seats. That's It.</div>
-        <div class="inc-desc">Intentionally small, so Mario knows who's in the room.</div>
-      </div>
-      <div class="inc-card" data-r="up3">
-        <div class="inc-icon">🔓</div>
-        <div class="inc-title">Cancel Anytime</div>
-        <div class="inc-desc">No contracts and no lock-ins.</div>
-      </div>
-    </div>
+<!-- FAQ -->
+<section class="section" style="background:var(--bg2);border-top:1px solid var(--line)">
+  <div class="wrap narrow">
+    <span class="kicker" data-r>FAQ</span>
+    <h2 class="h-lg" style="margin:.8rem 0 1.2rem" data-r>Quick answers.</h2>
+    <details class="qa"><summary>What do I get with a free account?</summary><p>The free lessons, all 24 Trade Sim setups with your score saved, and a library where anything you buy shows up right away.</p></details>
+    <details class="qa"><summary>Where should I start?</summary><p>Make a free account, watch the first lessons, and play the Trade Sim. When you want the full method, get the books. The indicators put it on your own charts. The live room is opening soon, and the waitlist hears first.</p></details>
+    <details class="qa"><summary>Are these signals or financial advice?</summary><p>Neither. You watch how I plan and trade a session and ask questions. Your account, your decisions. Everything here is education.</p></details>
+    <details class="qa"><summary>When does the live room open?</summary><p>Once the waitlist can fill a room. Seat holders will get the stream and the chat right here on the site. Join the waitlist and you'll hear first.</p></details>
+    <details class="qa"><summary>Can I cancel?</summary><p>Yes. Seats are billed weekly. Cancel before the next week starts and you won't be charged for it.</p></details>
+    <details class="qa"><summary>What if there's no trade on my Day Pass?</summary><p>You get a full refund or a seat at the next session, your call.</p></details>
+    <p style="margin-top:1.4rem"><a class="link" href="faq.html">More answers →</a></p>
   </div>
 </section>
 
-<!-- ══ DAY PASS ══ -->
-<section class="daypass">
-  <div class="wrap">
-    <div class="dp-card" data-r="scale">
-      <div class="dp-badge">Day Pass</div>
-      <div class="dp-title">One session.<br><em>No commitment.</em></div>
-      <p class="dp-copy">Try Wingman for a single live session. 1–3 hours or until the profit target hits, whichever comes first. Max 6 day-pass seats per session.</p>
-      <div class="dp-guarantee">
-        "If we don't trade — you don't pay."
-      </div>
-      <a class="dp-btn" href="#" data-lead="daypass">
-        Book a Day Pass
-      </a>
-    </div>
+<!-- CLOSE -->
+<section class="close">
+  <div class="wrap narrow">
+    <h2 class="h-lg" data-r>Everything you need. One login.</h2>
+    <p class="lead" data-r>Lessons, the Trade Sim, the books and the indicators, with the live room on the way. Make your free account in a minute and start with the lessons and the sim.</p>
+    <div class="hero-ctas" data-r><a class="btn" href="#" data-auth="signup">Join free</a><a class="btn ghost" href="#sim">Try the Trade Sim</a></div>
   </div>
 </section>
+</main>
 
-<!-- ══ METHOD ══ -->
-<section class="method" id="method">
-  <div class="wrap">
-    <div class="method-inner">
-      <div>
-        <div class="label section-label" data-r>The Book</div>
-        <h2 class="section-h" data-r>Trading<br><em>The Grain.</em><br>Start here.</h2>
-        <p class="section-p" data-r>The Johnny Cake Method in full: 9 chapters. Most Wingman members read the book first. It's the playbook behind the live sessions.</p>
-        <div style="margin-top:1.8rem" data-r>
-          <a class="hero-cta" href="#" data-buy style="display:inline-flex;width:auto">
-            Get the Ebook
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-        </div>
-      </div>
-      <div data-r="up2">
-        <div class="book-3d-wrap">
-          <div class="book-3d">
-            <div class="book-lbl">@MarioVsNQ</div>
-            <div class="book-h">Trading<br><em>The</em><br>Grain</div>
-            <div class="book-rule"></div>
-            <div class="book-foot">Johnny Cake Method</div>
-            <div class="book-glow"></div>
-          </div>
-        </div>
-        <div class="steps" style="margin-top:2rem;">
-          <div class="step-row">
-            <div class="step-n">01</div>
-            <div class="step-body">
-              <div class="step-title">Before the session</div>
-              <div class="step-desc">Your levels are set before the open. The work is done.</div>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-n">02</div>
-            <div class="step-body">
-              <div class="step-title">The wait</div>
-              <div class="step-desc">Most traders lose here. The method fixes it at the source.</div>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-n">03</div>
-            <div class="step-body">
-              <div class="step-title">The signal</div>
-              <div class="step-desc">Price arrives. Something specific happens. The Hunter sees it.</div>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-n">04</div>
-            <div class="step-body">
-              <div class="step-title">The plan</div>
-              <div class="step-desc">Set before you touch the order. Every. Single. Time.</div>
-            </div>
-          </div>
-          <div class="step-row">
-            <div class="step-n">05</div>
-            <div class="step-body">
-              <div class="step-title">Execution</div>
-              <div class="step-desc">Was already valid or it wasn't. You're just following the plan.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<!--FOOT--><footer class="sfoot"><div class="wrap">
+  <div class="sfoot-grid">
+    <div><a class="sbrand" href="index.html"><img src="media/johnny-avatar.png" alt="" width="32" height="32">Johnny Cake Method</a><p class="about">A home base for futures and forex traders, taught by Johnny Crow: lessons, the Trade Sim, books, TradingView tools and a live room, all under one login.</p></div>
+    <div><h4>Learn</h4><a href="index.html#lessons">Lessons</a><a href="index.html#sim">Trade Sim</a><a href="index.html#path">Mentoring</a><a href="index.html#live">Live room</a><a href="universe.html">Meet the crew</a></div>
+    <div><h4>Shop</h4><a href="store.html">Store</a><a href="pricing.html">Pricing</a><a href="members.html">Members</a></div>
+    <div><h4>Help</h4><a href="faq.html">FAQ</a><a href="risk.html">Risk disclosure</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+    <div><h4>Follow</h4><a href="https://www.tiktok.com/@johnnycrowtrades" target="_blank" rel="noopener">TikTok · @johnnycrowtrades</a></div>
   </div>
-</section>
-
-<!-- ══ OFFERS ══ -->
-<section class="offers" id="offers">
-  <div class="wrap">
-    <div class="label" data-r>The Stack</div>
-    <h2 class="section-h" style="margin-top:.5rem;margin-bottom:0" data-r>Pick your level.</h2>
-
-    <div class="offers-grid">
-
-      <!-- Trading the Grain -->
-      <div class="offer-card" data-r>
-        <div>
-          <div class="offer-name">Trading the Grain</div>
-          <div class="offer-sub">Ebook · Instant Access</div>
-        </div>
-        <ul class="offer-list">
-          <li><span class="ck">✓</span> Full Johnny Cake Method ebook</li>
-          <li><span class="ck">✓</span> 9 chapters</li>
-          <li><span class="ck">✓</span> Hunter Psychology framework</li>
-          <li><span class="ck">✓</span> Discord community access</li>
-          <li><span class="ck">✓</span> Instant delivery</li>
-        </ul>
-        <div>
-          <a class="offer-btn lime" href="#" data-buy>
-            Get the Book
-          </a>
-        </div>
-      </div>
-
-      <!-- Wingman (hero) -->
-      <div class="offer-card hero-card" data-r="up2">
-        <div class="offer-badge lime">Most Popular</div>
-        <div>
-          <div class="offer-name">Wingman</div>
-          <div class="offer-sub">Live Charts · 12 Weekly Seats</div>
-        </div>
-        <ul class="offer-list">
-          <li><span class="ck">✓</span> Live chart sessions Mon–Thu</li>
-          <li><span class="ck">✓</span> Pre-week game plan, Sun–Mon</li>
-          <li><span class="ck">✓</span> Friday recap</li>
-          <li><span class="ck">✓</span> Mario trading live, not a replay</li>
-          <li><span class="ck">✓</span> 12 seats each week, hard cap</li>
-          <li><span class="ck">✓</span> Cancel anytime</li>
-          <li><span class="ck">✓</span> Discord access</li>
-        </ul>
-        <div>
-          <a class="offer-btn lime" href="#" data-auth="signup">
-            Claim a Seat
-          </a>
-        </div>
-      </div>
-
-      <!-- Private Session (dimmed) -->
-      <div class="offer-card dimmed" data-r="up3">
-        <div class="offer-badge warm">Waitlist</div>
-        <div>
-          <div class="offer-name">Bootcamp</div>
-          <div class="offer-sub">Training Room · 1-on-1</div>
-        </div>
-        <ul class="offer-list">
-          <li><span class="ck dim">✓</span> Ebook included</li>
-          <li><span class="ck dim">✓</span> Private training room session with Mario</li>
-          <li><span class="ck dim">✓</span> Live chart walkthrough of your setups</li>
-          <li><span class="ck dim">✓</span> Open Q&amp;A during the session</li>
-          <li><span class="ck dim">✓</span> 2 custom TradingView indicators — yours to keep</li>
-          <li><span class="ck dim">✓</span> Discord access</li>
-        </ul>
-        <div>
-          <a class="offer-btn ghost" href="#" data-lead="bootcamp">
-            Join the Waitlist
-          </a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══ COMPARE ══ -->
-<section class="compare">
-  <div class="wrap">
-    <div class="label" data-r>Why Wingman</div>
-    <h2 class="section-h" style="margin-top:.5rem;margin-bottom:0;max-width:20ch" data-r>Less than one reset.<br>More than any replay.</h2>
-    <div class="compare-table" style="margin-top:2.4rem" data-r>
-      <div class="ct-row header">
-        <div class="ct-cell"> </div>
-        <div class="ct-cell">Prop Firm Eval</div>
-        <div class="ct-cell active">Wingman Weekly</div>
-      </div>
-      <div class="ct-row">
-        <div class="ct-cell" style="color:var(--muted);font-size:.85rem">Cost</div>
-        <div class="ct-cell muted">$150 – $500 / reset</div>
-        <div class="ct-cell active">Weekly seat</div>
-      </div>
-      <div class="ct-row">
-        <div class="ct-cell" style="color:var(--muted);font-size:.85rem">Live mentor</div>
-        <div class="ct-cell"><span class="x">✕</span></div>
-        <div class="ct-cell"><span class="ck2">✓</span></div>
-      </div>
-      <div class="ct-row">
-        <div class="ct-cell" style="color:var(--muted);font-size:.85rem">Real chart access</div>
-        <div class="ct-cell"><span class="x">✕</span></div>
-        <div class="ct-cell"><span class="ck2">✓</span></div>
-      </div>
-      <div class="ct-row">
-        <div class="ct-cell" style="color:var(--muted);font-size:.85rem">You keep learning</div>
-        <div class="ct-cell"><span class="x">✕</span></div>
-        <div class="ct-cell"><span class="ck2">✓</span></div>
-      </div>
-      <div class="ct-row">
-        <div class="ct-cell" style="color:var(--muted);font-size:.85rem">Cancel anytime</div>
-        <div class="ct-cell muted">N/A</div>
-        <div class="ct-cell"><span class="ck2">✓</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ AUTHOR ══ -->
-<section class="author">
-  <div class="wrap">
-    <div class="author-inner">
-      <div class="author-av" id="author-av">MRJ</div>
-      <div>
-        <div class="author-name">Romario Johnson</div>
-        <p class="author-copy">I trade NQ futures. I built the Johnny Cake Method from years of getting it wrong — chasing moves, getting stopped at the exact wrong level, watching the market do exactly what I called after I already exited. The number one thing I hear from traders is: "I get the strategy but I keep failing the eval." That's not a strategy problem. That's a live execution problem. That's what Wingman fixes.</p>
-        <p class="author-handle">@MarioVsNQ · @propfirm.wingman</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ FAQ ══ -->
-<section class="faq">
-  <div class="wrap faq-wrap">
-    <div class="label" data-r>FAQ</div>
-    <h2 class="section-h" style="margin-top:.5rem" data-r>Questions.</h2>
-
-    <details>
-      <summary>Will this help me pass my prop firm eval? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">That's the goal. Most traders fail evals not because they lack a strategy — but because they've never seen real execution under pressure. Watching Mario trade live on NQ shows you what controlled execution looks like under pressure. No result is guaranteed.</p>
-    </details>
-    <details>
-      <summary>Is this coaching or financial advice? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">Neither. Wingman is a live trade room — Mario trades live and members watch, observe, and ask questions in real time. This is not financial advice, investment advice, or coaching. It's access to a live trader's process, for educational purposes only.</p>
-    </details>
-    <details>
-      <summary>What platform do live sessions run on? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">Discord Stage. Invite link sent on purchase. No extra apps needed beyond Discord.</p>
-    </details>
-    <details>
-      <summary>What if I join mid-week? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">Weekly seats start Monday. Mid-week, grab a Day Pass for the remaining sessions that week, then roll into a weekly seat the following Monday.</p>
-    </details>
-    <details>
-      <summary>Is the book included with Wingman Weekly? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">The book is a separate purchase. Most members grab it first.</p>
-    </details>
-    <details>
-      <summary>What markets does the room cover? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">Primarily NQ futures. The Johnny Cake Method applies broadly — but live sessions are built around NQ.</p>
-    </details>
-    <details>
-      <summary>Can I cancel anytime? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">Yes. No contracts and no lock-ins.</p>
-    </details>
-    <details>
-      <summary>What happens on a Day Pass if no trades fire? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">Full refund or rollover to the next session, your call.</p>
-    </details>
-    <details>
-      <summary>How many people are in the room? <span class="faq-plus">+</span></summary>
-      <p class="faq-body">12 seats each week, hard cap. Seats are billed weekly, so you can step in or out week to week.</p>
-    </details>
-  </div>
-</section>
-
-<!-- ══ FINAL CTA ══ -->
-<section class="final">
-  <div class="wrap">
-    <div class="final-inner">
-      <h2>Let's get you funded.</h2>
-      <p>Your wingman is live on the NQ. 12 weekly seats.</p>
-      <a class="final-btn" href="#" data-auth="signup">
-        Claim a Seat
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 5l4.5 4L10 13" stroke="#101A08" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ══ FOOTER ══ -->
-<footer>
-  <div class="wrap">
-    <div class="foot-inner">
-      <p class="foot-disc">Wingman is a live trade room for educational purposes only. Mario Johnson is not a licensed financial advisor, broker, or investment coach. Nothing on this page constitutes financial advice, investment advice, or a recommendation to buy or sell any security or futures contract. Trading involves substantial risk of loss. Past performance does not guarantee future results. You are solely responsible for your own trading decisions.</p>
-      <div class="foot-links"><a href="pricing.html">Pricing</a><a href="faq.html">FAQ</a><a href="risk.html">Risk disclosure</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
-      <div class="foot-row">
-        <span>© 2026 Smart Money Store</span>
-        <span>@MarioVsNQ</span>
-        <span>smartmoneystore.com</span>
-      </div>
-    </div>
-  </div>
-</footer>
+  <p class="sfoot-disc">The Johnny Cake Method, the indicators and the Wingman live room are for educational purposes only. We are not licensed financial advisors, brokers, or investment advisers. Nothing on this site is financial advice or a recommendation to buy or sell any security or futures contract. Trading futures and forex involves substantial risk of loss and is not suitable for everyone. Past performance does not guarantee future results. You are solely responsible for your own trading decisions.</p>
+  <div class="sfoot-row"><span>© 2026 Smart Money Store</span><span>smartmoneystore.com</span></div>
+</div></footer><!--/FOOT-->
 
 <script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" crossorigin="anonymous" onerror="window.WMSUPA_FAIL=1"></script>
 <script src="cloud.js"></script>
 <script src="auth.js" onerror="window.WMAUTH_MISSING=1"></script>
+<script src="lessons-data.js"></script>
+<script src="store-data.js"></script>
+<script src="site.js"></script>
 <script src="promo.js"></script>
 <script src="results.js"></script>
 <script src="results-panel.js"></script>
+<script src="counter.js"></script>
+<script src="sim.js"></script>
 <script>
-var CFG = window.WM_CONFIG || {}, LINKS = CFG.links || {};
-var CHECKOUT_URL = LINKS.ebook || "https://buy.stripe.com/28EdR95TD3xz4os4ccgnK04";
-
-document.querySelectorAll('[data-buy]').forEach(function(el) {
-  el.addEventListener('click', function(e) {
-    e.preventDefault();
-    if (CHECKOUT_URL) window.location.href = CHECKOUT_URL;
-    else location.href = 'mailto:' + (CFG.contactEmail || '') + '?subject=' + encodeURIComponent('Trading the Grain ebook');
-  });
-});
-
-// Day Pass + Bootcamp waitlist
-document.querySelectorAll('[data-lead]').forEach(function(el) {
-  el.addEventListener('click', function(e) {
-    e.preventDefault();
-    var t = el.getAttribute('data-lead');
-    if (t === 'daypass' && LINKS.daypass) { location.href = LINKS.daypass; return; }
-    var cfg = t === 'daypass'
-      ? { type: 'daypass', title: 'Book a Day Pass', sub: 'Leave your details and Mario will confirm your session slot.', button: 'Request my slot', subject: 'Day Pass Seat' }
-      : { type: 'bootcamp', title: 'Join the Bootcamp waitlist', sub: "We'll email you when a spot opens.", button: 'Join the waitlist', subject: 'Bootcamp Waitlist' };
-    if (window.WMAuth) WMAuth.openLead(cfg);
-    else location.href = 'mailto:' + (CFG.contactEmail || '') + '?subject=' + encodeURIComponent(cfg.subject);
-  });
-});
-
-// Accounts
-(function() {
-  if (!window.WMAuth) {
-    document.querySelectorAll('[data-auth]').forEach(function(el) {
-      el.addEventListener('click', function(e) { e.preventDefault(); location.href = 'mailto:' + (CFG.contactEmail || '') + '?subject=Wingman+Seat'; });
+(function () {
+  // lessons rail: first three play free, the rest open after joining
+  var L = (window.WM_LESSONS || []).filter(function (x) { return x.kind === 'lesson' || x.kind === 'duo'; }).concat((window.WM_LESSONS || []).filter(function (x) { return x.kind !== 'lesson' && x.kind !== 'duo'; }));
+  var rail = document.getElementById('rail'), dlg = document.getElementById('vid'), v = document.getElementById('vid-v');
+  var KIND = { lesson: 'Lesson', duo: 'Johnny vs Dæv', meme: 'Short', dav: 'Dæv' };
+  L.slice(0, 10).forEach(function (x, i) {
+    var free = i < 3, b = document.createElement('button');
+    b.type = 'button'; b.className = 'lcard' + (free ? '' : ' locked');
+    var img = document.createElement('img'); img.src = x.poster; img.alt = ''; img.loading = 'lazy'; b.appendChild(img);
+    var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = free ? 'Free' : 'Members'; b.appendChild(bd);
+    if (free) { var pl = document.createElement('span'); pl.className = 'play'; pl.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'; b.appendChild(pl); }
+    var m = document.createElement('div'); m.className = 'meta';
+    var t = document.createElement('b'); t.textContent = x.title; var k = document.createElement('span'); k.textContent = (KIND[x.kind] || 'Lesson') + ' · ' + x.secs + 's';
+    m.appendChild(t); m.appendChild(k); b.appendChild(m);
+    b.addEventListener('click', function () {
+      if (!free) { var a = document.querySelector('[data-auth="signup"]'); if (a) a.click(); return; }
+      v.src = x.video; v.poster = x.poster;
+      if (dlg.showModal) { dlg.showModal(); v.play().catch(function () {}); } else window.open(x.video);
     });
-    return;
-  }
-  function go(mode) { WMAuth.openModal({ mode: mode, redirect: 'members.html' }); }
-  document.querySelectorAll('[data-auth]').forEach(function(el) {
-    el.addEventListener('click', function(e) {
-      e.preventDefault();
-      if (WMAuth.user()) { location.href = WMAuth.user().role === 'admin' ? 'admin.html' : 'members.html'; return; }
-      go(el.getAttribute('data-auth'));
-    });
+    rail.appendChild(b);
   });
-  function paint() {
-  var u = WMAuth.user();
-  if (u) {
-    var si = document.getElementById('nav-signin'), jn = document.getElementById('nav-join');
-    if (si) { si.textContent = 'Sign out'; si.removeAttribute('data-auth'); si.onclick = function(e) { e.preventDefault(); WMAuth.signOut(); location.reload(); }; }
-    if (jn) { jn.textContent = (u.role === 'admin') ? 'Admin panel' : 'Dashboard'; }
-  }
-  }
-  paint(); WMAuth.ready().then(paint);
-})();
+  function shut() { v.pause(); dlg.close(); }
+  document.getElementById('vid-x').onclick = shut;
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) shut(); });
 
-// Failsafe: if anything above fails, never leave content hidden
-setTimeout(function() { document.querySelectorAll('[data-r]:not(.on)').forEach(function(el) { el.classList.add('on'); }); }, 2500);
-
-// Scroll reveal
-(function() {
-  var els = document.querySelectorAll('[data-r]');
-  if (!els.length || !window.IntersectionObserver) {
-    els.forEach(function(el) { el.classList.add('on'); });
-    return;
-  }
-  var io = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('on');
-        io.unobserve(entry.target);
-      }
+  // store strip: use the live catalog when products exist
+  if (window.WMStore) WMStore.list().then(function (rows) {
+    if (!rows || !rows.length) return;
+    var box = document.getElementById('shop-list'); box.innerHTML = '';
+    var KN = { book: 'Book', indicator: 'Indicators', course: 'Course', live: 'Live room' };
+    rows.slice(0, 3).forEach(function (p) {
+      var a = document.createElement('a'); a.className = 'prod card on'; a.href = 'store.html#' + encodeURIComponent(p.id);
+      var k = document.createElement('span'); k.className = 'k'; k.textContent = KN[p.kind] || 'More';
+      var h = document.createElement('h3'); h.textContent = p.title;
+      var d = document.createElement('p'); d.textContent = p.blurb;
+      var pr = document.createElement('span'); pr.className = 'p'; pr.textContent = p.price_label || 'See details';
+      a.appendChild(k); a.appendChild(h); a.appendChild(d); a.appendChild(pr); box.appendChild(a);
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
-  els.forEach(function(el) { io.observe(el); });
-})();
-</script>
-<script>
-(function(){
-  var v=document.getElementById('live-vid'), b=document.getElementById('vid-toggle'); if(!v||!b) return;
-  var reduce=false; try{ reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
-  function label(){ b.textContent = v.paused ? 'Play' : 'Pause'; b.setAttribute('aria-label', v.paused ? 'Play video' : 'Pause video'); }
-  b.onclick=function(){ if(v.paused){ var p=v.play(); if(p&&p.catch)p.catch(function(){}); } else v.pause(); label(); };
-  v.addEventListener('play',label); v.addEventListener('pause',label);
-  if('IntersectionObserver' in window && !reduce){
-    new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ var p=v.play(); if(p&&p.catch)p.catch(function(){}); } else if(!v.paused) v.pause(); }); },{threshold:.35}).observe(v);
+  }).catch(function () {});
+
+  // one free sim setup; the rest open after joining
+  if (window.WMSim) WMSim.mount(document.getElementById('sim-free'), { only: ['pullback-fakeout'], more: {
+    label: function () { var u = window.WMAuth && WMAuth.user(); return u ? 'Play ' + (WMSim.scenarios.length - 1) + ' more setups' : 'Unlock ' + (WMSim.scenarios.length - 1) + ' more setups free'; },
+    go: function () { var u = window.WMAuth && WMAuth.user(); if (u) { location.href = 'members.html#sim'; return; } if (window.WMAuth) WMAuth.openModal({ mode: 'signup', redirect: 'members.html#sim' }); else location.href = 'login.html?mode=signup&next=members.html%23sim'; }
+  } });
+
+  // pause hero/live loops when off screen to save battery
+  if ('IntersectionObserver' in window) {
+    var vo = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) e.target.play().catch(function () {}); else e.target.pause(); }); });
+    document.querySelectorAll('video[autoplay]').forEach(function (el) { vo.observe(el); });
   }
-  /* if the video files are missing or cannot play, keep the still frame and drop the dead controls */
-  function noVid(){ b.style.display='none'; v.removeAttribute('autoplay'); }
-  v.addEventListener('error', noVid, true);
-  setTimeout(function(){ if (v.networkState === 3 || (v.readyState === 0 && v.error)) noVid(); }, 4000);
-  label();
 })();
-</script>
-<script>
-(function(){ var el=document.getElementById('author-av'); if(!el) return;
-  var im=new Image(); im.onload=function(){ el.textContent=''; im.alt='Romario Johnson'; im.style.cssText='width:100%;height:100%;object-fit:cover;display:block'; el.appendChild(im); };
-  im.src='author.jpg'; })();
 </script>
 </body>
 </html>

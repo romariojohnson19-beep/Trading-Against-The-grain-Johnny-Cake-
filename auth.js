@@ -140,7 +140,7 @@
         if (mode === 'forgot' || mode === 'reset') { renderReset(); return; }
         var signup = mode === 'signup' || mode === 'admin-setup';
         var title = mode === 'admin-setup' ? 'Create admin account' : admin ? 'Admin sign in' : signup ? 'Create your account' : 'Welcome back';
-        var sub = mode === 'admin-setup' ? 'First-time setup for the trade room host.' : admin ? 'Trade room host access.' : signup ? 'Request your seat in the room. Mario confirms it after you sign up.' : 'Sign in to your member portal.';
+        var sub = mode === 'admin-setup' ? 'First-time setup for the trade room host.' : admin ? 'Trade room host access.' : signup ? 'Free account: lessons, everything you buy in the store, and the live room if you join it.' : 'Sign in to your member portal.';
         root.innerHTML =
           '<div class="wma-card" role="dialog" aria-modal="true" aria-labelledby="wma-t">' +
           (opts.dismissible === false ? '' : '<button class="wma-x" aria-label="Close" data-x>&times;</button>') +
@@ -255,7 +255,7 @@
       if (cloud()) window.WMCloud.ready.then(run); else run();
     },
 
-    /* Lead capture (Day Pass / Bootcamp waitlist). Cloud: stored for admin Inbox. Demo mode: opens an email to Mario. */
+    /* Lead capture (Day Pass / Bootcamp waitlist). Cloud: stored for admin Inbox. Demo mode: opens an email. */
     openLead: function (o) {
       var to = CFG.contactEmail || '';
       if (window.WMCloud && window.WMCloud.broken) { Auth.brokenCard(); return; }
@@ -282,9 +282,9 @@
         if (!f.name.value.trim()) { err.textContent = 'Enter your name.'; return; }
         if (!validEmail(f.email.value.trim())) { err.textContent = 'Enter a valid email.'; return; }
         btn.disabled = true;
-        window.WMCloud.submitLead({ type: o.type, name: f.name.value.trim(), email: f.email.value.trim(), detail: f.detail.value.trim() }).then(function (r) {
+        window.WMCloud.submitLead({ type: o.type, name: f.name.value.trim(), email: f.email.value.trim(), detail: (o.tag ? '[' + o.tag + '] ' : '') + f.detail.value.trim() }).then(function (r) {
           if (!r.ok) { err.textContent = r.error; btn.disabled = false; return; }
-          root.querySelector('.wma-card').innerHTML = '<h2 class="wma-h">You\'re in.</h2><p class="wma-sub">Mario will reach out by email shortly.</p><button class="wma-go" id="wma-ok">Done</button>';
+          root.querySelector('.wma-card').innerHTML = '<h2 class="wma-h">You\'re in.</h2><p class="wma-sub">We\'ll reach out by email shortly.</p><button class="wma-go" id="wma-ok">Done</button>';
           root.querySelector('#wma-ok').onclick = function () { root.remove(); };
         });
       };

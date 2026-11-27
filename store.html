@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Store · Johnny Cake Method</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="The book, the TradingView indicators and the Wingman live room. Everything you buy lands in your account library.">
+<meta name="theme-color" content="#0E1210">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="site.css"><script src="theme.js"></script>
+<link rel="stylesheet" href="world.css">
+<style>
+.store-top { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end; }
+.pairmini { display: flex; align-items: flex-end; gap: 4px; }
+.pairmini img { height: 150px; width: auto; filter: drop-shadow(0 14px 20px rgba(0,0,0,.45)); }
+.chips { display: flex; gap: .45rem; flex-wrap: wrap; margin: 0 0 1.6rem; }
+.chip { padding: .5rem .9rem; border-radius: 999px; border: 1px solid var(--line2); background: transparent; color: var(--fg2); font: 500 .88rem var(--f-body); cursor: pointer; }
+.chip.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.prod { display: flex; flex-direction: column; overflow: hidden; }
+.pv { height: 150px; position: relative; overflow: hidden; background: var(--bg2); border-bottom: 1px solid var(--line); display: grid; place-items: center; }
+.pv img.cov { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+.pv .bk { width: 92px; height: 128px; border-radius: 3px 8px 8px 3px; background: linear-gradient(135deg,#1d2a17,#0f150e 70%); border: 1px solid rgba(185,215,122,.35); padding: 12px 10px; font: 800 .9rem/1 var(--f-head); color: #F1F3EE; transform: perspective(500px) rotateY(-14deg); box-shadow: 0 18px 30px rgba(0,0,0,.5); }
+.pv .bk em { font-style: normal; color: #B9D77A; }
+.pv .ico { font: 800 2.2rem var(--f-head); color: var(--accent); opacity: .85; }
+.pb { padding: 1.15rem 1.2rem 1.25rem; display: flex; flex-direction: column; gap: .5rem; flex: 1; }
+.pb .k { font: 500 .66rem var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; gap: .5rem; }
+.pb .k b { color: var(--accent); font-weight: 500; }
+.pb h3 { font-size: 1.2rem; }
+.pb p { color: var(--fg2); font-size: .92rem; flex: 1; }
+.pb .row { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-top: .4rem; }
+.pb .price { font: 700 1.05rem var(--f-body); }
+.btn[aria-disabled=true] { opacity: .5; pointer-events: none; }
+.note { margin-top: 2rem; padding: 1.1rem 1.2rem; display: flex; gap: 1rem; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.note p { color: var(--fg2); font-size: .92rem; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) { .grid { grid-template-columns: 1fr; } .store-top { grid-template-columns: 1fr; } .pairmini { display: none; } }
+</style>
+</head>
+<body>
+<!--NAV--><header class="snav"><div class="snav-bar">
+  <a class="sbrand" href="index.html"><img src="media/johnny-avatar.png" alt="" width="32" height="32"><span>Johnny Cake<span class="hide-s"> Method</span></span></a>
+  <nav class="snav-links" aria-label="Main"><a href="index.html#lessons">Lessons</a><a href="index.html#sim">Trade Sim</a><a href="index.html#live">Live room</a><a href="store.html" aria-current="page">Store</a><a href="pricing.html">Pricing</a></nav>
+  <div class="snav-act"><a class="signin" href="#" data-auth="signin" data-nav="signin">Sign in</a><a class="btn sm" href="#" data-auth="signup" data-nav="join">Join free</a><button class="snav-menu" id="snav-menu" type="button" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+</div><div class="snav-sheet" id="snav-sheet"><a href="index.html#lessons">Lessons</a><a href="index.html#sim">Trade Sim</a><a href="index.html#live">Live room</a><a href="store.html" aria-current="page">Store</a><a href="pricing.html">Pricing</a><a href="#" data-auth="signin" data-nav="signin">Sign in</a></div></header><!--/NAV-->
+<main class="wrap">
+  <div class="phead store-top">
+    <div>
+      <span class="kicker">Store</span>
+      <h1 class="h-lg">Books, indicators and the live room.</h1>
+      <p class="lead">Add what you need to your home base. Everything you buy is tied to your account and shows up in your library right away.</p>
+    </div>
+    <div class="pairmini" aria-hidden="true"><img src="media/world/boss.webp" alt=""><img src="media/world/penny.webp" alt=""></div>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="grid" id="shop"><p class="muted">Loading…</p></div>
+  <div class="card note"><p><b>Not sure where to start?</b> Every free account comes with the lessons and all 24 Trade Sim setups.</p><a class="btn ghost sm" href="#" data-auth="signup" data-nav="join">Join free</a></div>
+  <p class="fine" style="margin:1.4rem 0 3rem">Educational only. Not financial advice. Trading futures carries substantial risk of loss.</p>
+</main>
+<div id="world-floor" data-cast="eddie,grumble,floor-boss,stomper,professor" data-thief="1"></div>
+<!--FOOT--><footer class="sfoot"><div class="wrap">
+  <div class="sfoot-grid">
+    <div><a class="sbrand" href="index.html"><img src="media/johnny-avatar.png" alt="" width="32" height="32">Johnny Cake Method</a><p class="about">A home base for futures and forex traders, taught by Johnny Crow: lessons, the Trade Sim, books, TradingView tools and a live room, all under one login.</p></div>
+    <div><h4>Learn</h4><a href="index.html#lessons">Lessons</a><a href="index.html#sim">Trade Sim</a><a href="index.html#path">Mentoring</a><a href="index.html#live">Live room</a><a href="universe.html">Meet the crew</a></div>
+    <div><h4>Shop</h4><a href="store.html">Store</a><a href="pricing.html">Pricing</a><a href="members.html">Members</a></div>
+    <div><h4>Help</h4><a href="faq.html">FAQ</a><a href="risk.html">Risk disclosure</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+    <div><h4>Follow</h4><a href="https://www.tiktok.com/@johnnycrowtrades" target="_blank" rel="noopener">TikTok · @johnnycrowtrades</a></div>
+  </div>
+  <p class="sfoot-disc">The Johnny Cake Method, the indicators and the Wingman live room are for educational purposes only. We are not licensed financial advisors, brokers, or investment advisers. Nothing on this site is financial advice or a recommendation to buy or sell any security or futures contract. Trading futures and forex involves substantial risk of loss and is not suitable for everyone. Past performance does not guarantee future results. You are solely responsible for your own trading decisions.</p>
+  <div class="sfoot-row"><span>© 2026 Smart Money Store</span><span>smartmoneystore.com</span></div>
+</div></footer><!--/FOOT-->
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" crossorigin="anonymous" onerror="window.WMSUPA_FAIL=1"></script>
+<script src="cloud.js"></script>
+<script src="auth.js"></script>
+<script src="store-data.js"></script>
+<script src="site.js"></script>
+<script src="world.js"></script>
+<script>
+(function () {
+  var KINDS = [['all', 'All'], ['book', 'Books'], ['indicator', 'Indicators'], ['course', 'Courses'], ['room', 'Live room'], ['other', 'More']];
+  // shown until products are added in Admin → Storefront
+  var FALLBACK = [
+    { id: 'book', kind: 'book', title: 'The Johnny Cake Method, Vol. 1', blurb: 'The method on real charts. Instant access, yours to keep.', price_label: '$47', buy_url: (window.WM_CONFIG && WM_CONFIG.links && WM_CONFIG.links.ebook) || 'https://buy.stripe.com/28EdR95TD3xz4os4ccgnK04', _lead: '' },
+    { id: 'book-bundle', kind: 'book', title: 'Vol. 1 + Vol. 2 bundle', blurb: 'Both books. Volume 2 puts Johnny and Dæv on the same nine setups, two entries on every one, each with a scorecard. Volume 2 is only sold in this bundle.', price_label: '$59 · both books', buy_url: (window.WM_CONFIG && WM_CONFIG.links && WM_CONFIG.links.bundle) || '', _lead: '' },
+    { id: 'indicators', kind: 'indicator', title: 'TradingView indicators', blurb: 'The Cake Game, FIBiT Lite and more. They mark what the books teach on your own charts. Tools, not signals.', price_label: 'By request', buy_url: '', _lead: 'indicators' },
+    { id: 'wingman', kind: 'room', title: 'Wingman seat', blurb: 'Opening soon: live sessions Monday to Thursday, the Sunday plan and the Friday recap. Twelve seats, billed weekly.', price_label: '$200 / week', buy_url: (window.WM_CONFIG && WM_CONFIG.links && WM_CONFIG.links.weekly) || '', _lead: '', _seat: 1 },
+    { id: 'daypass', kind: 'room', title: 'Day Pass', blurb: "Sit in on one live session. If there's no trade, you don't pay.", price_label: 'One session', buy_url: (window.WM_CONFIG && WM_CONFIG.links && WM_CONFIG.links.daypass) || '', _lead: 'daypass' }
+  ];
+  var ITEMS = [], OWNED = [], U = null, F = 'all';
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function kindOf(p) { return KINDS.some(function (x) { return x[0] === p.kind; }) ? p.kind : 'other'; }
+  function vis(p) {
+    var k = kindOf(p);
+    if (k === 'book') return '<div class="bk">The <em>Johnny Cake</em> Method</div>';
+    if (k === 'room') return '<img class="cov" src="media/session-poster.jpg" alt="" loading="lazy">';
+    if (k === 'course') return '<img class="cov" src="02-j1-the-cake.jpg" alt="" loading="lazy">';
+    if (k === 'indicator') return '<svg viewBox="0 0 200 110" width="86%" aria-hidden="true"><rect x="0" y="74" width="200" height="14" fill="#B9D77A" fill-opacity=".15"/><rect x="0" y="16" width="200" height="12" fill="#E5675F" fill-opacity=".14"/><polyline points="4,80 30,70 50,56 70,38 90,26 110,40 130,60 150,78 170,62 196,34" fill="none" stroke="#B9D77A" stroke-width="2.4" stroke-linejoin="round"/></svg>';
+    return '<span class="ico">JC</span>';
+  }
+  function chips() {
+    var have = {}; ITEMS.forEach(function (p) { have[kindOf(p)] = 1; });
+    document.getElementById('chips').innerHTML = KINDS.filter(function (k) { return k[0] === 'all' || have[k[0]]; }).map(function (k) { return '<button class="chip' + (k[0] === F ? ' on' : '') + '" data-k="' + k[0] + '" type="button">' + k[1] + '</button>'; }).join('');
+  }
+  function draw() {
+    var KL = {}; KINDS.forEach(function (k) { KL[k[0]] = k[1]; });
+    var list = ITEMS.filter(function (p) { return F === 'all' || kindOf(p) === F; });
+    document.getElementById('shop').innerHTML = list.map(function (p) {
+      var has = OWNED.indexOf(p.id) >= 0, act;
+      if (has) act = '<a class="btn ghost sm" href="members.html#library">In your library</a>';
+      else if (p._seat && !p.buy_url) act = '<a class="btn sm" href="#" data-lead2="liveroom">Join the waitlist</a>';
+      else if (p._lead && !p.buy_url) act = '<a class="btn sm" href="#" data-lead2="' + p._lead + '">Request</a>';
+      else if (!p.buy_url) act = '<span class="btn ghost sm" aria-disabled="true">Coming soon</span>';
+      else if (!U) act = '<a class="btn sm" href="login.html?mode=signup&next=store.html">Sign up to buy</a>';
+      else act = '<a class="btn sm" href="' + esc(window.WMStore ? WMStore.buyUrl(p) : p.buy_url) + '" rel="noopener">Buy</a>';
+      return '<article class="card prod" id="' + esc(p.id) + '"><div class="pv">' + vis(p) + '</div><div class="pb"><div class="k"><span>' + esc(KL[kindOf(p)] || 'More') + '</span>' + (has ? '<b>Owned</b>' : (p.badge ? '<b>' + esc(p.badge) + '</b>' : '')) + '</div><h3>' + esc(p.title) + '</h3><p>' + esc(p.blurb) + '</p><div class="row"><span class="price">' + esc(p.price_label) + '</span>' + act + '</div></div></article>';
+    }).join('');
+  }
+  document.getElementById('chips').onclick = function (e) { var b = e.target.closest('.chip'); if (!b) return; F = b.getAttribute('data-k'); chips(); draw(); };
+  document.getElementById('shop').onclick = function (e) {
+    var a = e.target.closest('[data-lead2]'); if (!a) return; e.preventDefault();
+    var t = a.getAttribute('data-lead2');
+    if (window.WMAuth) WMAuth.openLead(t === 'liveroom' ? { type: 'bootcamp', tag: 'Live room waitlist', title: 'Join the live room waitlist', sub: "Seats open once the list can fill a room. We'll email you first. Nothing to pay until then.", button: 'Join the waitlist', subject: 'Live Room Waitlist' } : t === 'daypass' ? { type: 'daypass', title: 'Book a Day Pass', sub: 'Leave your details and we will confirm your session slot.', button: 'Request my slot', subject: 'Day Pass Seat' } : { type: 'indicators', title: 'Get the indicators', sub: 'Add your TradingView username in the note and we will email access details.', button: 'Request access', subject: 'Indicators Access' });
+  };
+  function go(items, owned) { ITEMS = items && items.length ? items : FALLBACK; OWNED = owned || []; chips(); draw(); if (location.hash) { var el = document.getElementById(decodeURIComponent(location.hash.slice(1))); if (el) el.scrollIntoView({ block: 'center' }); } }
+  if (!window.WMStore) { go([], []); return; }
+  WMStore.ready().then(function () {
+    U = WMAuth.user();
+    return Promise.all([WMStore.list(), U ? WMStore.ownedIds() : Promise.resolve([])]).then(function (r) { go(r[0], r[1]); });
+  }).catch(function () { go([], []); });
+})();
+</script>
+</body>
+</html>
